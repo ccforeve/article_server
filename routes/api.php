@@ -23,6 +23,7 @@ $api->version('v1', [
     Route::fallback(function(){
         return response()->json(['message' => '接口链接不正确'], 404);
     });
+    $api->get('wechat_public_qrcode', 'UsersController@getWechatQrcode');
 
     //微信授权登录
     $api->get('user/login', 'UsersController@login');
@@ -30,13 +31,20 @@ $api->version('v1', [
     //微信开发配置
     $api->any('wechat', 'WechatController@index');
 
+    //微信公众号菜单
+    $api->get('wechat/create_button', 'WechatController@button');
+
     //微信jssdk配置
     $api->get('wechat/config', 'WechatController@config');
 
     //微信支付回调
     $api->any('wechat_out_trade', 'PayController@outTradeNo')->name('api.wechat_out_trade');
 
+    //添加产品接口
     $api->post('products', 'ProductsController@store');
+
+    //添加产品分类接口
+    $api->post('product_categories', 'ProductCategoriesController@store');
 
     // 需要 token 验证的接口
     $api->group(['middleware' => 'user.oauth'], function($api) {
@@ -176,6 +184,23 @@ $api->version('v1', [
 
             //更新访客足迹状态，页面红点去掉
             $api->get('update_state', 'VisitorsController@updateNewState');
+        });
+
+        $api->group(['prefix' => 'punch'], function ($api) {
+            //打卡页面数据
+            $api->get('/', 'PunchesController@index');
+
+            //打卡操作
+            $api->get('store', 'PunchesController@punchCard');
+
+            //获取省份打卡第一名数据
+            $api->get('province', 'PunchesController@getProvincePunch');
+
+            //获取全国前100打卡数据
+            $api->get('top_hundred', 'PunchesController@getTotal');
+
+            //获取当前用户打卡记录
+            $api->get('current_user', 'PunchesController@getCurrentUserPunch');
         });
     });
 

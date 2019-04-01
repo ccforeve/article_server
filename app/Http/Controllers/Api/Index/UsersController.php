@@ -53,7 +53,7 @@ class UsersController extends Controller
                 'nickname'  => $user_info['nickname'],
                 'sex'       => $user_info['sex'],
                 'avatar'    => $user_info['headimgurl'],
-                'subscribe'    => $subscribe ? 1 : 0
+                'subscribe' => $subscribe ? 1 : 0,
             ]);
         }
 
@@ -100,7 +100,6 @@ class UsersController extends Controller
 //        $content = config('app.url'). "/image/qrcode.jpg";
 
         return $this->response->array([
-            'code' => 200,
             'qrcode' => $qrcode,
             'avatar' => $avatar
         ]);

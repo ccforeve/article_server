@@ -23,6 +23,9 @@ Route::group([
     //美图分类
     $router->resource('poster_type', 'PosterTypeController');
 
+    //打卡鼓励语
+    $router->resource('punch_comment', 'PunchCommentController');
+
     //所属类型
     $router->get('poster/type', 'PosterController@getType');
     //美图

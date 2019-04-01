@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => env('FILESYSTEM_DRIVER', 'admin'),
+    'default' => env('FILESYSTEM_DRIVER', 'qiniu'),
 
     /*
     |--------------------------------------------------------------------------
@@ -69,6 +69,14 @@ return [
             'region' => env('AWS_DEFAULT_REGION'),
             'bucket' => env('AWS_BUCKET'),
             'url' => env('AWS_URL'),
+        ],
+
+        'qiniu' => [
+            'driver' => 'qiniu',
+            'domain' => 'https://' . env('QINIU_DOMAIN'), //你的七牛域名
+            'access_key' => env('QINIU_ACCESS_KEY'),  //AccessKey
+            'secret_key' => env('QINIU_SECRET_KEY'),  //SecretKey
+            'bucket' => env('QINIU_BUCKET'),  //Bucket名字
         ],
 
     ],

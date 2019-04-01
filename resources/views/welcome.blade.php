@@ -45,10 +45,6 @@
                 text-align: center;
             }
 
-            .title {
-                font-size: 84px;
-            }
-
             .links > a {
                 color: #636b6f;
                 padding: 0 25px;
@@ -58,39 +54,50 @@
                 text-decoration: none;
                 text-transform: uppercase;
             }
-
-            .m-b-md {
-                margin-bottom: 30px;
+            ul li {
+                float: left;
+                list-style: none;
+                padding-left: 10px;
             }
         </style>
     </head>
     <body>
+        <ul>
+            <li>用户列表</li>
+        </ul>
         <div class="flex-center position-ref full-height">
-            @if (Route::has('login'))
-                <div class="top-right links">
-                    @auth
-                        <a href="{{ url('/home') }}">Home</a>
-                    @else
-                        <a href="{{ route('login') }}">Login</a>
-                        <a href="{{ route('register') }}">Register</a>
-                    @endauth
-                </div>
-            @endif
-
             <div class="content">
-                <div class="title m-b-md">
-                    Laravel
-                </div>
-
-                <div class="links">
-                    <a href="https://laravel.com/docs">Documentation</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://nova.laravel.com">Nova</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
-                </div>
+                <input type="text" name="message">
+                <button name="sub">发送</button>
             </div>
         </div>
     </body>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        let ul = $('ul');
+      var wsServer = 'ws://101.200.51.186:5200';
+      var websocket = new WebSocket(wsServer);
+      websocket.onopen = function (evt) {
+        console.log("登录成功.");
+      };
+
+      websocket.onclose = function (evt) {
+        console.log("Disconnected");
+      };
+
+      websocket.onmessage = function (evt) {
+        evt.data.split('|').forEach(function (value) {
+          $('ul').append("<li>"+ value +"</li>")
+        })
+      };
+
+      websocket.onerror = function (evt, e) {
+        console.log('Error occured: ' + e);
+      };
+
+      $('button').click(function () {
+        let message = $('input[name=message]').val()
+        websocket.send(message)
+      })
+    </script>
 </html>

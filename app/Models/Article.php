@@ -13,6 +13,16 @@ class Article extends Model
         return $this->belongsTo(ArticleCategory::class, 'category_id');
     }
 
+    public function userArticle()
+    {
+        return $this->hasMany(UserArticle::class);
+    }
+
+    public function footprint()
+    {
+        return $this->hasMany(Footprint::class);
+    }
+
     public function setCoversAttribute($pictures)
     {
         if (is_array($pictures)) {
@@ -25,13 +35,11 @@ class Article extends Model
         return json_decode($pictures, true);
     }
 
-    public function userArticle()
+    public function getCoverAttribute( $value )
     {
-        return $this->hasMany(UserArticle::class);
-    }
-
-    public function footprint()
-    {
-        return $this->hasMany(Footprint::class);
+        if(!str_contains($value, 'http')) {
+            return \Storage::disk('admin')->url($value);
+        }
+        return $value;
     }
 }

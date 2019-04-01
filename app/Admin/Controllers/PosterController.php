@@ -87,7 +87,7 @@ class PosterController extends Controller
         $grid->model()->latest('id');
 
         $grid->id('Id');
-        $grid->image_url('美图')->image(100, 100);
+        $grid->image_url('美图')->image('http://stl.yxcxin.com', 100, 100);
         $grid->title('标题')->editable();
         $grid->poster()->name('分类');
         $grid->created_at('新增时间');
@@ -130,7 +130,7 @@ class PosterController extends Controller
     {
         $form = new Form(new Poster);
 
-        $form->image('image_url', '美图');
+        $form->image('image_url', '美图')->uniqueName();
         $form->text('title', '标题');
         $form->select('poster_type', '类型')->options(['category' => '美图类型', 'brand' => '品牌'])->load('poster_id', '/admin/poster/type');
         $form->select('poster_id', '类型列表');

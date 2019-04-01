@@ -2,16 +2,15 @@
 
 namespace App\Admin\Controllers;
 
-use App\Models\Article;
 use App\Http\Controllers\Controller;
-use App\Models\ArticleCategory;
+use App\Models\PunchComment;
 use Encore\Admin\Controllers\HasResourceActions;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
 
-class ArticlesController extends Controller
+class PunchCommentController extends Controller
 {
     use HasResourceActions;
 
@@ -24,8 +23,8 @@ class ArticlesController extends Controller
     public function index(Content $content)
     {
         return $content
-            ->header('Index')
-            ->description('description')
+            ->header('打卡鼓励语')
+            ->description('列表')
             ->body($this->grid());
     }
 
@@ -39,8 +38,8 @@ class ArticlesController extends Controller
     public function show($id, Content $content)
     {
         return $content
-            ->header('Detail')
-            ->description('description')
+            ->header('打卡鼓励语')
+            ->description('详情')
             ->body($this->detail($id));
     }
 
@@ -54,8 +53,8 @@ class ArticlesController extends Controller
     public function edit($id, Content $content)
     {
         return $content
-            ->header('Edit')
-            ->description('description')
+            ->header('打卡鼓励语')
+            ->description('编辑')
             ->body($this->form()->edit($id));
     }
 
@@ -68,8 +67,8 @@ class ArticlesController extends Controller
     public function create(Content $content)
     {
         return $content
-            ->header('Create')
-            ->description('description')
+            ->header('打卡鼓励语')
+            ->description('新增')
             ->body($this->form());
     }
 
@@ -80,17 +79,19 @@ class ArticlesController extends Controller
      */
     protected function grid()
     {
-        $grid = new Grid(new Article);
+        $grid = new Grid(new PunchComment());
+
+        $grid->model()->latest('id');
 
         $grid->id('Id');
-        $grid->title('标题');
-        $grid->category()->title('标题');
-        $grid->read_count('阅读数');
-        $grid->share_count('分享数');
-        $grid->created_at('创建时间');
+        $grid->content('鼓励语');
+        $grid->created_at('新增时间');
         $grid->updated_at('更新时间');
 
         $grid->disableExport();
+        $grid->disableRowSelector();
+
+        $grid->perPages([15, 20]);
 
         return $grid;
     }
@@ -103,21 +104,12 @@ class ArticlesController extends Controller
      */
     protected function detail($id)
     {
-        $show = new Show(Article::findOrFail($id));
+        $show = new Show(PunchComment::findOrFail($id));
 
         $show->id('Id');
-        $show->title('标题');
-        $show->cover('Cover');
-        $show->covers('Covers');
-        $show->category_id('Category id');
-        $show->brand_id('Brand id');
-        $show->detail('Detail');
-        $show->read_count('Read count');
-        $show->share_count('Share count');
-        $show->like_count('Like count');
-        $show->cover_state('Cover state');
-        $show->created_at('Created at');
-        $show->updated_at('Updated at');
+        $show->content('鼓励语');
+        $show->created_at('创建时间');
+        $show->updated_at('更新时间');
 
         return $show;
     }
@@ -129,17 +121,10 @@ class ArticlesController extends Controller
      */
     protected function form()
     {
-        $form = new Form(new Article);
+        $form = new Form(new PunchComment);
 
-        $form->text('title', '标题');
-        $form->image('cover', '封面')->uniqueName();
-        $form->multipleImage('covers', '多封面');
-        $form->select('category_id', '类型')->options(ArticleCategory::all()->pluck('title', 'id'));
-        $form->number('read_count', '阅读数');
-        $form->number('share_count', '分享数');
-        $form->number('like_count', '喜欢数');
-        $form->switch('cover_state', '是否显示多图封面');
-        $form->editor('detail', '详情内容');
+        $form->text('content', '鼓励语')->rules('required', ['鼓励语不可为空']);
+
         return $form;
     }
 }

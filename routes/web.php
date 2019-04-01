@@ -12,4 +12,5 @@
 */
 
 
-Route::get('test', 'IndexController@test');
+Route::view('test', 'welcome');
+Route::get('tests', 'IndexController@test');

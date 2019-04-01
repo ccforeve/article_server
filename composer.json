@@ -10,6 +10,7 @@
         "dingo/api": "2.0.0-alpha2",
         "encore/laravel-admin": "^1.6",
         "fideloper/proxy": "^4.0",
+        "hhxsv5/laravel-s": "~3.3",
         "jxlwqq/material-ui": "^1.0",
         "laravel/framework": "5.7.*",
         "laravel/horizon": "^2.0",

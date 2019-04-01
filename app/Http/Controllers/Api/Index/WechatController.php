@@ -11,7 +11,6 @@ namespace App\Http\Controllers\Api\Index;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Carbon\Carbon;
-use EasyWeChat\Kernel\Messages\Image;
 use EasyWeChat\OfficialAccount\Application;
 use Illuminate\Http\Request;
 
@@ -61,15 +60,9 @@ class WechatController extends Controller
                 //收到文字消息
                 case 'text':
                     return '暂无客服';
-//                    $content = '暂无客服';
-//                    message($message['FromUserName'], 'text', $content);
-//                    message($message['FromUserName'], 'image', 'iVNa-Daw9h5An5r9eWd0Lko9Htb2gV5oLLf4mGGiD2k');
                     break;
             }
         });
-
-        //菜单
-//        $this->button();
 
         // 将响应输出
         return $app->server->serve();
@@ -83,14 +76,14 @@ class WechatController extends Controller
         $app = $this->app;
         $buttons = [
             [
-                "name" => "绿叶事业",
-                "sub_button" => [
-                    [
-                        "type" => "view",
-                        "name" => "热文文章",
-                        "url"  => "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe910075ca3b12399&redirect_uri=http://btl.yxcxin.com&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect"
-                    ]
-                ]
+                "type" => "view",
+                "name" => "热文分享",
+                "url"  => "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxfa7b58cf37b2d3bd&redirect_uri=http://btl.yxcxin.com&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect"
+            ],
+            [
+                "type" => "view",
+                "name" => "早起打卡",
+                "url"  => "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxfa7b58cf37b2d3bd&redirect_uri=http://btl.yxcxin.com/punch&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect"
             ]
         ];
         $app->menu->create($buttons);

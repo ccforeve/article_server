@@ -56,7 +56,11 @@ class PostersController extends Controller
     public function random( Request $request, $count )
     {
         if($type = $request->cate_type) {
-            $posters = Poster::query()->where(['poster_type' => $type, 'poster_id' => $request->cate_id])->inRandomOrder()->limit($count)->get();
+            $posters_query = Poster::query()->where([ 'poster_type' => $type, 'poster_id' => $request->cate_id ])->inRandomOrder()->limit($count);
+            if($count != 1) {
+                $posters_query->get();
+            }
+            $posters = $posters_query->first();
         } else {
             $posters = Poster::query()->inRandomOrder()->limit($count)->get();
         }

@@ -26,6 +26,7 @@ class UserTransformer extends TransformerAbstract
             'phone' => $user->phone,
             'wechat' => $user->wechat,
             'wechat_qrcode' => $user->qrcode,
+            'province' => $user->province,
             'employed_area' => $user->employed_area,
             'profession' => $user->profession,
             'type' => $user->type,

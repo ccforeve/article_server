@@ -23,7 +23,7 @@ class ProductsController extends Controller
         $product->save();
 
         if(!$product->id) {
-            return response()->json([], Response::HTTP_EXPECTATION_FAILED);
+            return response()->json(['content' => '添加出错'], Response::HTTP_EXPECTATION_FAILED);
         }
 
         //添加文章
@@ -32,6 +32,7 @@ class ProductsController extends Controller
             'cover' => $request->cover,
             'category_id' => 1,
             'brand_id' => 1,
+            'product_id' => $product->id,
             'detail' => $request->content
         ]);
 
