@@ -26,7 +26,7 @@ class PosterController extends Controller
     public function index(Content $content)
     {
         return $content
-            ->header('美图列表')
+            ->header('美图')
             ->description('列表')
             ->body($this->grid());
     }
@@ -41,7 +41,7 @@ class PosterController extends Controller
     public function show($id, Content $content)
     {
         return $content
-            ->header('美图详情')
+            ->header('美图')
             ->description('详情')
             ->body($this->detail($id));
     }
@@ -56,7 +56,7 @@ class PosterController extends Controller
     public function edit($id, Content $content)
     {
         return $content
-            ->header('编辑美图')
+            ->header('美图')
             ->description('编辑')
             ->body($this->form()->edit($id));
     }
@@ -70,7 +70,7 @@ class PosterController extends Controller
     public function create(Content $content)
     {
         return $content
-            ->header('新增美图')
+            ->header('美图')
             ->description('新增')
             ->body($this->form());
     }
@@ -95,6 +95,13 @@ class PosterController extends Controller
 
         $grid->disableExport();
         $grid->disableRowSelector();
+
+        $grid->filter(function ($filter) {
+            $filter->disableIdFilter();
+            $filter->equal('poster_type', '类型')->radio(['brand' => '品牌', 'category' => '其他']);
+            $filter->equal('poster_id', '分类')->select(PosterCategory::query()->pluck('name', 'id'));
+            $filter->like('title', '标题');
+        });
 
         $grid->perPages([15, 20]);
 

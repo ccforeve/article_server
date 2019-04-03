@@ -97,7 +97,6 @@ class UsersController extends Controller
         $url = $app->qrcode->url($result['ticket']);
         $qrcode = imgChangeBase64($url, 'qrcode_' . $user->openid);
         $avatar = imgChangeBase64($user->avatar, 'avatar' . $user->openid);
-//        $content = config('app.url'). "/image/qrcode.jpg";
 
         return $this->response->array([
             'qrcode' => $qrcode,

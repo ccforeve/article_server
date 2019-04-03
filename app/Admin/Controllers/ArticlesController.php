@@ -24,24 +24,9 @@ class ArticlesController extends Controller
     public function index(Content $content)
     {
         return $content
-            ->header('Index')
-            ->description('description')
+            ->header('文章')
+            ->description('列表')
             ->body($this->grid());
-    }
-
-    /**
-     * Show interface.
-     *
-     * @param mixed $id
-     * @param Content $content
-     * @return Content
-     */
-    public function show($id, Content $content)
-    {
-        return $content
-            ->header('Detail')
-            ->description('description')
-            ->body($this->detail($id));
     }
 
     /**
@@ -54,8 +39,8 @@ class ArticlesController extends Controller
     public function edit($id, Content $content)
     {
         return $content
-            ->header('Edit')
-            ->description('description')
+            ->header('文章')
+            ->description('编辑')
             ->body($this->form()->edit($id));
     }
 
@@ -68,8 +53,8 @@ class ArticlesController extends Controller
     public function create(Content $content)
     {
         return $content
-            ->header('Create')
-            ->description('description')
+            ->header('文章')
+            ->description('添加')
             ->body($this->form());
     }
 
@@ -81,10 +66,11 @@ class ArticlesController extends Controller
     protected function grid()
     {
         $grid = new Grid(new Article);
+        $grid->model()->latest('id');
 
         $grid->id('Id');
         $grid->title('标题');
-        $grid->category()->title('标题');
+        $grid->category()->title('分类');
         $grid->read_count('阅读数');
         $grid->share_count('分享数');
         $grid->created_at('创建时间');
@@ -92,34 +78,17 @@ class ArticlesController extends Controller
 
         $grid->disableExport();
 
+        $grid->filter(function ($filter) {
+            $filter->disableIdFilter();
+            $filter->equal('category_id', '分类')->select(ArticleCategory::query()->pluck('title', 'id'))->default(1);
+            $filter->like('title', '标题');
+        });
+
+        $grid->actions(function ($action) {
+            $action->disableView();
+        });
+
         return $grid;
-    }
-
-    /**
-     * Make a show builder.
-     *
-     * @param mixed $id
-     * @return Show
-     */
-    protected function detail($id)
-    {
-        $show = new Show(Article::findOrFail($id));
-
-        $show->id('Id');
-        $show->title('标题');
-        $show->cover('Cover');
-        $show->covers('Covers');
-        $show->category_id('Category id');
-        $show->brand_id('Brand id');
-        $show->detail('Detail');
-        $show->read_count('Read count');
-        $show->share_count('Share count');
-        $show->like_count('Like count');
-        $show->cover_state('Cover state');
-        $show->created_at('Created at');
-        $show->updated_at('Updated at');
-
-        return $show;
     }
 
     /**
@@ -131,15 +100,16 @@ class ArticlesController extends Controller
     {
         $form = new Form(new Article);
 
-        $form->text('title', '标题');
+        $form->text('title', '标题')->rules('required', ['标题不可为空']);
         $form->image('cover', '封面')->uniqueName();
-        $form->multipleImage('covers', '多封面');
+        $form->multipleImage('covers', '多封面')->help('可选');
         $form->select('category_id', '类型')->options(ArticleCategory::all()->pluck('title', 'id'));
         $form->number('read_count', '阅读数');
         $form->number('share_count', '分享数');
         $form->number('like_count', '喜欢数');
         $form->switch('cover_state', '是否显示多图封面');
-        $form->editor('detail', '详情内容');
+        $form->textarea('desc', '描述');
+        $form->UEditor('detail');
         return $form;
     }
 }

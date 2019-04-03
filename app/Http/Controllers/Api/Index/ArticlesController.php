@@ -28,7 +28,8 @@ class ArticlesController extends Controller
 
         return [
             'article' => $user_article->article,
-            'user' => $user_article->user
+            'user' => $user_article->user,
+            'user_article_id' => $user_article->id,
         ];
     }
 }

@@ -5,7 +5,7 @@ namespace PHPSTORM_META {
 
    /**
     * PhpStorm Meta file, to provide autocomplete information for PhpStorm
-    * Generated on 2019-02-19 10:23:30.
+    * Generated on 2019-04-02 16:09:36.
     *
     * @author Barry vd. Heuvel <barryvdh@gmail.com>
     * @see https://github.com/barryvdh/laravel-ide-helper
@@ -196,6 +196,7 @@ namespace PHPSTORM_META {
         'tymon.jwt.provider.storage' => \Tymon\JWTAuth\Providers\Storage\Illuminate::class,
         'tymon.jwt.secret' => \Tymon\JWTAuth\Console\JWTGenerateSecretCommand::class,
         'tymon.jwt.validators.payload' => \Tymon\JWTAuth\Validators\PayloadValidator::class,
+        'ueditor.storage' => \Overtrue\LaravelUEditor\StorageManager::class,
         'url' => \Illuminate\Routing\UrlGenerator::class,
         'validation.presence' => \Illuminate\Validation\DatabasePresenceVerifier::class,
         'view' => \Illuminate\View\Factory::class,
@@ -390,6 +391,7 @@ namespace PHPSTORM_META {
         'tymon.jwt.provider.storage' => \Tymon\JWTAuth\Providers\Storage\Illuminate::class,
         'tymon.jwt.secret' => \Tymon\JWTAuth\Console\JWTGenerateSecretCommand::class,
         'tymon.jwt.validators.payload' => \Tymon\JWTAuth\Validators\PayloadValidator::class,
+        'ueditor.storage' => \Overtrue\LaravelUEditor\StorageManager::class,
         'url' => \Illuminate\Routing\UrlGenerator::class,
         'validation.presence' => \Illuminate\Validation\DatabasePresenceVerifier::class,
         'view' => \Illuminate\View\Factory::class,
@@ -584,6 +586,7 @@ namespace PHPSTORM_META {
         'tymon.jwt.provider.storage' => \Tymon\JWTAuth\Providers\Storage\Illuminate::class,
         'tymon.jwt.secret' => \Tymon\JWTAuth\Console\JWTGenerateSecretCommand::class,
         'tymon.jwt.validators.payload' => \Tymon\JWTAuth\Validators\PayloadValidator::class,
+        'ueditor.storage' => \Overtrue\LaravelUEditor\StorageManager::class,
         'url' => \Illuminate\Routing\UrlGenerator::class,
         'validation.presence' => \Illuminate\Validation\DatabasePresenceVerifier::class,
         'view' => \Illuminate\View\Factory::class,
@@ -778,6 +781,7 @@ namespace PHPSTORM_META {
         'tymon.jwt.provider.storage' => \Tymon\JWTAuth\Providers\Storage\Illuminate::class,
         'tymon.jwt.secret' => \Tymon\JWTAuth\Console\JWTGenerateSecretCommand::class,
         'tymon.jwt.validators.payload' => \Tymon\JWTAuth\Validators\PayloadValidator::class,
+        'ueditor.storage' => \Overtrue\LaravelUEditor\StorageManager::class,
         'url' => \Illuminate\Routing\UrlGenerator::class,
         'validation.presence' => \Illuminate\Validation\DatabasePresenceVerifier::class,
         'view' => \Illuminate\View\Factory::class,
@@ -972,6 +976,7 @@ namespace PHPSTORM_META {
         'tymon.jwt.provider.storage' => \Tymon\JWTAuth\Providers\Storage\Illuminate::class,
         'tymon.jwt.secret' => \Tymon\JWTAuth\Console\JWTGenerateSecretCommand::class,
         'tymon.jwt.validators.payload' => \Tymon\JWTAuth\Validators\PayloadValidator::class,
+        'ueditor.storage' => \Overtrue\LaravelUEditor\StorageManager::class,
         'url' => \Illuminate\Routing\UrlGenerator::class,
         'validation.presence' => \Illuminate\Validation\DatabasePresenceVerifier::class,
         'view' => \Illuminate\View\Factory::class,
@@ -1166,6 +1171,7 @@ namespace PHPSTORM_META {
         'tymon.jwt.provider.storage' => \Tymon\JWTAuth\Providers\Storage\Illuminate::class,
         'tymon.jwt.secret' => \Tymon\JWTAuth\Console\JWTGenerateSecretCommand::class,
         'tymon.jwt.validators.payload' => \Tymon\JWTAuth\Validators\PayloadValidator::class,
+        'ueditor.storage' => \Overtrue\LaravelUEditor\StorageManager::class,
         'url' => \Illuminate\Routing\UrlGenerator::class,
         'validation.presence' => \Illuminate\Validation\DatabasePresenceVerifier::class,
         'view' => \Illuminate\View\Factory::class,
@@ -1360,6 +1366,7 @@ namespace PHPSTORM_META {
         'tymon.jwt.provider.storage' => \Tymon\JWTAuth\Providers\Storage\Illuminate::class,
         'tymon.jwt.secret' => \Tymon\JWTAuth\Console\JWTGenerateSecretCommand::class,
         'tymon.jwt.validators.payload' => \Tymon\JWTAuth\Validators\PayloadValidator::class,
+        'ueditor.storage' => \Overtrue\LaravelUEditor\StorageManager::class,
         'url' => \Illuminate\Routing\UrlGenerator::class,
         'validation.presence' => \Illuminate\Validation\DatabasePresenceVerifier::class,
         'view' => \Illuminate\View\Factory::class,

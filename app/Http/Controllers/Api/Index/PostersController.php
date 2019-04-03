@@ -57,10 +57,11 @@ class PostersController extends Controller
     {
         if($type = $request->cate_type) {
             $posters_query = Poster::query()->where([ 'poster_type' => $type, 'poster_id' => $request->cate_id ])->inRandomOrder()->limit($count);
-            if($count != 1) {
-                $posters_query->get();
+            if($count == 1) {
+                $posters = $posters_query->first();
+                $posters = collect($posters)->put('image_url', imgChangeBase64($posters->image_url));
             }
-            $posters = $posters_query->first();
+            $posters_query->get();
         } else {
             $posters = Poster::query()->inRandomOrder()->limit($count)->get();
         }

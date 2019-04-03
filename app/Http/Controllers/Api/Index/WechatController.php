@@ -45,7 +45,7 @@ class WechatController extends Controller
 
     public function config( Application $app, Request $request )
     {
-        return $app->jssdk->buildConfig(['updateAppMessageShareData', 'updateTimelineShareData'], $request->url);
+        return $app->jssdk->buildConfig(['chooseWXPay', 'onMenuShareTimeline', 'onMenuShareAppMessage'], urldecode($request->url));
     }
 
     public function index()

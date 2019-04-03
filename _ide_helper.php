@@ -3,7 +3,7 @@
 
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.7.13 on 2019-02-19 10:23:27.
+ * Generated for Laravel 5.7.13 on 2019-04-02 16:09:32.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -3162,7 +3162,7 @@ namespace Illuminate\Support\Facades {
          */ 
         public static function lock($name, $seconds = 0)
         {
-            return \Illuminate\Cache\MemcachedStore::lock($name, $seconds);
+            return \Illuminate\Cache\RedisStore::lock($name, $seconds);
         }
         
         /**
@@ -3173,18 +3173,41 @@ namespace Illuminate\Support\Facades {
          */ 
         public static function flush()
         {
-            return \Illuminate\Cache\MemcachedStore::flush();
+            return \Illuminate\Cache\RedisStore::flush();
         }
         
         /**
-         * Get the underlying Memcached connection.
+         * Get the Redis connection instance.
          *
-         * @return \Memcached 
+         * @return \Predis\ClientInterface 
          * @static 
          */ 
-        public static function getMemcached()
+        public static function connection()
         {
-            return \Illuminate\Cache\MemcachedStore::getMemcached();
+            return \Illuminate\Cache\RedisStore::connection();
+        }
+        
+        /**
+         * Set the connection name to be used.
+         *
+         * @param string $connection
+         * @return void 
+         * @static 
+         */ 
+        public static function setConnection($connection)
+        {
+            \Illuminate\Cache\RedisStore::setConnection($connection);
+        }
+        
+        /**
+         * Get the Redis database instance.
+         *
+         * @return \Illuminate\Contracts\Redis\Factory 
+         * @static 
+         */ 
+        public static function getRedis()
+        {
+            return \Illuminate\Cache\RedisStore::getRedis();
         }
         
         /**
@@ -3195,7 +3218,7 @@ namespace Illuminate\Support\Facades {
          */ 
         public static function getPrefix()
         {
-            return \Illuminate\Cache\MemcachedStore::getPrefix();
+            return \Illuminate\Cache\RedisStore::getPrefix();
         }
         
         /**
@@ -3207,7 +3230,7 @@ namespace Illuminate\Support\Facades {
          */ 
         public static function setPrefix($prefix)
         {
-            \Illuminate\Cache\MemcachedStore::setPrefix($prefix);
+            \Illuminate\Cache\RedisStore::setPrefix($prefix);
         }
          
     }
@@ -14155,6 +14178,418 @@ namespace Dingo\Api\Facade {
  
 }
 
+namespace Encore\Admin\Facades { 
+
+    /**
+     * Class Admin.
+     *
+     * @method static \Encore\Admin\Grid grid($model, \Closure $callable)
+     * @method static \Encore\Admin\Form form($model, \Closure $callable)
+     * @method static \Encore\Admin\Show show($model, $callable = null)
+     * @method static \Encore\Admin\Tree tree($model, \Closure $callable = null)
+     * @method static \Encore\Admin\Layout\Content content(\Closure $callable = null)
+     * @method static \Illuminate\Contracts\View\Factory|\Illuminate\View\View|void css($css = null)
+     * @method static \Illuminate\Contracts\View\Factory|\Illuminate\View\View|void js($js = null)
+     * @method static \Illuminate\Contracts\View\Factory|\Illuminate\View\View|void script($script = '')
+     * @method static \Illuminate\Contracts\Auth\Authenticatable|null user()
+     * @method static string title()
+     * @method static void navbar(\Closure $builder = null)
+     * @method static void registerAuthRoutes()
+     * @method static void extend($name, $class)
+     * @method static void disablePjax()
+     */ 
+    class Admin {
+        
+        /**
+         * Returns the long version of Laravel-admin.
+         *
+         * @return string The long application version
+         * @static 
+         */ 
+        public static function getLongVersion()
+        {
+            return \Encore\Admin\Admin::getLongVersion();
+        }
+        
+        /**
+         * 
+         *
+         * @param $model
+         * @param \Closure $callable
+         * @return \Encore\Admin\Grid 
+         * @deprecated since v1.6.1
+         * @static 
+         */ 
+        public static function grid($model, $callable)
+        {
+            return \Encore\Admin\Admin::grid($model, $callable);
+        }
+        
+        /**
+         * 
+         *
+         * @param $model
+         * @param \Closure $callable
+         * @return \Encore\Admin\Form @deprecated since v1.6.1
+         * @static 
+         */ 
+        public static function form($model, $callable)
+        {
+            return \Encore\Admin\Admin::form($model, $callable);
+        }
+        
+        /**
+         * Build a tree.
+         *
+         * @param $model
+         * @return \Encore\Admin\Tree 
+         * @static 
+         */ 
+        public static function tree($model, $callable = null)
+        {
+            return \Encore\Admin\Admin::tree($model, $callable);
+        }
+        
+        /**
+         * Build show page.
+         *
+         * @param $model
+         * @param mixed $callable
+         * @return \Encore\Admin\Show 
+         * @deprecated since v1.6.1
+         * @static 
+         */ 
+        public static function show($model, $callable = null)
+        {
+            return \Encore\Admin\Admin::show($model, $callable);
+        }
+        
+        /**
+         * 
+         *
+         * @param \Closure $callable
+         * @return \Encore\Admin\Layout\Content 
+         * @deprecated since v1.6.1
+         * @static 
+         */ 
+        public static function content($callable = null)
+        {
+            return \Encore\Admin\Admin::content($callable);
+        }
+        
+        /**
+         * 
+         *
+         * @param $model
+         * @return mixed 
+         * @static 
+         */ 
+        public static function getModel($model)
+        {
+            return \Encore\Admin\Admin::getModel($model);
+        }
+        
+        /**
+         * Left sider-bar menu.
+         *
+         * @return array 
+         * @static 
+         */ 
+        public static function menu()
+        {
+            return \Encore\Admin\Admin::menu();
+        }
+        
+        /**
+         * Get admin title.
+         *
+         * @return \Config 
+         * @static 
+         */ 
+        public static function title()
+        {
+            return \Encore\Admin\Admin::title();
+        }
+        
+        /**
+         * Get current login user.
+         *
+         * @return mixed 
+         * @static 
+         */ 
+        public static function user()
+        {
+            return \Encore\Admin\Admin::user();
+        }
+        
+        /**
+         * Set navbar.
+         *
+         * @param \Closure|null $builder
+         * @return \Encore\Admin\Navbar 
+         * @static 
+         */ 
+        public static function navbar($builder = null)
+        {
+            return \Encore\Admin\Admin::navbar($builder);
+        }
+        
+        /**
+         * Get navbar object.
+         *
+         * @return \Encore\Admin\Widgets\Navbar 
+         * @static 
+         */ 
+        public static function getNavbar()
+        {
+            return \Encore\Admin\Admin::getNavbar();
+        }
+        
+        /**
+         * Register the auth routes.
+         *
+         * @return void 
+         * @static 
+         */ 
+        public static function registerAuthRoutes()
+        {
+            \Encore\Admin\Admin::registerAuthRoutes();
+        }
+        
+        /**
+         * Extend a extension.
+         *
+         * @param string $name
+         * @param string $class
+         * @return void 
+         * @static 
+         */ 
+        public static function extend($name, $class)
+        {
+            \Encore\Admin\Admin::extend($name, $class);
+        }
+        
+        /**
+         * 
+         *
+         * @param callable $callback
+         * @static 
+         */ 
+        public static function booting($callback)
+        {
+            return \Encore\Admin\Admin::booting($callback);
+        }
+        
+        /**
+         * 
+         *
+         * @param callable $callback
+         * @static 
+         */ 
+        public static function booted($callback)
+        {
+            return \Encore\Admin\Admin::booted($callback);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function disablePjax()
+        {
+            return \Encore\Admin\Admin::disablePjax();
+        }
+        
+        /**
+         * Add css or get all css.
+         *
+         * @param null $css
+         * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|void 
+         * @static 
+         */ 
+        public static function css($css = null)
+        {
+            return \Encore\Admin\Admin::css($css);
+        }
+        
+        /**
+         * 
+         *
+         * @param null $css
+         * @return array|void 
+         * @static 
+         */ 
+        public static function baseCss($css = null)
+        {
+            return \Encore\Admin\Admin::baseCss($css);
+        }
+        
+        /**
+         * Add js or get all js.
+         *
+         * @param null $js
+         * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|void 
+         * @static 
+         */ 
+        public static function js($js = null)
+        {
+            return \Encore\Admin\Admin::js($js);
+        }
+        
+        /**
+         * 
+         *
+         * @param null $js
+         * @return array|void 
+         * @static 
+         */ 
+        public static function baseJs($js = null)
+        {
+            return \Encore\Admin\Admin::baseJs($js);
+        }
+        
+        /**
+         * 
+         *
+         * @param string $script
+         * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|void 
+         * @static 
+         */ 
+        public static function script($script = '')
+        {
+            return \Encore\Admin\Admin::script($script);
+        }
+        
+        /**
+         * 
+         *
+         * @return string 
+         * @static 
+         */ 
+        public static function jQuery()
+        {
+            return \Encore\Admin\Admin::jQuery();
+        }
+         
+    }
+ 
+}
+
+namespace Laravel\Horizon { 
+
+    /**
+     * 
+     *
+     */ 
+    class Horizon {
+         
+    }
+ 
+}
+
+namespace Laravel\Socialite\Facades { 
+
+    /**
+     * 
+     *
+     * @see \Laravel\Socialite\SocialiteManager
+     */ 
+    class Socialite {
+        
+        /**
+         * Get a driver instance.
+         *
+         * @param string $driver
+         * @return mixed 
+         * @static 
+         */ 
+        public static function with($driver)
+        {
+            return \Laravel\Socialite\SocialiteManager::with($driver);
+        }
+        
+        /**
+         * Build an OAuth 2 provider instance.
+         *
+         * @param string $provider
+         * @param array $config
+         * @return \Laravel\Socialite\Two\AbstractProvider 
+         * @static 
+         */ 
+        public static function buildProvider($provider, $config)
+        {
+            return \Laravel\Socialite\SocialiteManager::buildProvider($provider, $config);
+        }
+        
+        /**
+         * Format the server configuration.
+         *
+         * @param array $config
+         * @return array 
+         * @static 
+         */ 
+        public static function formatConfig($config)
+        {
+            return \Laravel\Socialite\SocialiteManager::formatConfig($config);
+        }
+        
+        /**
+         * Get the default driver name.
+         *
+         * @throws \InvalidArgumentException
+         * @return string 
+         * @static 
+         */ 
+        public static function getDefaultDriver()
+        {
+            return \Laravel\Socialite\SocialiteManager::getDefaultDriver();
+        }
+        
+        /**
+         * Get a driver instance.
+         *
+         * @param string $driver
+         * @return mixed 
+         * @throws \InvalidArgumentException
+         * @static 
+         */ 
+        public static function driver($driver = null)
+        {
+            //Method inherited from \Illuminate\Support\Manager            
+            return \Laravel\Socialite\SocialiteManager::driver($driver);
+        }
+        
+        /**
+         * Register a custom driver creator Closure.
+         *
+         * @param string $driver
+         * @param \Closure $callback
+         * @return $this 
+         * @static 
+         */ 
+        public static function extend($driver, $callback)
+        {
+            //Method inherited from \Illuminate\Support\Manager            
+            return \Laravel\Socialite\SocialiteManager::extend($driver, $callback);
+        }
+        
+        /**
+         * Get all of the created "drivers".
+         *
+         * @return array 
+         * @static 
+         */ 
+        public static function getDrivers()
+        {
+            //Method inherited from \Illuminate\Support\Manager            
+            return \Laravel\Socialite\SocialiteManager::getDrivers();
+        }
+         
+    }
+ 
+}
+
 namespace Overtrue\LaravelWeChat { 
 
     /**
@@ -14410,108 +14845,6 @@ namespace Overtrue\LaravelWeChat {
         {
             //Method inherited from \EasyWeChat\Kernel\ServiceContainer            
             return \EasyWeChat\OfficialAccount\Application::delegateTo($id);
-        }
-         
-    }
- 
-}
-
-namespace Laravel\Socialite\Facades { 
-
-    /**
-     * 
-     *
-     * @see \Laravel\Socialite\SocialiteManager
-     */ 
-    class Socialite {
-        
-        /**
-         * Get a driver instance.
-         *
-         * @param string $driver
-         * @return mixed 
-         * @static 
-         */ 
-        public static function with($driver)
-        {
-            return \Laravel\Socialite\SocialiteManager::with($driver);
-        }
-        
-        /**
-         * Build an OAuth 2 provider instance.
-         *
-         * @param string $provider
-         * @param array $config
-         * @return \Laravel\Socialite\Two\AbstractProvider 
-         * @static 
-         */ 
-        public static function buildProvider($provider, $config)
-        {
-            return \Laravel\Socialite\SocialiteManager::buildProvider($provider, $config);
-        }
-        
-        /**
-         * Format the server configuration.
-         *
-         * @param array $config
-         * @return array 
-         * @static 
-         */ 
-        public static function formatConfig($config)
-        {
-            return \Laravel\Socialite\SocialiteManager::formatConfig($config);
-        }
-        
-        /**
-         * Get the default driver name.
-         *
-         * @throws \InvalidArgumentException
-         * @return string 
-         * @static 
-         */ 
-        public static function getDefaultDriver()
-        {
-            return \Laravel\Socialite\SocialiteManager::getDefaultDriver();
-        }
-        
-        /**
-         * Get a driver instance.
-         *
-         * @param string $driver
-         * @return mixed 
-         * @throws \InvalidArgumentException
-         * @static 
-         */ 
-        public static function driver($driver = null)
-        {
-            //Method inherited from \Illuminate\Support\Manager            
-            return \Laravel\Socialite\SocialiteManager::driver($driver);
-        }
-        
-        /**
-         * Register a custom driver creator Closure.
-         *
-         * @param string $driver
-         * @param \Closure $callback
-         * @return $this 
-         * @static 
-         */ 
-        public static function extend($driver, $callback)
-        {
-            //Method inherited from \Illuminate\Support\Manager            
-            return \Laravel\Socialite\SocialiteManager::extend($driver, $callback);
-        }
-        
-        /**
-         * Get all of the created "drivers".
-         *
-         * @return array 
-         * @static 
-         */ 
-        public static function getDrivers()
-        {
-            //Method inherited from \Illuminate\Support\Manager            
-            return \Laravel\Socialite\SocialiteManager::getDrivers();
         }
          
     }
@@ -15033,316 +15366,6 @@ namespace Tymon\JWTAuth\Facades {
         {
             return \Tymon\JWTAuth\Factory::setRefreshFlow($refreshFlow);
         }
-         
-    }
- 
-}
-
-namespace Encore\Admin\Facades { 
-
-    /**
-     * Class Admin.
-     *
-     * @method static \Encore\Admin\Grid grid($model, \Closure $callable)
-     * @method static \Encore\Admin\Form form($model, \Closure $callable)
-     * @method static \Encore\Admin\Show show($model, $callable = null)
-     * @method static \Encore\Admin\Tree tree($model, \Closure $callable = null)
-     * @method static \Encore\Admin\Layout\Content content(\Closure $callable = null)
-     * @method static \Illuminate\Contracts\View\Factory|\Illuminate\View\View|void css($css = null)
-     * @method static \Illuminate\Contracts\View\Factory|\Illuminate\View\View|void js($js = null)
-     * @method static \Illuminate\Contracts\View\Factory|\Illuminate\View\View|void script($script = '')
-     * @method static \Illuminate\Contracts\Auth\Authenticatable|null user()
-     * @method static string title()
-     * @method static void navbar(\Closure $builder = null)
-     * @method static void registerAuthRoutes()
-     * @method static void extend($name, $class)
-     * @method static void disablePjax()
-     */ 
-    class Admin {
-        
-        /**
-         * Returns the long version of Laravel-admin.
-         *
-         * @return string The long application version
-         * @static 
-         */ 
-        public static function getLongVersion()
-        {
-            return \Encore\Admin\Admin::getLongVersion();
-        }
-        
-        /**
-         * 
-         *
-         * @param $model
-         * @param \Closure $callable
-         * @return \Encore\Admin\Grid 
-         * @deprecated since v1.6.1
-         * @static 
-         */ 
-        public static function grid($model, $callable)
-        {
-            return \Encore\Admin\Admin::grid($model, $callable);
-        }
-        
-        /**
-         * 
-         *
-         * @param $model
-         * @param \Closure $callable
-         * @return \Encore\Admin\Form @deprecated since v1.6.1
-         * @static 
-         */ 
-        public static function form($model, $callable)
-        {
-            return \Encore\Admin\Admin::form($model, $callable);
-        }
-        
-        /**
-         * Build a tree.
-         *
-         * @param $model
-         * @return \Encore\Admin\Tree 
-         * @static 
-         */ 
-        public static function tree($model, $callable = null)
-        {
-            return \Encore\Admin\Admin::tree($model, $callable);
-        }
-        
-        /**
-         * Build show page.
-         *
-         * @param $model
-         * @param mixed $callable
-         * @return \Encore\Admin\Show 
-         * @deprecated since v1.6.1
-         * @static 
-         */ 
-        public static function show($model, $callable = null)
-        {
-            return \Encore\Admin\Admin::show($model, $callable);
-        }
-        
-        /**
-         * 
-         *
-         * @param \Closure $callable
-         * @return \Encore\Admin\Layout\Content 
-         * @deprecated since v1.6.1
-         * @static 
-         */ 
-        public static function content($callable = null)
-        {
-            return \Encore\Admin\Admin::content($callable);
-        }
-        
-        /**
-         * 
-         *
-         * @param $model
-         * @return mixed 
-         * @static 
-         */ 
-        public static function getModel($model)
-        {
-            return \Encore\Admin\Admin::getModel($model);
-        }
-        
-        /**
-         * Left sider-bar menu.
-         *
-         * @return array 
-         * @static 
-         */ 
-        public static function menu()
-        {
-            return \Encore\Admin\Admin::menu();
-        }
-        
-        /**
-         * Get admin title.
-         *
-         * @return \Config 
-         * @static 
-         */ 
-        public static function title()
-        {
-            return \Encore\Admin\Admin::title();
-        }
-        
-        /**
-         * Get current login user.
-         *
-         * @return mixed 
-         * @static 
-         */ 
-        public static function user()
-        {
-            return \Encore\Admin\Admin::user();
-        }
-        
-        /**
-         * Set navbar.
-         *
-         * @param \Closure|null $builder
-         * @return \Encore\Admin\Navbar 
-         * @static 
-         */ 
-        public static function navbar($builder = null)
-        {
-            return \Encore\Admin\Admin::navbar($builder);
-        }
-        
-        /**
-         * Get navbar object.
-         *
-         * @return \Encore\Admin\Widgets\Navbar 
-         * @static 
-         */ 
-        public static function getNavbar()
-        {
-            return \Encore\Admin\Admin::getNavbar();
-        }
-        
-        /**
-         * Register the auth routes.
-         *
-         * @return void 
-         * @static 
-         */ 
-        public static function registerAuthRoutes()
-        {
-            \Encore\Admin\Admin::registerAuthRoutes();
-        }
-        
-        /**
-         * Extend a extension.
-         *
-         * @param string $name
-         * @param string $class
-         * @return void 
-         * @static 
-         */ 
-        public static function extend($name, $class)
-        {
-            \Encore\Admin\Admin::extend($name, $class);
-        }
-        
-        /**
-         * 
-         *
-         * @param callable $callback
-         * @static 
-         */ 
-        public static function booting($callback)
-        {
-            return \Encore\Admin\Admin::booting($callback);
-        }
-        
-        /**
-         * 
-         *
-         * @param callable $callback
-         * @static 
-         */ 
-        public static function booted($callback)
-        {
-            return \Encore\Admin\Admin::booted($callback);
-        }
-        
-        /**
-         * 
-         *
-         * @static 
-         */ 
-        public static function disablePjax()
-        {
-            return \Encore\Admin\Admin::disablePjax();
-        }
-        
-        /**
-         * Add css or get all css.
-         *
-         * @param null $css
-         * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|void 
-         * @static 
-         */ 
-        public static function css($css = null)
-        {
-            return \Encore\Admin\Admin::css($css);
-        }
-        
-        /**
-         * 
-         *
-         * @param null $css
-         * @return array|void 
-         * @static 
-         */ 
-        public static function baseCss($css = null)
-        {
-            return \Encore\Admin\Admin::baseCss($css);
-        }
-        
-        /**
-         * Add js or get all js.
-         *
-         * @param null $js
-         * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|void 
-         * @static 
-         */ 
-        public static function js($js = null)
-        {
-            return \Encore\Admin\Admin::js($js);
-        }
-        
-        /**
-         * 
-         *
-         * @param null $js
-         * @return array|void 
-         * @static 
-         */ 
-        public static function baseJs($js = null)
-        {
-            return \Encore\Admin\Admin::baseJs($js);
-        }
-        
-        /**
-         * 
-         *
-         * @param string $script
-         * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|void 
-         * @static 
-         */ 
-        public static function script($script = '')
-        {
-            return \Encore\Admin\Admin::script($script);
-        }
-        
-        /**
-         * 
-         *
-         * @return string 
-         * @static 
-         */ 
-        public static function jQuery()
-        {
-            return \Encore\Admin\Admin::jQuery();
-        }
-         
-    }
- 
-}
-
-namespace Laravel\Horizon { 
-
-    /**
-     * 
-     *
-     */ 
-    class Horizon {
          
     }
  
@@ -17725,17 +17748,17 @@ namespace  {
 
     class API extends \Dingo\Api\Facade\API {}
 
-    class EasyWeChat extends \Overtrue\LaravelWeChat\Facade {}
+    class Admin extends \Encore\Admin\Facades\Admin {}
+
+    class Horizon extends \Laravel\Horizon\Horizon {}
 
     class Socialite extends \Laravel\Socialite\Facades\Socialite {}
+
+    class EasyWeChat extends \Overtrue\LaravelWeChat\Facade {}
 
     class JWTAuth extends \Tymon\JWTAuth\Facades\JWTAuth {}
 
     class JWTFactory extends \Tymon\JWTAuth\Facades\JWTFactory {}
-
-    class Admin extends \Encore\Admin\Facades\Admin {}
-
-    class Horizon extends \Laravel\Horizon\Horizon {}
  
 }
 

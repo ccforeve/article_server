@@ -98,18 +98,16 @@ function base64ChangeImg($img_base64,$file_name)
 
 /**
  * 图片转成base64位
- * @param $is_cache     '是否使用缓存'
  * @param $cache_name   '缓存名称'
  * @param $url          '图片链接'
  * @return string
  */
 function imgChangeBase64 ($url, $cache_name = '') {
-    $base64 = base64_encode(file_get_contents($url));
     if($cache_name) {
-        return Cache::remember($cache_name, 60 * 24 * 5, function () use ($base64) {
-            return "data:image/jpeg;base64," . $base64;
+        return Cache::remember($cache_name, 60 * 24 * 5, function () use ($url) {
+            return "data:image/jpeg;base64," . base64_encode(file_get_contents($url));
         });
     } else {
-        return "data:image/jpeg;base64," . $base64;
+        return "data:image/jpeg;base64," . base64_encode(file_get_contents($url));
     }
 }

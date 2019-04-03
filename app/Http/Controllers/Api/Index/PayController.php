@@ -73,8 +73,14 @@ class PayController extends Controller
             'openid'         => $user->openid, // trade_type=JSAPI，此参数必传，用户在商户appid下的唯一标识，
         ];
         $result = $app->order->unify($attributes);
-        $jssdk = $app->jssdk;
-        $config = $jssdk->sdkConfig($result['prepay_id']); // 返回数组
+        if(isset($result['err_code'])) {
+            return $this->response->array([
+                'code' => 513,
+                'err_code' => $result['err_code'],
+                'err_msg' => $result['err_code_des']
+            ]);
+        }
+        $config = $app->jssdk->sdkConfig($result['prepay_id']); // 返回数组
         return $this->response->array([
             'code' => 200,
             'msg' => '请求支付成功',

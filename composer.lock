@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d89ef340df5325c9e35b622bb42707ed",
+    "content-hash": "2c34fd19dc9fcbea8ff78f968bebdabc",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -194,6 +194,66 @@
                 "time"
             ],
             "time": "2018-10-18T22:02:21+00:00"
+        },
+        {
+            "name": "codingyu/ueditor",
+            "version": "2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel-admin-extensions/UEditor.git",
+                "reference": "efadb3d012d5d229315aef99d1b19e76007fa8aa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel-admin-extensions/UEditor/zipball/efadb3d012d5d229315aef99d1b19e76007fa8aa",
+                "reference": "efadb3d012d5d229315aef99d1b19e76007fa8aa",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "encore/laravel-admin": "~1.6",
+                "overtrue/laravel-ueditor": "~1.0",
+                "php": ">=7.0.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~6.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Codingyu\\Ueditor\\UeditorServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Codingyu\\Ueditor\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "codingyu",
+                    "email": "everceyu@gmail.com"
+                }
+            ],
+            "description": "UEditor extension for laravel-admin",
+            "homepage": "https://github.com/codingyu/UEditor",
+            "keywords": [
+                "extension",
+                "laravel-admin",
+                "ueditor"
+            ],
+            "time": "2019-03-19T07:54:49+00:00"
         },
         {
             "name": "dingo/api",
@@ -1394,83 +1454,6 @@
             "time": "2017-03-20T17:10:46+00:00"
         },
         {
-            "name": "hhxsv5/laravel-s",
-            "version": "v3.3.9",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/hhxsv5/laravel-s.git",
-                "reference": "2a21c452ced4ed255eadf282b43ba14ff1456af2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/hhxsv5/laravel-s/zipball/2a21c452ced4ed255eadf282b43ba14ff1456af2",
-                "reference": "2a21c452ced4ed255eadf282b43ba14ff1456af2",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
-            },
-            "require": {
-                "ext-json": "*",
-                "php": ">=5.5.9",
-                "symfony/console": ">=2.7.0"
-            },
-            "suggest": {
-                "ext-inotify": "Inotify, used to reload all worker processes when your code is modified.",
-                "ext-swoole": "Event-driven asynchronous & concurrent & coroutine networking engine with high performance for PHP, require >= 1.7.19."
-            },
-            "bin": [
-                "bin/fswatch"
-            ],
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Hhxsv5\\LaravelS\\Illuminate\\LaravelSServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Hhxsv5\\LaravelS\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Xie Biao",
-                    "email": "hhxsv5@sina.com"
-                }
-            ],
-            "description": "🚀LaravelS is a glue that is used to quickly integrate Swoole into Laravel or Lumen and then give them better performance and more possibilities.",
-            "homepage": "https://github.com/hhxsv5/laravel-s",
-            "keywords": [
-                "async",
-                "coroutine",
-                "http",
-                "inotify",
-                "laravel",
-                "laravel-s",
-                "lumen",
-                "performance",
-                "process",
-                "server",
-                "swoole",
-                "task",
-                "tcp",
-                "timer",
-                "udp",
-                "websocket"
-            ],
-            "time": "2019-01-02T11:41:08+00:00"
-        },
-        {
             "name": "jakub-onderka/php-console-color",
             "version": "v0.2",
             "source": {
@@ -1567,64 +1550,6 @@
                 }
             ],
             "time": "2015-04-20T18:58:01+00:00"
-        },
-        {
-            "name": "jxlwqq/material-ui",
-            "version": "1.0.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/laravel-admin-extensions/material-ui.git",
-                "reference": "d91d817cfd661094fc2ce718223f9d32ffb59449"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/laravel-admin-extensions/material-ui/zipball/d91d817cfd661094fc2ce718223f9d32ffb59449",
-                "reference": "d91d817cfd661094fc2ce718223f9d32ffb59449",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
-            },
-            "require": {
-                "encore/laravel-admin": ">=1.6.1",
-                "php": ">=7.0.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~6.0"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Jxlwqq\\MaterialUI\\MaterialUIServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Jxlwqq\\MaterialUI\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "jxlwqq",
-                    "email": "jxlwqq@gmail.com"
-                }
-            ],
-            "description": "material ui for laravel-admin",
-            "homepage": "https://github.com/jxlwqq/material-ui",
-            "keywords": [
-                "extension",
-                "laravel-admin"
-            ],
-            "time": "2018-10-29T11:02:41+00:00"
         },
         {
             "name": "laravel/framework",
@@ -2896,6 +2821,58 @@
             "time": "2017-11-29T06:55:32+00:00"
         },
         {
+            "name": "overtrue/laravel-ueditor",
+            "version": "1.2.10",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/overtrue/laravel-ueditor.git",
+                "reference": "f73f6399a21ab8c6635e492b7b5a28caaafa4127"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/overtrue/laravel-ueditor/zipball/f73f6399a21ab8c6635e492b7b5a28caaafa4127",
+                "reference": "f73f6399a21ab8c6635e492b7b5a28caaafa4127",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require-dev": {
+                "fabpot/php-cs-fixer": "^1.10"
+            },
+            "suggest": {
+                "overtrue/laravel-filesystem-qiniu": "如果你想要使用七牛云存储，也许你需要安装它哦~"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Overtrue\\LaravelUEditor\\UEditorServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Overtrue\\LaravelUEditor\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "overtrue",
+                    "email": "anzhengchao@gmail.com"
+                }
+            ],
+            "description": "UEditor integration for Laravel.",
+            "time": "2018-12-22T07:40:09+00:00"
+        },
+        {
             "name": "overtrue/laravel-wechat",
             "version": "4.0.22",
             "source": {
@@ -4145,16 +4122,16 @@
         },
         {
             "name": "symfony/console",
-            "version": "v4.1.7",
+            "version": "v4.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "432122af37d8cd52fba1b294b11976e0d20df595"
+                "reference": "9dc2299a016497f9ee620be94524e6c0af0280a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/432122af37d8cd52fba1b294b11976e0d20df595",
-                "reference": "432122af37d8cd52fba1b294b11976e0d20df595",
+                "url": "https://api.github.com/repos/symfony/console/zipball/9dc2299a016497f9ee620be94524e6c0af0280a9",
+                "reference": "9dc2299a016497f9ee620be94524e6c0af0280a9",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -4165,11 +4142,15 @@
             },
             "require": {
                 "php": "^7.1.3",
+                "symfony/contracts": "^1.0",
                 "symfony/polyfill-mbstring": "~1.0"
             },
             "conflict": {
                 "symfony/dependency-injection": "<3.4",
                 "symfony/process": "<3.3"
+            },
+            "provide": {
+                "psr/log-implementation": "1.0"
             },
             "require-dev": {
                 "psr/log": "~1.0",
@@ -4180,7 +4161,7 @@
                 "symfony/process": "~3.4|~4.0"
             },
             "suggest": {
-                "psr/log-implementation": "For using the console logger",
+                "psr/log": "For using the console logger",
                 "symfony/event-dispatcher": "",
                 "symfony/lock": "",
                 "symfony/process": ""
@@ -4188,7 +4169,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.1-dev"
+                    "dev-master": "4.2-dev"
                 }
             },
             "autoload": {
@@ -4215,7 +4196,81 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2018-10-31T09:30:44+00:00"
+            "time": "2019-02-23T15:17:42+00:00"
+        },
+        {
+            "name": "symfony/contracts",
+            "version": "v1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/contracts.git",
+                "reference": "1aa7ab2429c3d594dd70689604b5cf7421254cdf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/contracts/zipball/1aa7ab2429c3d594dd70689604b5cf7421254cdf",
+                "reference": "1aa7ab2429c3d594dd70689604b5cf7421254cdf",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": "^7.1.3"
+            },
+            "require-dev": {
+                "psr/cache": "^1.0",
+                "psr/container": "^1.0"
+            },
+            "suggest": {
+                "psr/cache": "When using the Cache contracts",
+                "psr/container": "When using the Service contracts",
+                "symfony/cache-contracts-implementation": "",
+                "symfony/service-contracts-implementation": "",
+                "symfony/translation-contracts-implementation": ""
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Contracts\\": ""
+                },
+                "exclude-from-classmap": [
+                    "**/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "A set of abstractions extracted out of the Symfony components",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "abstractions",
+                "contracts",
+                "decoupling",
+                "interfaces",
+                "interoperability",
+                "standards"
+            ],
+            "time": "2018-12-05T08:06:11+00:00"
         },
         {
             "name": "symfony/css-selector",
@@ -4744,16 +4799,16 @@
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.10.0",
+            "version": "v1.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "c79c051f5b3a46be09205c73b80b346e4153e494"
+                "reference": "fe5e94c604826c35a32fa832f35bd036b6799609"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/c79c051f5b3a46be09205c73b80b346e4153e494",
-                "reference": "c79c051f5b3a46be09205c73b80b346e4153e494",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/fe5e94c604826c35a32fa832f35bd036b6799609",
+                "reference": "fe5e94c604826c35a32fa832f35bd036b6799609",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -4771,7 +4826,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.9-dev"
+                    "dev-master": "1.11-dev"
                 }
             },
             "autoload": {
@@ -4805,7 +4860,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2018-09-21T13:07:52+00:00"
+            "time": "2019-02-06T07:57:58+00:00"
         },
         {
             "name": "symfony/polyfill-php56",
