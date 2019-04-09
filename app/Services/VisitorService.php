@@ -129,8 +129,7 @@ class VisitorService
     {
         $prospects = Footprint::with('seeUser:id,avatar,nickname')
             ->where('user_id', $user_id)
-            ->select('see_user_id')
-            ->distinct()
+            ->groupBy('see_user_id')
             ->latest('id')
             ->paginate(5);
         $prospects->transform(function ($prospect) use ($user_id) {

@@ -23,6 +23,10 @@ $api->version('v1', [
     Route::fallback(function(){
         return response()->json(['message' => '接口链接不正确'], 404);
     });
+
+    //测试
+    $api->get('test', 'TestsController@test');
+
     $api->get('wechat_public_qrcode', 'UsersController@getWechatQrcode');
 
     //微信授权登录

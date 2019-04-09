@@ -44,8 +44,8 @@ class UserArticleService
         if ( $user_article->user_id != $user_id ) {
             //用户文章第一次阅读则推送文本消息给该文章拥有者
             $openid = User::query()->where('id', $user_id)->value('openid');
-            $cache_name = $user_article->id . $openid;
-            if ( !\Cache::has($cache_name) && $user_article->user->subscribe && $user_article->user->receive_message ) {
+            $cache_name = $user_article->id . '_' . $openid;
+            if ( !\Cache::has($cache_name) && $user_article->user->subscribe ) {
                 //推送消息
                 $context = "有人对你的头条感兴趣！还不赶紧看看是谁~\n\n头条标题：《{$user_article->article->title}》\n\n<a href='http://btl.yxcxin.com/visitor'>【点击这里】</a>查看谁对我的头条感兴趣>></a>";
                 message($user_article->user->openid, 'text', $context);

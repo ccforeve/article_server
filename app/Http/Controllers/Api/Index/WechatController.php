@@ -118,8 +118,10 @@ class WechatController extends Controller
                     if ($user->id == $eventkey) {
                         return '扫自己的推广二维码是没用的喔';
                     }
+                } else {
+                    $this->checkUser($FromUserName);
                 }
-                $context = "关注欢迎语";
+                $context = "✨如何引流让客户主动加你？\n\n👉创业，不管产品再好，也要有人知道才行，所以很多创业者就为引流头痛，一方面要想着怎么加人，另一方面要想着怎么样才能留着住人。其实，这些问题在超级伙伴都可以轻松解决，为什么这么说？\n\n👉<a href='http://btl.yxcxin.com/punch'>【打卡】</a>每天努力打卡，积极向上，生成的打卡海报分享在朋友圈的传播中自动为你引来流量，根本不用你主动加人\n\n👉<a href='http://btl.yxcxin.com/poster'>【美图库】</a>提供整套的朋友圈素材，满足你的日常发圈需求，再也不用担心自己的客户因为朋友圈发的不好而把自己拉黑删除了";
                 message($FromUserName, 'text', $context);
                 break;
             //取消关注公众号
@@ -127,7 +129,7 @@ class WechatController extends Controller
                 User::where('openid', $FromUserName)->update(['subscribe' => 0]);
                 break;
             case 'CLICK':
-//                return new Image('AD_Lic41HecTBFHSKicKQrwdBglTPvJXd6uEM6A8kdk');
+                return '暂无点击事件';
                 break;
         }
     }
@@ -139,13 +141,14 @@ class WechatController extends Controller
      * @return mixed
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
      */
-    public function checkUser( $FromUserName, $eventkey )
+    public function checkUser( $FromUserName, $eventkey = 0 )
     {
         $user = User::where('openid', $FromUserName)->first();
         if($user) {
-            if($user->id !== $eventkey && $user->extension_id == 0 && $user->type == 0) {
+            if($eventkey) {
                 $this->relation($user, $eventkey);
-            } else {
+            }
+             else {
                 $user->subscribe = 1;
                 $user->subscribe_at = Carbon::now()->toDateTimeString();
                 $user->save();
@@ -163,26 +166,28 @@ class WechatController extends Controller
      * @return mixed
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
      */
-    public function register($FromUserName, $eventkey)
+    public function register($FromUserName, $eventkey = 0)
     {
         $user = $this->app->user->get($FromUserName);
         $data = [
-            'wc_nickname' => $user[ 'nickname' ],
-            'head' => $user[ 'headimgurl' ],
-            'openid' => $user[ 'openid' ],
-            'subscribe' => $user[ 'subscribe' ],
+            'openid' => $FromUserName,
+            'nickname' => $user[ 'nickname' ],
+            'avatar' => $user[ 'headimgurl' ],
+            'subscribe' => 1,
             'subscribe_at' => now()->toDateTimeString(),
             'sex' => $user[ 'sex' ]
         ];
-        $puser = User::find($eventkey);
-        if($puser) {
-            $data[ 'superior' ] = $puser->id;
-            $data[ 'superior_up' ] = $puser->superior;
-            $data[ 'extension_at' ] = now()->toDateTimeString();
-            $data[ 'extension_type' ] = '推广二维码';
+        $user = User::create($data);
+        if($eventkey) {
+            $puser = User::query()->where('id', $eventkey)->first(['id', 'superior']);
+            $user->superior = $puser->id;
+            $user->superior_up = $puser->superior;
+            $user->extension_at = now()->toDateTimeString();
+            $user->extension_type = '推广二维码';
+            $user->save();
         }
         //保存用户
-        return User::create($data);
+        return $user;
     }
 
     /**
@@ -192,12 +197,16 @@ class WechatController extends Controller
      */
     public function relation( $user, $eventkey )
     {
-        $pinfo = User::find($eventkey);
-        //当用户本来没有推广用户和经销商的时候
-        $user->superior = $pinfo->id;
-        $user->superior_up = $pinfo->superior_up;
-        $user->extension_at = now()->toDateTimeString();
-        $user->extension_type = '推广二维码';
-        $user->save();
+        if($user->id !== $eventkey && $user->extension_id == 0 && $user->type == 0) {
+            $pinfo = User::find($eventkey);
+            //当用户本来没有推广用户和经销商的时候
+            $user->subscribe = 1;
+            $user->subscribe_at = now()->toDateTimeString();
+            $user->superior = $pinfo->id;
+            $user->superior_up = $pinfo->superior;
+            $user->extension_at = now()->toDateTimeString();
+            $user->extension_type = '推广二维码';
+            $user->save();
+        }
     }
 }
