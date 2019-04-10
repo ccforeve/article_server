@@ -109,7 +109,11 @@ class ArticlesController extends Controller
         $form->number('like_count', '喜欢数');
         $form->switch('cover_state', '是否显示多图封面');
         $form->textarea('desc', '描述');
-        $form->UEditor('detail');
+        $form->UEditor('detail', '文章详情');
+
+        $form->saving(function (Form $form) {
+            $form->detail = str_replace('crossorigin="anonymous"', '', $form->detail);
+        });
         return $form;
     }
 }

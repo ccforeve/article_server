@@ -108,7 +108,7 @@ class VisitorService
             ->where(['see_user_id' => $user_id, 'type' => 1])
             ->latest('id')
             ->paginate(5);
-//        return $footprints;
+
         $footprints->transform(function ($footprint) {
             $article = $footprint->userArticle->article;
             $value = collect($article);

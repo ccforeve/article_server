@@ -9,6 +9,7 @@
 namespace App\Http\Controllers\Api\Index;
 
 
+use App\Events\PaySuccess;
 use App\Http\Controllers\Api\Controller;
 use App\Models\Order;
 use App\Models\Payment;
@@ -40,7 +41,7 @@ class PayController extends Controller
 
         if($user->superior) {
             $order['superior'] = $user->extension_id;
-            $order['superior_rate'] = floor($user->extension->integral_scale * $payment->price);
+            $order['superior_rate'] = floor($user->superior->integral_scale * $payment->price);
         }
 
         if($user->superior_up && optional($user->superior_up)->type == 2) {
@@ -97,7 +98,6 @@ class PayController extends Controller
      */
     public function outTradeNo(Application $app)
     {
-        //待测试
         $response = $app->handlePaidNotify(function( $notify, $fail) {
             // 使用通知里的 "微信支付订单号" 或者 "商户订单号" 去自己的数据库找到订单
             $order = Order::query()->where('order_id', $notify[ 'out_trade_no' ])->first();
@@ -114,26 +114,11 @@ class PayController extends Controller
             if ($notify['return_code'] === 'SUCCESS') {
                 // 用户是否支付成功
                 if (array_get($notify, 'result_code') === 'SUCCESS') {
-                    //只要用户支付成功，先把支付时间更新，以防后面发消息出错再次回调
-                    $order->pay_at = now();
-                    // 订单表修改为已经支付状态
-                    $order->state = 1;
-                    $order->save();
-                    //用户会员加时间
-                    $pay_user = User::query()->where('id',$order->user_id)->first();
-                    //判断用户的会员时间是否过期
-                    if (Carbon::parse($pay_user->member_lock_at)->gt(now())){
-                        $time = Carbon::parse($pay_user->member_lock_at);
-                    } else {
-                        $time = now();
-                    }
-                    $pay_user->member_up_at = now();
-                    $pay_user->member_lock_at = $time->addMonth($order->month);
-                    $pay_user->save();
+                    event(new PaySuccess($order));
                 } else { // 用户支付失败
                     $order->state = 2;
+                    $order->save();
                 }
-                $order->save();
                 return true; // 返回处理完成
             }
         });

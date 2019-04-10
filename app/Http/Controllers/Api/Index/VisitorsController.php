@@ -109,6 +109,9 @@ class VisitorsController extends Controller
      */
     public function checkMemberState( $user )
     {
+        if($user->type == 1) {
+            return false;
+        }
         if(!Carbon::parse($user->member_lock_at)->gt(now())) {
             return $this->response->error('开通会员后即可查看', 402);
         }

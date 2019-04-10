@@ -5,6 +5,19 @@
  * Date: 2018/11/8 0008
  * Time: 下午 2:50
  */
+if (! function_exists('cdn_path')) {
+    /**
+     * Get the path to the public folder.
+     *
+     * @param  string  $path
+     * @return string
+     */
+    function cdn_path($path = '')
+    {
+        return base_path() . '/cdn' . ($path ? DIRECTORY_SEPARATOR.ltrim($path, DIRECTORY_SEPARATOR) : $path);
+    }
+}
+
 /**
  * @title 推送文本、图片消息
  * @param $app
@@ -14,9 +27,6 @@
  */
 function message($FromUserName,$type,$context)
 {
-    info($FromUserName);
-    info($type);
-    info($context);
     switch($type) {
         case 'text':
             //推送推广成功消息（客服消息）

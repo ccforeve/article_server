@@ -24,7 +24,7 @@ class UserArticleRepository
     {
         $user_article = $this->user_article->with(
             'user:id,nickname,avatar,wechat,phone,qrcode,profession,subscribe,receive_message,member_lock_at',
-            'article:id,title,cover,detail,created_at'
+            'article:id,title,cover,detail,desc,created_at'
         )
             ->where($where)
             ->select('id', 'user_id', 'article_id')

@@ -74,7 +74,7 @@ return [
         /* 上传视频配置 */
         'videoActionName' => 'upload-video', /* 执行上传视频的action名称 */
         'videoFieldName' => 'upfile', /* 提交的视频表单名称 */
-        'videoPathFormat' => '/uploads/video/{yyyy}/{mm}/{dd}/', /* 上传保存路径,可以自定义保存路径和文件名格式 */
+        'videoPathFormat' => '/editor/video/{yyyy}/{mm}/{dd}/', /* 上传保存路径,可以自定义保存路径和文件名格式 */
         'videoUrlPrefix' => '', /* 视频访问路径前缀 */
         'videoMaxSize' => 102400000, /* 上传大小限制，单位B，默认100MB */
         'videoAllowFiles' => [
@@ -84,7 +84,7 @@ return [
         /* 上传文件配置 */
         'fileActionName' => 'upload-file', /* controller里,执行上传视频的action名称 */
         'fileFieldName' => 'upfile', /* 提交的文件表单名称 */
-        'filePathFormat' => '/uploads/file/{yyyy}/{mm}/{dd}/', /* 上传保存路径,可以自定义保存路径和文件名格式 */
+        'filePathFormat' => '/editor/file/{yyyy}/{mm}/{dd}/', /* 上传保存路径,可以自定义保存路径和文件名格式 */
         'fileUrlPrefix' => '', /* 文件访问路径前缀 */
         'fileMaxSize' => 51200000, /* 上传大小限制，单位B，默认50MB */
         'fileAllowFiles' => [
@@ -97,7 +97,7 @@ return [
 
         /* 列出指定目录下的图片 */
         'imageManagerActionName' => 'list-image', /* 执行图片管理的action名称 */
-        'imageManagerListPath' => '/uploads/image/', /* 指定要列出图片的目录 */
+        'imageManagerListPath' => '/editor/image/', /* 指定要列出图片的目录 */
         'imageManagerListSize' => 20, /* 每次列出文件数量 */
         'imageManagerUrlPrefix' => '', /* 图片访问路径前缀 */
         'imageManagerInsertAlign' => 'none', /* 插入的图片浮动方式 */
@@ -105,7 +105,7 @@ return [
 
         /* 列出指定目录下的文件 */
         'fileManagerActionName' => 'list-file', /* 执行文件管理的action名称 */
-        'fileManagerListPath' => '/uploads/file/', /* 指定要列出文件的目录 */
+        'fileManagerListPath' => '/editor/file/', /* 指定要列出文件的目录 */
         'fileManagerUrlPrefix' => '', /* 文件访问路径前缀 */
         'fileManagerListSize' => 20, /* 每次列出文件数量 */
         'fileManagerAllowFiles' => [

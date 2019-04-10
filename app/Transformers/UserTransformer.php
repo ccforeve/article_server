@@ -16,7 +16,7 @@ class UserTransformer extends TransformerAbstract
 {
     public function transform( User $user )
     {
-        return [
+        $user_data = [
             'id' => $user->id,
             'openid' => $user->openid,                               //微信openid
             'is_subscribe' => $user->subscribe,
@@ -32,12 +32,13 @@ class UserTransformer extends TransformerAbstract
             'type' => $user->type,
             'ali_account' => $user->ali_account,
             'ali_name' => $user->ali_name,
-            'member_lock_at' => Carbon::parse($user->member_lock_at)->toDateString(),
-            'is_member' => Carbon::parse($user->member_lock_at)->gt(now()) ? 1 : 0,
+            'member_lock_at' => $user->type == 1 ? now()->addYears(99)->toDateString() : Carbon::parse($user->member_lock_at)->toDateString(),
+            'is_member' => $user->type == 1 ? 1 : (Carbon::parse($user->member_lock_at)->gt(now()) ? 1 : 0) ,
             'integral_scale' => $user->integral_scale,
             'integral_scale_second' => $user->integral_scale_second,
             'created_at' => $user->created_at,
         ];
+        return $user_data;
     }
 
 }
