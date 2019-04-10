@@ -17,12 +17,12 @@ class User extends Authenticatable implements JWTSubject
      */
     protected $guarded = ['type', 'integral_scale', 'member_up_at', 'member_lock_at', 'state'];
 
-    public function superior()
+    public function superiorUser()
     {
         return $this->belongsTo(User::class, 'superior');
     }
 
-    public function superior_up()
+    public function superiorUpUser()
     {
         return $this->belongsTo(User::class, 'superior_up');
     }

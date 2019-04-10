@@ -24,6 +24,7 @@ class PaySuccessNotification
         // 订单表修改为已经支付状态
         $order->state = 1;
         $order->save();
+
         //用户会员加时间
         $pay_user = User::query()->where('id',$order->user_id)->first();
         //判断用户的会员时间是否过期

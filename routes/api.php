@@ -44,6 +44,12 @@ $api->version('v1', [
     //微信支付回调
     $api->any('wechat_out_trade', 'PayController@outTradeNo')->name('api.wechat_out_trade');
 
+    //支付宝支付
+    $api->get('alipay/pay/{order}', 'PayController@alipay');
+
+    //支付宝支付回调
+    $api->any('alipay/notify', 'PayController@alipayNotify')->name('api.alipay_notify');
+
     //添加产品接口
     $api->post('products', 'ProductsController@store');
 

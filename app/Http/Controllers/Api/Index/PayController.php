@@ -14,9 +14,9 @@ use App\Http\Controllers\Api\Controller;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Models\User;
-use Carbon\Carbon;
 use EasyWeChat\Payment\Application;
 use Illuminate\Http\Request;
+use Pay;
 
 class PayController extends Controller
 {
@@ -40,19 +40,29 @@ class PayController extends Controller
         ];
 
         if($user->superior) {
-            $order['superior'] = $user->extension_id;
-            $order['superior_rate'] = floor($user->superior->integral_scale * $payment->price);
+            $order['superior'] = $user->superior;
+            $order['superior_rate'] = floor($user->superiorUser->integral_scale * $payment->price);
         }
 
-        if($user->superior_up && optional($user->superior_up)->type == 2) {
-            $order[ 'superior_up' ] = $user->extension_up;
-            $order[ 'superior_up_scale' ] = floor($user->superior_up->integral_scale_second * $payment->price);
+        if($user->superior_up && optional($user->superiorUpUser)->type == 2) {
+            $order[ 'superior_up' ] = $user->superior_up;
+            $order[ 'superior_up_scale' ] = floor($user->superiorUpUser->integral_scale_second * $payment->price);
         }
 
         $add_order = Order::create($order);
 
-        //微信支付
-        return $this->wechat($app, $add_order);
+        if($order['pay_type'] == 1) {
+            //微信支付
+            return $this->wechat($app, $add_order);
+        } elseif($order['pay_type'] == 2) {
+            //支付宝支付
+            return $this->response->array([
+                'code' => 200,
+                'order_id' => $add_order->id,
+                'pay_type' => $order['pay_type'],
+                'message' => '支付宝支付生成订单成功'
+            ]);
+        }
     }
 
     /**
@@ -84,7 +94,8 @@ class PayController extends Controller
         $config = $app->jssdk->sdkConfig($result['prepay_id']); // 返回数组
         return $this->response->array([
             'code' => 200,
-            'msg' => '请求支付成功',
+            'pay_type' => $order['pay_type'],
+            'msg' => '微信支付请求成功',
             'config' => $config,
             'member_month' => $order->month
         ]);
@@ -123,5 +134,45 @@ class PayController extends Controller
             }
         });
         return $response;
+    }
+
+    /**
+     * 支付宝支付
+     * @param Order $order
+     * @return mixed
+     */
+    public function alipay(Order $order)
+    {
+        $order = [
+            'out_trade_no' => $order->order_id,
+            'total_amount' => $order->price,
+            'subject' => $order->title,
+        ];
+
+        $alipay = Pay::alipay()->wap($order);
+
+        return $alipay;
+    }
+
+    public function alipayNotify()
+    {
+        $alipay = Pay::alipay();
+        $data = $alipay->verify(); // 是的，验签就这么简单！
+        // 请自行对 trade_status 进行判断及其它逻辑进行判断，在支付宝的业务通知中，只有交易通知状态为 TRADE_SUCCESS 或 TRADE_FINISHED 时，支付宝才会认定为买家付款成功。
+        $data = json_decode($data, true);
+        info('支付宝支付', $data);
+        if ( $data[ 'trade_status' ] == 'TRADE_SUCCESS' || $data[ 'trade_status' ] == 'TRADE_FINISHED' ) {
+            // 1、商户需要验证该通知数据中的out_trade_no是否为商户系统中创建的订单号；
+            $order = Order::query()->where('order_id', $data['out_trade_no'])->first();
+            if(!$order->pay_at || !$order->state == 1) {
+                // 2、验证app_id是否为该商户本身。
+                if ( $data[ 'app_id' ] == config('pay.alipay.app_id') ) {
+                    // 3、其它业务逻辑情况
+                    event(new PaySuccess($order));
+                }
+            }
+        }
+
+        return $alipay->success();
     }
 }
