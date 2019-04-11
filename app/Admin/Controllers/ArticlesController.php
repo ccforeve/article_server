@@ -101,7 +101,7 @@ class ArticlesController extends Controller
         $form = new Form(new Article);
 
         $form->text('title', '标题')->rules('required', ['标题不可为空']);
-        $form->image('cover', '封面')->uniqueName();
+        $form->cropper('cover', '封面')->uniqueName();
         $form->multipleImage('covers', '多封面')->help('可选');
         $form->select('category_id', '类型')->options(ArticleCategory::all()->pluck('title', 'id'));
         $form->number('read_count', '阅读数');

@@ -9,6 +9,7 @@
 namespace App\Http\Controllers\Api\Index;
 
 use App\Http\Controllers\Controller;
+use App\Models\Product;
 use App\Models\User;
 use Carbon\Carbon;
 use EasyWeChat\OfficialAccount\Application;
@@ -21,6 +22,11 @@ class WechatController extends Controller
     public function __construct( Application $app )
     {
         $this->app = $app;
+    }
+
+    public function url( $value )
+    {
+        return "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxfa7b58cf37b2d3bd&redirect_uri={$value}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
     }
 
     /**
@@ -43,6 +49,14 @@ class WechatController extends Controller
         \Cache::flush();
     }
 
+    /**
+     * 获取微信sdk配置
+     * @param Application $app
+     * @param Request $request
+     * @return array|string
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     */
     public function config( Application $app, Request $request )
     {
         return $app->jssdk->buildConfig(['chooseWXPay', 'onMenuShareTimeline', 'onMenuShareAppMessage'], urldecode($request->url));
@@ -59,7 +73,11 @@ class WechatController extends Controller
                     break;
                 //收到文字消息
                 case 'text':
-                    return '暂无客服';
+                    return $this->_text($message['FromUserName'], $message['Content']);
+                    break;
+                case 'voice':
+                    return $this->_voice($message['Recognition']);
+                    return '收到语音消息';
                     break;
             }
         });
@@ -78,15 +96,41 @@ class WechatController extends Controller
             [
                 "type" => "view",
                 "name" => "热文分享",
-                "url"  => "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxfa7b58cf37b2d3bd&redirect_uri=http://btl.yxcxin.com&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect"
+                "url"  => $this->url('http://btl.yxcxin.com')
             ],
             [
                 "type" => "view",
                 "name" => "早起打卡",
-                "url"  => "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxfa7b58cf37b2d3bd&redirect_uri=http://btl.yxcxin.com/punch&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect"
+                "url"  => $this->url('http://btl.yxcxin.com/punch')
             ]
         ];
         $app->menu->create($buttons);
+    }
+
+    public function _text( $openid, $content )
+    {
+        return $this->searchProduct($content);
+    }
+
+    public function _voice( $recognition )
+    {
+        return $this->searchProduct($recognition);
+    }
+
+    public function searchProduct( $content )
+    {
+        $products = Product::with('article:id,product_id')->where('name', 'like', "%$content%")->paginate(6);
+        if(count($products->items()) > 1) {
+            $message = "智能推荐关键词为“{$content}”的产品{$products->total()}种：\n";
+            foreach ( $products->items() as $key => $product ) {
+                $key++;
+                $member_price = number_format($product->price - $product->ticket, 2);
+                $message .= "{$key}、[{$product->online_id}]<a href='" . $this->url("http://btl.yxcxin.com/article_detail/{$product->article->id}/public") . "'>{$product->name}</a>(零售：{$product->price}元，会员：{$member_price}元 + {$product->ticket}卷)\n";
+            }
+
+            return $message;
+        }
+        return "智能搜索暂无“{$content}”";
     }
 
     /**
@@ -119,10 +163,10 @@ class WechatController extends Controller
                         return '扫自己的推广二维码是没用的喔';
                     }
                 } else {
-                    $this->checkUser($FromUserName);
+                    $user = $this->checkUser($FromUserName);
                 }
-                $context = "✨如何引流让客户主动加你？\n\n👉创业，不管产品再好，也要有人知道才行，所以很多创业者就为引流头痛，一方面要想着怎么加人，另一方面要想着怎么样才能留着住人。其实，这些问题在超级伙伴都可以轻松解决，为什么这么说？\n\n👉<a href='http://btl.yxcxin.com/punch'>【打卡】</a>每天努力打卡，积极向上，生成的打卡海报分享在朋友圈的传播中自动为你引来流量，根本不用你主动加人\n\n👉<a href='http://btl.yxcxin.com/poster'>【美图库】</a>提供整套的朋友圈素材，满足你的日常发圈需求，再也不用担心自己的客户因为朋友圈发的不好而把自己拉黑删除了";
-                message($FromUserName, 'text', $context);
+                $context = "{$user->nickname}，你好\n\n恭喜你找到事业分享神奇\n“事业分享”为你准备了大量的行业文章。\n每天都会持续稳定更新。\n让你可以快速成长，获取专业知识。\n是你健康事业一大利器！\n你可以通过“分享事业”点击进入，分享里面的文章。\n分享到朋友圈和好友群之后，如有人点开你分享的文章浏览，我们会第一时间通知您，让你第一时间和客户取得联系。不遗漏每一位潜在客户！！！\n\n点击👇👇👇“分享事业”开启你互联网健康事业的第一步吧！";
+                return $context;
                 break;
             //取消关注公众号
             case 'unsubscribe':

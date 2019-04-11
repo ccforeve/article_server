@@ -39,7 +39,7 @@ class InvitationPoster implements ShouldQueue
     public function handle(Application $app)
     {
         // 上传临时图片素材
-        $file_path = public_path('uploads/') . $this->image_url;
+        $file_path = cdn_path("uploads/{$this->image_url}");
         $ret = $app->media->uploadImage($file_path);
         unlink($file_path);
 

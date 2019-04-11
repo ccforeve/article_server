@@ -27,6 +27,21 @@ class User extends Authenticatable implements JWTSubject
         return $this->belongsTo(User::class, 'superior_up');
     }
 
+    public function getAvatarAttribute( $value )
+    {
+        if(!str_contains($value, 'http')) {
+            return \Storage::disk('admin')->url($value);
+        }
+        return $value;
+    }
+
+    public function getQrcodeAttribute( $value )
+    {
+        if(!str_contains($value, 'http')) {
+            return \Storage::disk('admin')->url($value);
+        }
+        return $value;
+    }
 
     public function getJWTIdentifier()
     {

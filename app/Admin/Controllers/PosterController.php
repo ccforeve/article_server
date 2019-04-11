@@ -87,7 +87,7 @@ class PosterController extends Controller
         $grid->model()->latest('id');
 
         $grid->id('Id');
-        $grid->image_url('美图')->image('http://stl.yxcxin.com', 100, 100);
+        $grid->image_url('美图')->image('http://cdn.yxcxin.com', 100, 100);
         $grid->title('标题')->editable();
         $grid->poster()->name('分类');
         $grid->created_at('新增时间');
