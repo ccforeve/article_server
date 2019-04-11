@@ -78,10 +78,13 @@ class PostersController extends Controller
     public function nextOrLast( PosterService $service, Request $request )
     {
         $poster = $service->nextOrLast($request->id, $request->cate, $request->cate_id, $request->type);
-
+        $image = "";
+        if($poster) {
+            $image = imgChangeBase64($poster->image_url);
+        }
         return $this->response->array([
             'code' => 200,
-            'data' => $poster
+            'data' => ['image_url' => $image]
         ]);
     }
 
