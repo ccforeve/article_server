@@ -46,4 +46,10 @@ Route::group([
 
     //数据报表
     $router->get('report_index', 'ReportController@index');
+
+    //公众号关键词
+    $router->resource('key_word', 'KeyWordController');
+
+    //自定义关键词回复
+    $router->resource('key_word_custom', 'KeyWordCustomController');
 });

@@ -9,14 +9,15 @@
 namespace App\Http\Controllers\Api\Index;
 
 use App\Http\Controllers\Controller;
-use App\Models\Product;
+use App\Http\Traits\WechatNotifiable;
 use App\Models\User;
-use Carbon\Carbon;
 use EasyWeChat\OfficialAccount\Application;
 use Illuminate\Http\Request;
 
 class WechatController extends Controller
 {
+    use WechatNotifiable;
+
     protected $app;
 
     public function __construct( Application $app )
@@ -77,7 +78,6 @@ class WechatController extends Controller
                     break;
                 case 'voice':
                     return $this->_voice($message['Recognition']);
-                    return '收到语音消息';
                     break;
             }
         });
@@ -107,30 +107,25 @@ class WechatController extends Controller
         $app->menu->create($buttons);
     }
 
+    /**
+     * 文字事件
+     * @param $openid
+     * @param $content
+     * @return string
+     */
     public function _text( $openid, $content )
     {
         return $this->searchProduct($content);
     }
 
+    /**
+     * 语音事件
+     * @param $recognition
+     * @return string
+     */
     public function _voice( $recognition )
     {
         return $this->searchProduct($recognition);
-    }
-
-    public function searchProduct( $content )
-    {
-        $products = Product::with('article:id,product_id')->where('name', 'like', "%$content%")->paginate(6);
-        if(count($products->items()) > 1) {
-            $message = "智能推荐关键词为“{$content}”的产品{$products->total()}种：\n";
-            foreach ( $products->items() as $key => $product ) {
-                $key++;
-                $member_price = number_format($product->price - $product->ticket, 2);
-                $message .= "{$key}、[{$product->online_id}]<a href='" . $this->url("http://btl.yxcxin.com/article_detail/{$product->article->id}/public") . "'>{$product->name}</a>(零售：{$product->price}元，会员：{$member_price}元 + {$product->ticket}卷)\n";
-            }
-
-            return $message;
-        }
-        return "智能搜索暂无“{$content}”";
     }
 
     /**
@@ -175,82 +170,6 @@ class WechatController extends Controller
             case 'CLICK':
                 return '暂无点击事件';
                 break;
-        }
-    }
-
-    /**
-     * 检查用户账户情况
-     * @param $FromUserName
-     * @param $eventkey
-     * @return mixed
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     */
-    public function checkUser( $FromUserName, $eventkey = 0 )
-    {
-        $user = User::where('openid', $FromUserName)->first();
-        if($user) {
-            if($eventkey) {
-                $this->relation($user, $eventkey);
-            }
-             else {
-                $user->subscribe = 1;
-                $user->subscribe_at = Carbon::now()->toDateTimeString();
-                $user->save();
-            }
-        } else {    //创建用户
-            $user = $this->register($FromUserName, $eventkey);
-        }
-        return $user;
-    }
-
-    /**
-     * 创建账户
-     * @param $FromUserName     openid
-     * @param $eventkey         上级推荐id
-     * @return mixed
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     */
-    public function register($FromUserName, $eventkey = 0)
-    {
-        $user = $this->app->user->get($FromUserName);
-        $data = [
-            'openid' => $FromUserName,
-            'nickname' => $user[ 'nickname' ],
-            'avatar' => $user[ 'headimgurl' ],
-            'subscribe' => 1,
-            'subscribe_at' => now()->toDateTimeString(),
-            'sex' => $user[ 'sex' ]
-        ];
-        $user = User::create($data);
-        if($eventkey) {
-            $puser = User::query()->where('id', $eventkey)->first(['id', 'superior']);
-            $user->superior = $puser->id;
-            $user->superior_up = $puser->superior;
-            $user->extension_at = now()->toDateTimeString();
-            $user->extension_type = '推广二维码';
-            $user->save();
-        }
-        //保存用户
-        return $user;
-    }
-
-    /**
-     * 关联账户关系
-     * @param $user
-     * @param $eventkey
-     */
-    public function relation( $user, $eventkey )
-    {
-        if($user->id !== $eventkey && $user->extension_id == 0 && $user->type == 0) {
-            $pinfo = User::find($eventkey);
-            //当用户本来没有推广用户和经销商的时候
-            $user->subscribe = 1;
-            $user->subscribe_at = now()->toDateTimeString();
-            $user->superior = $pinfo->id;
-            $user->superior_up = $pinfo->superior;
-            $user->extension_at = now()->toDateTimeString();
-            $user->extension_type = '推广二维码';
-            $user->save();
         }
     }
 }
