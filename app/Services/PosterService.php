@@ -35,22 +35,4 @@ class PosterService
 
         return $posters;
     }
-
-    public function nextOrLast( $id, $cate, $cate_id, $type )
-    {
-        if($type == 'next') {
-            return Poster::query()->where([
-                ['id', '>', $id],
-                ['poster_id', '=', $cate_id],
-                ['poster_type', '=', $cate]
-            ])->first();
-        } else {
-            return Poster::query()->where([
-                ['id', '<', $id],
-                ['poster_id', '=', $cate_id],
-                ['poster_type', '=', $cate]
-            ])->latest('id')->first();
-        }
-
-    }
 }

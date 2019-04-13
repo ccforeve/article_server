@@ -4,6 +4,7 @@ namespace App\Admin\Controllers;
 
 use App\Models\KeyWord;
 use App\Http\Controllers\Controller;
+use App\Models\KeyWordCustom;
 use Encore\Admin\Controllers\HasResourceActions;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -126,6 +127,7 @@ class KeyWordController extends Controller
         $form->text('name', '关键词');
         $form->text('cmd', '规则名');
         $form->select('type', '处理类型')->options([0 => '等于', 1 => '前置', 2 => '中间', 3 => '后置', 4 => '正则', 5 => '包含多个']);
+        $form->select('custom_id', '返回自定义')->options(KeyWordCustom::query()->pluck('name', 'id'));
 
         return $form;
     }

@@ -36,17 +36,17 @@ function message($FromUserName,$type,$context)
             //推送推广图片消息（客服消息）
             $message = new \EasyWeChat\Kernel\Messages\Image($context);
             break;
-//        case 'article':
-//            $items = [
-//                new \EasyWeChat\Kernel\Messages\NewsItem([
-//                    'title'       => $context['title'],
-//                    'description' => str_limit(strip_tags($context['details']), 70),
-//                    'url'         => route('article_details', $context['id']),
-//                    'image'       => $context['pic'],
-//                ]),
-//            ];
-//            $message = new \EasyWeChat\Kernel\Messages\News($items);
-//            break;
+        case 'new_item':
+            $items = [
+                new \EasyWeChat\Kernel\Messages\NewsItem([
+                    'title'       => $context['title'],
+                    'description' => $context['description'],
+                    'url'         => $context['url'],
+                    'image'       => $context['image'],
+                ]),
+            ];
+            $message = new \EasyWeChat\Kernel\Messages\News($items);
+            break;
     }
     try {
         $app = \EasyWeChat::officialAccount();

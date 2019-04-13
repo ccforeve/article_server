@@ -55,37 +55,14 @@ class PostersController extends Controller
      */
     public function random( Request $request, $count )
     {
-        if($type = $request->cate_type) {
-            $posters_query = Poster::query()->where([ 'poster_type' => $type, 'poster_id' => $request->cate_id ])->inRandomOrder()->limit($count);
-            if($count == 1) {
-                $posters = $posters_query->first();
-                $posters = collect($posters)->put('image_url', imgChangeBase64($posters->image_url));
-            }
-            $posters_query->get();
+        if($count == 1) {
+            $posters = Poster::query()->inRandomOrder()->limit($count)->first();
+            $posters = collect($posters)->put('image_url', imgChangeBase64($posters->image_url));
         } else {
             $posters = Poster::query()->inRandomOrder()->limit($count)->get();
         }
 
         return $posters;
-    }
-
-    /**
-     * 当前分类下上一个或下一下海报
-     * @param PosterService $service
-     * @param Request $request
-     * @return PosterService|\Illuminate\Database\Eloquent\Model|null|object
-     */
-    public function nextOrLast( PosterService $service, Request $request )
-    {
-        $poster = $service->nextOrLast($request->id, $request->cate, $request->cate_id, $request->type);
-        $image = "";
-        if($poster) {
-            $image = imgChangeBase64($poster->image_url);
-        }
-        return $this->response->array([
-            'code' => 200,
-            'data' => ['image_url' => $image]
-        ]);
     }
 
     /**

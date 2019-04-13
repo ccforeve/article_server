@@ -9,4 +9,9 @@ use Illuminate\Database\Eloquent\Model;
 class KeyWord extends Model
 {
     protected $guarded = [];
+
+    public function custom(  )
+    {
+        return $this->belongsTo(KeyWordCustom::class, 'custom_id');
+    }
 }

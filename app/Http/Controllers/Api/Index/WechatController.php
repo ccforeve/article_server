@@ -115,7 +115,7 @@ class WechatController extends Controller
      */
     public function _text( $openid, $content )
     {
-        return $this->searchProduct($content);
+        return $this->searchProduct($openid, $content);
     }
 
     /**
@@ -123,9 +123,9 @@ class WechatController extends Controller
      * @param $recognition
      * @return string
      */
-    public function _voice( $recognition )
+    public function _voice( $openid, $recognition )
     {
-        return $this->searchProduct($recognition);
+        return $this->searchProduct( $openid, $recognition );
     }
 
     /**

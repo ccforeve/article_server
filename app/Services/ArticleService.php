@@ -47,7 +47,6 @@ class ArticleService
     public function show( $user_id, $article_id )
     {
         Article::query()->where('id', $article_id)->increment('read_count');
-//        $user_article = UserArticle::query()->where(['user_id' => $user_id, 'article_id' => $article_id])->first();
         $user_article = $this->user_article_repository->articleFromUser(['user_id' => $user_id, 'article_id' => $article_id]);
         if(!$user_article) {
             $user_article = UserArticle::create([

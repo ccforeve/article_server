@@ -82,10 +82,13 @@ class KeyWordCustomController extends Controller
         $grid = new Grid(new KeyWordCustom);
 
         $grid->id('Id');
-        $grid->name('Name');
-        $grid->response_content('Response content');
-        $grid->created_at('Created at');
-        $grid->updated_at('Updated at');
+        $grid->name('标题');
+        $grid->created_at('添加时间');
+        $grid->updated_at('更新时间');
+
+        $grid->disableExport();
+        $grid->disableRowSelector();
+        $grid->perPages([10, 20]);
 
         return $grid;
     }
@@ -101,10 +104,10 @@ class KeyWordCustomController extends Controller
         $show = new Show(KeyWordCustom::findOrFail($id));
 
         $show->id('Id');
-        $show->name('Name');
-        $show->response_content('Response content');
-        $show->created_at('Created at');
-        $show->updated_at('Updated at');
+        $show->name('标题');
+        $show->response_content('返回内容');
+        $show->created_at('添加时间');
+        $show->updated_at('更新时间');
 
         return $show;
     }
@@ -118,8 +121,8 @@ class KeyWordCustomController extends Controller
     {
         $form = new Form(new KeyWordCustom);
 
-        $form->text('name', 'Name');
-        $form->textarea('response_content', 'Response content');
+        $form->text('name', '标题');
+        $form->textarea('response_content', '返回内容');
 
         return $form;
     }
