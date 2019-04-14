@@ -14,4 +14,9 @@ class KeyWord extends Model
     {
         return $this->belongsTo(KeyWordCustom::class, 'custom_id');
     }
+
+    public function scopeType( $query, $value )
+    {
+        $query->where('type', $value);
+    }
 }

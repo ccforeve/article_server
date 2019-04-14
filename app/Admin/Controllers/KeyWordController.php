@@ -85,7 +85,7 @@ class KeyWordController extends Controller
         $grid->id('Id');
         $grid->name('关键词');
         $grid->cmd('规则名');
-        $grid->type('处理类型')->using([0 => '等于', 1 => '前置', 2 => '中间', 3 => '后置', 4 => '正则', 5 => '包含多个']);
+        $grid->type('处理类型')->using([0 => '等于', 1 => '前置、中间、后置', 2 => '包含多个']);
         $grid->created_at('添加时间');
         $grid->updated_at('更新时间');
 
@@ -126,7 +126,7 @@ class KeyWordController extends Controller
 
         $form->text('name', '关键词');
         $form->text('cmd', '规则名');
-        $form->select('type', '处理类型')->options([0 => '等于', 1 => '前置', 2 => '中间', 3 => '后置', 4 => '正则', 5 => '包含多个']);
+        $form->select('type', '处理类型')->options([0 => '等于', 1 => '前置、中间、后置', 2 => '包含多个']);
         $form->select('custom_id', '返回自定义')->options(KeyWordCustom::query()->pluck('name', 'id'));
 
         return $form;

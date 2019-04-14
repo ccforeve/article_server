@@ -4,6 +4,7 @@ namespace App\Admin\Controllers;
 
 use App\Models\User;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Encore\Admin\Controllers\HasResourceActions;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -196,6 +197,12 @@ class UsersController extends Controller
         $form->switch('receive_message', '是否接收公众号消息')->states(['on' => ['value' => 0, 'text' => '接收'], 'off' => ['value' => 1, 'text' => '不接收']]);
         $form->text('ali_account', '支付宝账号');
         $form->text('ali_name', '支付宝认证姓名');
+
+        $form->saving(function (Form $form) {
+            if($form->type == 1) {
+                $form->member_lock_at = now()->addYears(100);
+            }
+        });
 
         return $form;
     }

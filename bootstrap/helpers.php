@@ -121,3 +121,17 @@ function imgChangeBase64 ($url, $cache_name = '') {
         return "data:image/jpeg;base64," . base64_encode(file_get_contents($url));
     }
 }
+
+/**
+ * 获取数组中最长的字符串
+ * @param $array
+ * @return mixed
+ */
+function getMaxString($array) {
+    $index = 0;
+    foreach ($array as $k => $v) {
+        if (strlen($array[$index]['item']) < strlen($v['item']))
+            $index = $k;
+    }
+    return $array[$index];
+}
