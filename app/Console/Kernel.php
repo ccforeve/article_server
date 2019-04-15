@@ -30,8 +30,8 @@ class Kernel extends ConsoleKernel
             $end_time = now()->subHours(32);
             $users = User::query()
                 ->where('subscribe', 1)
-                ->whereBetween('subscribed_at', [$begin_time, $end_time])
-                ->get(['id', 'openid', 'nickname', 'subscribe', 'subscribed_at']);
+                ->whereBetween('subscribe_at', [$begin_time, $end_time])
+                ->get(['id', 'openid', 'nickname', 'subscribe', 'subscribe_at']);
             foreach ($users as $user) {
                 message($user->openid, 'text', array_random(config('app.wechat_service_message')));
             }

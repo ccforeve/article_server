@@ -49,17 +49,6 @@ class MessageService
         return $messages;
     }
 
-//    public function messageTransform( $messages )
-//    {
-//        return $messages->transform(function ($message) {
-//            $value = collect($message->submitUser);
-//            $value->put('message_id', $message->id);
-//            $value->put('created_at', $message->created_at->toDateTimeString());
-//
-//            return $value;
-//        });
-//    }
-
     public function story( $user_id, $request )
     {
         $data = $request->except('cate');
@@ -69,6 +58,7 @@ class MessageService
                 $add = Message::create($data);
                 break;
             case 'family':
+                $data['age'] = now()->year - Carbon::parse($request->age)->year;
                 $add = MessageFamily::create($data);
                 break;
         }

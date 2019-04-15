@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Index;
 
 use App\Jobs\InvitationPoster;
 use App\Models\Poster;
+use App\Models\PosterCategory;
 use App\Services\PosterService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Api\Controller;
@@ -38,7 +39,7 @@ class PostersController extends Controller
 
     public function show( Poster $poster )
     {
-        $base64 = imgChangeBase64($poster->image_url);
+        $base64 = imgChangeBase64($poster->image_url, "{$poster->id}_{$poster->title}");
         return $this->response->array([
             'id' => $poster->id,
             'image_url' => $base64,
@@ -56,13 +57,26 @@ class PostersController extends Controller
     public function random( Request $request, $count )
     {
         if($count == 1) {
-            $posters = Poster::query()->inRandomOrder()->limit($count)->first();
-            $posters = collect($posters)->put('image_url', imgChangeBase64($posters->image_url));
+            $poster = Poster::query()->inRandomOrder()->limit($count)->first();
+            $posters = collect($poster)->put('image_url', imgChangeBase64($poster->image_url, "{$poster->id}_{$poster->title}"));
         } else {
             $posters = Poster::query()->inRandomOrder()->limit($count)->get();
         }
 
         return $posters;
+    }
+
+    /**
+     * 获取打卡海报
+     * @return mixed
+     */
+    public function getPunchPoster()
+    {
+        $poster_category = PosterCategory::query()->find(2);
+        $poster = $poster_category->posters()->inRandomOrder()->take(1)->first();
+        $poster = collect($poster)->put('image_url', imgChangeBase64($poster->image_url, "{$poster->id}_{$poster->title}"));
+
+        return $poster;
     }
 
     /**

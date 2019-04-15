@@ -11,6 +11,7 @@ namespace App\Http\Controllers\Api\Index;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\WechatNotifiable;
 use App\Models\User;
+use Carbon\Carbon;
 use EasyWeChat\OfficialAccount\Application;
 use Illuminate\Http\Request;
 
@@ -20,9 +21,19 @@ class WechatController extends Controller
 
     protected $app;
 
+    public $last_week;
+
+    public $this_week;
+
+    public $next_week;
+
     public function __construct( Application $app )
     {
         $this->app = $app;
+
+        $this->last_week = Carbon::parse('last week')->startOfDay();
+        $this->this_week = Carbon::parse('this week')->startOfDay();
+        $this->next_week = Carbon::parse('next week')->startOfDay();
     }
 
     public function url( $value )

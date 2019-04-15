@@ -14,7 +14,17 @@ class MessageFamily extends Model
         self::WOMAN => '女士',
     ];
 
+    public static $family_gender = [
+        self::MAN => '男',
+        self::WOMAN => '女',
+    ];
+
     protected $guarded = [];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function submitUser()
     {

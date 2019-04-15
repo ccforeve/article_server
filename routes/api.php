@@ -97,6 +97,9 @@ $api->version('v1', [
             //海报详情
             $api->get('{poster}', 'PostersController@show')->where(['poster' => '[0-9]+']);
 
+            //获取打卡海报
+            $api->get('punch', 'PostersController@getPunchPoster');
+
             //随机获取海报
             $api->get('random/{count}', 'PostersController@random');
 

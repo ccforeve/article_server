@@ -13,6 +13,8 @@ use League\Fractal\TransformerAbstract;
 
 class MessageFamilyTransformer extends TransformerAbstract
 {
+    protected $availableIncludes = ['user'];
+
     public function transform( MessageFamily $message )
     {
         return [
@@ -20,12 +22,17 @@ class MessageFamilyTransformer extends TransformerAbstract
             'type' => $message->type,
             'name' => $message->name,
             'age' => $message->age,
-            'gender' => MessageFamily::$gender[$message->gender],
+            'gender' => MessageFamily::$family_gender[$message->gender],
             'phone' => $message->phone,
             'region' => $message->region,
             'family' => $message->family,
             'income' => $message->income,
             'created_at' => $message->created_at->toDateTimeString()
         ];
+    }
+
+    public function includeUser( MessageFamily $message )
+    {
+        return $this->primitive(['id' => $message->user->id, 'qrcode' => $message->user->qrcode]);
     }
 }
