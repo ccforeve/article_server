@@ -13,6 +13,11 @@ class Article extends Model
         return $this->belongsTo(ArticleCategory::class, 'category_id');
     }
 
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
+
     public function userArticle()
     {
         return $this->hasMany(UserArticle::class);
@@ -37,7 +42,7 @@ class Article extends Model
 
     public function getCoverAttribute( $value )
     {
-        if(!str_contains($value, 'http')) {
+        if(!str_contains($value, 'img.lvye100.com')) {
             return \Storage::disk('admin')->url($value);
         }
         return $value;

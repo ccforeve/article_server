@@ -69,7 +69,8 @@ class UserArticleService
             'article' => $user_article->article,
             'user' => $user_article->user,
             'footprint' => isset($footprint) ? $footprint->id : null,
-            'user_article_id' => $user_article->id
+            'user_article_id' => $user_article->id,
+            'product' => $user_article->article->product
         ];
     }
 

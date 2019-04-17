@@ -85,9 +85,10 @@ class WechatController extends Controller
                     break;
                 //收到文字消息
                 case 'text':
-                    return $this->_text($message['FromUserName'], $message['Content']);
+                    return $this->_text($message['Content']);
                     break;
                 case 'voice':
+                    info('测试', $message);
                     return $this->_voice($message['Recognition']);
                     break;
             }
@@ -124,9 +125,9 @@ class WechatController extends Controller
      * @param $content
      * @return string
      */
-    public function _text( $openid, $content )
+    public function _text( $content )
     {
-        return $this->searchProduct($openid, $content);
+        return $this->searchProduct( $content );
     }
 
     /**
@@ -134,9 +135,9 @@ class WechatController extends Controller
      * @param $recognition
      * @return string
      */
-    public function _voice( $openid, $recognition )
+    public function _voice( $recognition )
     {
-        return $this->searchProduct( $openid, $recognition );
+        return $this->searchProduct( $recognition );
     }
 
     /**

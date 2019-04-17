@@ -30,6 +30,7 @@ class ArticlesController extends Controller
             'article' => $user_article->article,
             'user' => $user_article->user,
             'user_article_id' => $user_article->id,
+            'product' => $user_article->article->product
         ];
     }
 }

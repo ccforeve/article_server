@@ -19,22 +19,27 @@ class ProductsController extends Controller
 {
     public function store( Request $request, Product $product )
     {
-        $product->fill($request->all());
-        $product->save();
+        $has_product = Product::query()->where('online_id', $request->online_id)->first();
+        if($has_product) {
+            $has_product->update($request->all());
+        } else {
+            $product->fill($request->all());
+            $product->save();
 
-        if(!$product->id) {
-            return response()->json(['content' => '添加出错'], Response::HTTP_EXPECTATION_FAILED);
+            if (!$product->id) {
+                return response()->json(['content' => '添加出错'], Response::HTTP_EXPECTATION_FAILED);
+            }
+
+            //添加文章
+            Article::create([
+                'title' => $request->name,
+                'cover' => $request->cover,
+                'category_id' => 1,
+                'brand_id' => 1,
+                'product_id' => $product->id,
+                'detail' => $request->content
+            ]);
         }
-
-        //添加文章
-        Article::create([
-            'title' => $request->name,
-            'cover' => $request->cover,
-            'category_id' => 1,
-            'brand_id' => 1,
-            'product_id' => $product->id,
-            'detail' => $request->content
-        ]);
 
         return response()->json([
             'content' => '添加成功'

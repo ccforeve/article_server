@@ -16,7 +16,7 @@ trait KeyWordReplyNotifications
      * @param $content
      * @return string
      */
-    public function searchProduct( $openid, $content )
+    public function searchProduct( $content )
     {
         /***********第一规则***********/
         if($first = $this->first($content)) {
@@ -38,11 +38,15 @@ trait KeyWordReplyNotifications
      */
     public function sendProductsMessage( $products, $content )
     {
-        $message = "智能推荐关键词为“{$content}”的产品{$products->total()}种：\n";
+        $message = "智能推荐关键词为“{$content}”的产品{$products->total()}种";
+        if($products->total() > 6) {
+            $message .= "，下面仅显示6条检索结果：\n";
+        } else {
+            $message .= "：\n";
+        }
         foreach ( $products->items() as $key => $product ) {
             $key++;
-            $member_price = number_format($product->price - $product->ticket, 2);
-            $message .= "{$key}、[{$product->id}]<a href='" . $this->url("{$this->domain}/{$product->article->id}/public") . "'>{$product->name}</a>(零售：{$product->price}元，会员：{$member_price}元 + {$product->ticket}卷)\n";
+            $message .= "{$key}、[{$product->online_id}]<a href='" . $this->url("{$this->domain}/{$product->article->id}/public") . "'>{$product->name}</a>(零售：{$product->price}元，会员：{$product->money}元 + {$product->ticket}卷)\n";
         }
 
         return $message;
@@ -50,21 +54,34 @@ trait KeyWordReplyNotifications
 
     /**
      * 发送图片消息
-     * @param $openid
      * @param $item
      * @return News
      */
     public function sendNewItem( $item )
     {
-        $member_fee = number_format($item->price - $item->ticket, 2);
+        $content = $this->productDesc($item);
         $item = [
             new NewsItem([
                 'title' => $item->name,
-                'description' => "零售：{$item->price}，会员：{$member_fee} + {$item->ticket}卷",
+                'description' => $content,
                 'url' => "http://btl.yxcxin.com/article_detail/{$item->article->id}/public",
-                'image' => $item->cover
+                'image' => "http:" . str_replace('/p/', '/pxs/', $item->cover)
             ])
         ];
         return new News($item);
+    }
+
+    public function productDesc($product)
+    {
+        $content = "零售：{$product->price}，会员：{$product->money} + {$product->ticket}卷";
+        if($product->kind == 1) {
+            if($product->price == $product->money) {
+                $content = "会员价：{$product->money}元";
+            } else {
+                $content = "零售：{$product->price}元，会员价：{$product->money}元";
+            }
+        }
+
+        return $content;
     }
 }
