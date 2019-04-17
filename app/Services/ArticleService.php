@@ -33,7 +33,9 @@ class ArticleService
             })
             ->when($search_key, function ($query) use ($search_key) {
                 $query->where('title', 'like', "%$search_key%");
-            })->select('id', 'category_id', 'title', 'cover', 'covers', 'read_count', 'cover_state', 'created_at')->latest('id')->paginate(6);
+            })
+            ->where('product_id', 0)
+            ->select('id', 'category_id', 'title', 'cover', 'covers', 'read_count', 'cover_state', 'created_at')->latest('id')->paginate(6);
         $articles->transform(function ($article) {
             $value = collect($article);
             $value->put('created_at', $article->created_at->toDateString());

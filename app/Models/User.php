@@ -37,7 +37,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function getQrcodeAttribute( $value )
     {
-        if(!str_contains($value, 'http')) {
+        if($value) {
             return \Storage::disk('admin')->url($value);
         }
         return $value;

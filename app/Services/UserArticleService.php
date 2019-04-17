@@ -26,10 +26,13 @@ class UserArticleService
 
     public function list( $user_id )
     {
-        $articles = UserArticle::with('article:id,title,cover,read_count,share_count,created_at')
+        $articles = UserArticle::with(['article' => function ($query) {
+            $query->where('product_id', 0)->select('id', 'title', 'cover', 'read_count', 'share_count', 'product_id', 'created_at');
+        }])
             ->where('user_id', $user_id)->latest('id')->paginate(8);
         $articles->transform(function ($article) {
             $article_value = collect($article->article);
+            $article_value->put('article', $article->article);
             $article_value->put('user_article_id', $article->id);
 
             return $article_value;

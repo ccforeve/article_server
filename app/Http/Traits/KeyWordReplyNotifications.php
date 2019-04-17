@@ -73,7 +73,7 @@ trait KeyWordReplyNotifications
 
     public function productDesc($product)
     {
-        $content = "零售：{$product->price}，会员：{$product->money} + {$product->ticket}卷";
+        $content = "零售：{$product->price}元，会员：{$product->money}元 + {$product->ticket}券";
         if($product->kind == 1) {
             if($product->price == $product->money) {
                 $content = "会员价：{$product->money}元";

@@ -11,7 +11,7 @@ class ArticleCategoriesController extends Controller
 {
     public function list( Request $request )
     {
-        $categories = ArticleCategory::query()->whereNotIn('id', [1])->latest('sort')->get();
+        $categories = ArticleCategory::query()->latest('sort')->get();
         $categories->transform(function ($cate, $key) {
             $value = collect($cate);
             $value->put('aaa', 'mescrollInit' . $key);
