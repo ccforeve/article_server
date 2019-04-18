@@ -18,6 +18,11 @@ class UserArticle extends Model
         return $this->belongsTo(Article::class);
     }
 
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
+
     public function footprint()
     {
         return $this->hasMany(Footprint::class, 'user_article_id');

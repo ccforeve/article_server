@@ -78,6 +78,11 @@ class UsersController extends Controller
         return $count;
     }
 
+    /**
+     * 更新用户信息
+     * @param Request $request
+     * @return mixed
+     */
     public function update( Request $request )
     {
         $user = $this->user();
@@ -90,6 +95,11 @@ class UsersController extends Controller
         ]);
     }
 
+    /**
+     * 获取用户头像和微信二维码的base64
+     * @param Application $app
+     * @return mixed
+     */
     public function getWechatQrcode(Application $app)
     {
         $user = $this->user();

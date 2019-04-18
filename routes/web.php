@@ -11,6 +11,3 @@
 |
 */
 
-
-Route::view('test', 'welcome');
-Route::get('tests', 'IndexController@test');

@@ -41,6 +41,9 @@ $api->version('v1', [
     //微信jssdk配置
     $api->get('wechat/config', 'WechatController@config');
 
+    //滚动信息
+    $api->get('orders', 'PayController@orders');
+
     //微信支付回调
     $api->any('wechat_out_trade', 'PayController@outTradeNo')->name('api.wechat_out_trade');
 
@@ -83,6 +86,9 @@ $api->version('v1', [
 
         //成为我的文章
         $api->get('articles/become_my', 'UserArticlesController@becomeMyArticle');
+
+        //推荐好文章
+        $api->post('articles/extension', 'ArticlesController@extension');
 
         //海报分类列表
         $api->get('poster/categories', 'PosterCategoriesController@list');

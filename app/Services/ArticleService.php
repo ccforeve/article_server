@@ -48,15 +48,22 @@ class ArticleService
 
     public function show( $user_id, $article_id )
     {
-        Article::query()->where('id', $article_id)->increment('read_count');
+        $article = Article::query()->where('id', $article_id)->first();
+        $article->increment('read_count');
         $user_article = $this->user_article_repository->articleFromUser(['user_id' => $user_id, 'article_id' => $article_id]);
         if(!$user_article) {
             $user_article = UserArticle::create([
                 'user_id' => $user_id,
-                'article_id' => $article_id,
+                'article_id' => $article->id,
+                'product_id' => $article->product_id
             ]);
             $user_article = $this->user_article_repository->articleFromUser(['id' => $user_article->id]);
         }
+        $user_article->load(
+            'user:id,nickname,avatar,wechat,phone,qrcode,profession,subscribe,receive_message,member_lock_at',
+            'article:id,product_id,title,cover,detail,desc,created_at',
+            'product:id,name,cover,price,money,ticket,kind,listed_at,sale_unit,min_unit,unit,multiple'
+        );
 
         return $user_article;
     }

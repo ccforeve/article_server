@@ -13,10 +13,15 @@ use App\Models\UserArticle;
 
 class UserService
 {
+    /**
+     * 个人中心
+     * @param $user_id
+     * @return array
+     */
     public function center( $user_id )
     {
         //文章数
-        $article_count = UserArticle::query()->where('user_id', $user_id)->count();
+        $article_count = UserArticle::query()->where(['user_id' => $user_id, 'product_id' => 0])->count();
 
         //谁查看我的头条数
         $footprint_count = Footprint::query()->where('user_id', $user_id)->count();

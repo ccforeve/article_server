@@ -9,6 +9,7 @@ use Carbon\CarbonInterval;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Validation\ValidationException;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -42,5 +43,9 @@ class AppServiceProvider extends ServiceProvider
         if ($this->app->environment() !== 'production') {
             $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
         }
+
+//        \API::error(function (\Illuminate\Auth\Access\AuthorizationException $exception) {
+//            abort(403, $exception->getMessage());
+//        });
     }
 }

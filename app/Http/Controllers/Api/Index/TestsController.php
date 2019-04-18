@@ -8,7 +8,9 @@ use App\Jobs\CachePosters;
 use App\Models\Article;
 use App\Models\Footprint;
 use App\Models\KeyWordCustom;
+use App\Models\Order;
 use App\Models\Product;
+use App\Models\User;
 use App\Models\UserArticle;
 use Carbon\Carbon;
 

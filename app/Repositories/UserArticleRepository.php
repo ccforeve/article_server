@@ -22,11 +22,7 @@ class UserArticleRepository
 
     public function articleFromUser( $where )
     {
-        $user_article = $this->user_article->with(
-            'user:id,nickname,avatar,wechat,phone,qrcode,profession,subscribe,receive_message,member_lock_at',
-            'article:id,product_id,title,cover,detail,desc,created_at',
-            'article.product:id,name,cover,price,money,ticket,kind,listed_at,sale_unit,min_unit,unit,multiple'
-        )
+        $user_article = $this->user_article
             ->where($where)
             ->select('id', 'user_id', 'article_id')
             ->first();

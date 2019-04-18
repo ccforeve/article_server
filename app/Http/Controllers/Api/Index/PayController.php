@@ -175,4 +175,16 @@ class PayController extends Controller
 
         return $alipay->success();
     }
+
+    /**
+     * 滚动信息
+     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Query\Builder[]|\Illuminate\Support\Collection
+     */
+    public function orders()
+    {
+        $user = $this->user();
+        $users = User::query()->whereNotIn('id', [$user->id])->inRandomOrder()->take(20)->get(['id', 'nickname']);
+
+        return $users;
+    }
 }
