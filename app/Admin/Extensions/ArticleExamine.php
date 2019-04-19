@@ -23,32 +23,28 @@ class ArticleExamine
     protected function script()
     {
         return <<<SCRIPT
-
-        $('.examine').on('click', function () {
-            var url=$(this).data('url');
-            swal({
-              title: '提交审核后的好文章链接',
-              input: 'textarea',
-              showCancelButton: true,
-              confirmButtonText: '提交',
-              cancelButtonText: '取消',
-              showLoaderOnConfirm: true,
-              preConfirm: function(article_url) {
-                 $.post(url, {article_url:article_url,_token:LA.token}, function(ret) {
-                     swal(
-                        '审核！',
-                        '审核完成！',
-                        'success'
-                     )
-                     $.pjax.reload('#pjax-container');
-                 })
-              },
-              allowOutsideClick: false
-            }).then(function(email) {
-              //取消
-            })
-        });
- 
+$('button[name=examine]').click(function() {
+    let url = $(this).attr('data-url');
+    Swal.fire({
+      title: '确定通过审核吗?',
+      text: "审核通过后将不可撤销",
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: '是，审核通过',
+      cancelButtonText: '否'
+    }).then((result) => {
+      if (result.value) {
+          $.get(url, function(res) {
+            Swal.fire(
+              '审核成功'
+            )
+            $.pjax.reload('#pjax-container');
+          })
+      }
+    })
+});
 SCRIPT;
     }
 
@@ -56,7 +52,7 @@ SCRIPT;
     {
         Admin::script($this->script());
 
-        return "<a class='btn btn-xs btn-info fa fa-check examine' data-url='" . route('good_article.examine', $this->id) . "'></a>";
+        return "<button type='button' name='examine' class='btn btn-primary btn-sm' data-url='" . route('extension_article.examine', $this->id) . "'>审核通过</button>";
     }
 
     public function __toString()

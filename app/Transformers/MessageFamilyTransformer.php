@@ -25,8 +25,7 @@ class MessageFamilyTransformer extends TransformerAbstract
             'gender' => MessageFamily::$family_gender[$message->gender],
             'phone' => $message->phone,
             'region' => $message->region,
-            'family' => $message->family,
-            'income' => $message->income,
+            'message' => $message->message,
             'created_at' => $message->created_at->toDateTimeString()
         ];
     }

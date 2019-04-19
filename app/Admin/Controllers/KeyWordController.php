@@ -86,6 +86,7 @@ class KeyWordController extends Controller
         $grid->name('关键词');
         $grid->cmd('规则名');
         $grid->type('处理类型')->using([0 => '等于', 1 => '前置、中间、后置', 2 => '包含多个']);
+        $grid->custom()->name('所属自定义');
         $grid->created_at('添加时间');
         $grid->updated_at('更新时间');
 

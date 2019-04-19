@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Traits;
 
+use App\Jobs\UploadAvatar;
 use App\Models\User;
 use Carbon\Carbon;
 
@@ -50,6 +51,8 @@ trait CreateOrCheckUserNotifications
             'sex' => $user[ 'sex' ]
         ];
         $user = User::create($data);
+        //把微信头像保存到本地
+        dispatch(new UploadAvatar($user->id, $user->avatar));
         if($eventkey) {
             $puser = User::query()->where('id', $eventkey)->first(['id', 'superior']);
             $user->superior = $puser->id;

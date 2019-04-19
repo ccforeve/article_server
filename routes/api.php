@@ -39,7 +39,7 @@ $api->version('v1', [
     $api->get('wechat/create_button', 'WechatController@button');
 
     //微信jssdk配置
-    $api->get('wechat/config', 'WechatController@config');
+    $api->get('wechat/config', 'UsersController@config');
 
     //滚动信息
     $api->get('orders', 'PayController@orders');

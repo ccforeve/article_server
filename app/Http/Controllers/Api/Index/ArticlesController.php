@@ -49,10 +49,15 @@ class ArticlesController extends Controller
      */
     public function extension( ExtensionArticleRequest $request )
     {
-        $data = $request->all;
-        $data['user_id'] = $this->user()->id;
-        ExtensionArticle::query()->create($data);
+        $find = ExtensionArticle::query()->where('url', $request->url)->value('id');
+        if(!$find) {
+            $data = $request->all();
+            $data[ 'user_id' ] = $this->user()->id;
+            ExtensionArticle::query()->create($data);
 
-        return $this->response->array(['message' => '提交成功']);
+            return $this->response->array([ 'message' => '提交成功' ]);
+        }
+
+        return $this->response->array([ 'message' => '该链接已提交过' ]);
     }
 }

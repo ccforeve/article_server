@@ -34,9 +34,9 @@ Route::group([
     $router->resource('articles', 'ArticlesController');
 
     //审核好文章
-    $router->post('good_article/examine/{id}', 'GoodArticleController@examine')->name('good_article.examine');
+    $router->get('extension_article/examine/{article}', 'ExtensionArticleController@examine')->name('extension_article.examine');
     //好文章
-    $router->resource('good_article', 'GoodArticleController');
+    $router->resource('extension_article', 'ExtensionArticleController')->only('index', 'show');
 
     //订单
     $router->resource('order', 'OrderController')->only('index');

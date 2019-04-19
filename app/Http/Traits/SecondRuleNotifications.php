@@ -61,8 +61,8 @@ trait SecondRuleNotifications
                     new NewsItem([
                         'title' => $message[0],
                         'description' => '点开打开图片，然后按住图片或以保存',
-                        'url' => $message[1],
-                        'image' => $message[2]
+                        'url' => $message[2],
+                        'image' => $message[1]
                     ])
                 ];
                 return new News($item);
@@ -71,8 +71,8 @@ trait SecondRuleNotifications
                     new NewsItem([
                         'title' => $message[0],
                         'description' => $message[3],
-                        'url' => $message[1],
-                        'image' => $message[2]
+                        'url' => $message[2],
+                        'image' => $message[1]
                     ])
                 ];
                 return new News($item);

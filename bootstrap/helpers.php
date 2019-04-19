@@ -122,6 +122,10 @@ function imgChangeBase64 ($url, $cache_name = '') {
     }
 }
 
+function uploadImageBase64 ($url) {
+    return base64_decode(base64_encode(file_get_contents($url)));
+}
+
 /**
  * 获取数组中最长的字符串
  * @param $array
