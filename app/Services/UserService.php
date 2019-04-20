@@ -24,11 +24,11 @@ class UserService
         $article_count = UserArticle::query()->where(['user_id' => $user_id, 'product_id' => 0])->count();
 
         //谁查看我的头条数
-        $footprint_count = Footprint::query()->where('user_id', $user_id)->count();
+        $footprint_count = Footprint::query()->where(['user_id' => $user_id])->groupBy('see_user_id', 'type')->get();
 
         return [
             'article_count' => $article_count,
-            'footprint_count' => $footprint_count
+            'footprint_count' => count($footprint_count)
         ];
     }
 }
