@@ -67,7 +67,7 @@ function message($FromUserName,$type,$context)
  */
 function template_message($openid,array $data,$template_id,$url)
 {
-    $app = \EasyWeChat\Factory::officialAccount(config('wechat.defaults'));
+    $app = \EasyWeChat\Factory::officialAccount(config('wechat.official_account.default'));
     //推送模板消息
     $app->template_message->send([
         'touser' => $openid,

@@ -11,6 +11,7 @@ namespace App\Services;
 
 use App\Models\Message;
 use App\Models\MessageFamily;
+use App\Models\User;
 use Carbon\Carbon;
 
 class MessageService
@@ -51,17 +52,27 @@ class MessageService
 
     public function story( $user_id, $request )
     {
+        $openid = User::query()->where('id', $request->user_id)->value('openid');
         $data = $request->except('cate');
         $data['submit_user_id'] = $user_id;
         switch ($request->cate) {
             case 'normal':
-                $add = Message::create($data);
+                $add_message = Message::create($data);
+                $url = "http://btl.yxcxin.com/message/{$add_message->id}/normal";
                 break;
             case 'family':
-                $add = MessageFamily::create($data);
+                $add_message = MessageFamily::create($data);
+                $url = "http://btl.yxcxin.com/message/{$add_message->id}/family";
                 break;
         }
-        return $add;
+        $message = [
+            "first"    => "您收到了新的咨询",
+            "keyword1" => $request->name,
+            "keyword2" => now()->format('Y年m月d日'),
+            "keyword3" => $request->type,
+            "remark"   => "请及时处理！"
+        ];
+        template_message($openid, $message, config('wechat.template.message'), $url);
     }
 
 }
