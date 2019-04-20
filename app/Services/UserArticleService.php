@@ -60,7 +60,7 @@ class UserArticleService
             //用户文章浏览数+1
             $user_article->increment('read_count', 1);
             //记录访客足迹(停留时间处理)
-            $footprint = Footprint::Create([
+            $footprint = Footprint::query()->create([
                 'user_id' => $user_article->user_id,
                 'article_id' => $user_article->article_id,
                 'see_user_id' => $user_id,

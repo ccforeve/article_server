@@ -58,7 +58,6 @@ class MessageService
                 $add = Message::create($data);
                 break;
             case 'family':
-                $data['age'] = now()->year - Carbon::parse($request->age)->year;
                 $add = MessageFamily::create($data);
                 break;
         }

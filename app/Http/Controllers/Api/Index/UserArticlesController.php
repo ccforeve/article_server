@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api\Index;
 
+use App\Models\Footprint;
+use App\Models\UserArticle;
 use App\Services\UserArticleService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Api\Controller;
@@ -32,7 +34,7 @@ class UserArticlesController extends Controller
     public function show( Request $request, UserArticleService $service, $article_id, $share_id = 0 )
     {
         $user = $this->user();
-        $user_article = $service->show($user->id, $article_id, $request->form, $share_id);
+        $user_article = $service->show($user->id, $article_id, $request->from, $share_id);
 
         return $user_article;
     }
@@ -47,5 +49,28 @@ class UserArticlesController extends Controller
     {
         $user_id = $this->user()->id;
         return $service->becomeMyArticle($user_id, $request->article_id);
+    }
+
+    /**
+     * 分享文章
+     * @param Request $request
+     * @param UserArticle $user_article
+     * @return mixed
+     */
+    public function shareSuccess( Request $request, UserArticle $user_article )
+    {
+        $footprint = Footprint::query()->create([
+            'user_id' => $user_article->user_id,
+            'article_id' => $user_article->article_id,
+            'see_user_id' => $request->user_id,
+            'user_article_id' => $user_article->id,
+            'type' => 2,
+            'from' => $request->from
+        ]);
+        if($footprint->id) {
+            return $this->response->array([ 'message' => '分享成功' ]);
+        }
+
+        return $this->response->array([ 'message' => '分享失败' ]);
     }
 }

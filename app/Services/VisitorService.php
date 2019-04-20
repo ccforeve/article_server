@@ -125,6 +125,11 @@ class VisitorService
         ];
     }
 
+    /**
+     * 访客记录
+     * @param $user_id
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
     public function prospect( $user_id )
     {
         $prospects = Footprint::with('seeUser:id,avatar,nickname')
@@ -164,6 +169,10 @@ class VisitorService
         return ['code' => 200, 'data' => false, 'message' => '没有新的访客'];
     }
 
+    /**
+     * 更新访客查看状态
+     * @param $user_id
+     */
     public function updateNewState( $user_id )
     {
         $if_new_visitor = Footprint::query()->where(['user_id' => $user_id, 'type' => 1])->latest('id')->first();
