@@ -18,13 +18,8 @@ class Order extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function s_user()
+    public function superiorUser()
     {
         return $this->belongsTo(User::class, 'superior');
-    }
-
-    public function sup_user()
-    {
-        return $this->belongsTo(User::class, 'superior_up');
     }
 }

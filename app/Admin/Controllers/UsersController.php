@@ -85,7 +85,7 @@ class UsersController extends Controller
         $grid->model()->latest('id');
 
         $grid->id('Id');
-        $grid->openid('Openid');
+//        $grid->openid('微信Openid');
         $grid->subscribe('关注')->editable('select', [0 => '未关注', 1 => '关注']);
         $grid->nickname('昵称');
         $grid->sex('性别')->editable('select', [1 => '男', 2 => '女']);
@@ -95,8 +95,8 @@ class UsersController extends Controller
         $grid->type('类型')->editable('select', [0 => '普通', 1 => '经销商']);
         $grid->state('状态')->switch(['on' => ['value' => 0, 'text' => '正常'], 'off' => ['value' => 1, 'text' => '禁用']]);
         $grid->member_lock_at('到期时间')->editable('date');
+        $grid->superiorUser()->nickname('推荐人');
         $grid->integral_scale('一级佣金比')->editable();
-        $grid->integral_scale_second('二级佣金比')->editable();
         $grid->created_at('注册时间');
 
         $grid->disableCreateButton();
@@ -141,17 +141,15 @@ class UsersController extends Controller
         $show->profession('职业');
         $show->type('用户类型')->using(['0' => '普通', '1' => '经销商']);
         $show->state('账号状态')->using(['0' => '正常', '1' => '禁用']);
-        $show->s_user()->nickname('推荐用户');
-        $show->sup_user()->nickname('推荐用户的上级');
+        $show->superiorUser()->nickname('推荐用户');
         $show->extension_at('被推荐时间');
         $show->extension_type('推荐类型')->using([0 => '无', 1 => '文章', 2 => '邀请卡', 3 => '海报']);
         $show->member_up_at('开通会员时间');
         $show->member_lock_at('会员到期时间');
         $show->integral_scale('一级佣金比例')->badge();
-        $show->integral_scale_second('二级佣金比例')->badge();
         $show->subscribe_at('关注公众号时间');
-        $show->perfect_at('完善资料时间');
-        $show->receive_message('是否接收公众号消息')->using(['0' => '接收', '1' => '不接收']);
+//        $show->perfect_at('完善资料时间');
+        $show->message_send('是否接收公众号消息')->using(['0' => '接收', '1' => '不接收']);
         $show->ali_account('支付宝账号');
         $show->ali_name('支付宝认证姓名');
         $show->created_at('注册时间');
@@ -191,7 +189,6 @@ class UsersController extends Controller
         $form->datetime('member_up_at', '会员开通时间');
         $form->datetime('member_lock_at', '会员到期时间');
         $form->number('integral_scale', '一级佣金比例');
-        $form->number('integral_scale_second', '二级佣金比例');
         $form->datetime('subscribe_at', '关注时间');
         $form->datetime('perfect_at', '完善资料时间');
         $form->switch('receive_message', '是否接收公众号消息')->states(['on' => ['value' => 0, 'text' => '接收'], 'off' => ['value' => 1, 'text' => '不接收']]);

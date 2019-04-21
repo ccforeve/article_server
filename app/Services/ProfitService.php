@@ -59,13 +59,13 @@ class ProfitService
         return $this->detail($superior_orders, $users, 1);
     }
 
-    public function dealer( $user_id )
-    {
-        $superior_up_orders = Order::query()->pay()->where('superior_up', $user_id)->get();
-        $users_up = User::query()->where('superior_up', $user_id)->latest('id')->get();
-
-        return $this->detail($superior_up_orders, $users_up, 2);
-    }
+//    public function dealer( $user_id )
+//    {
+//        $superior_up_orders = Order::query()->pay()->where('superior_up', $user_id)->get();
+//        $users_up = User::query()->where('superior_up', $user_id)->latest('id')->get();
+//
+//        return $this->detail($superior_up_orders, $users_up, 2);
+//    }
 
     public function detail($orders, $users, $type)
     {

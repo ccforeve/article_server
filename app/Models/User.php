@@ -22,11 +22,6 @@ class User extends Authenticatable implements JWTSubject
         return $this->belongsTo(User::class, 'superior');
     }
 
-    public function superiorUpUser()
-    {
-        return $this->belongsTo(User::class, 'superior_up');
-    }
-
     public function getAvatarAttribute( $value )
     {
         if(!str_contains($value, 'http')) {

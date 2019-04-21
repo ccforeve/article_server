@@ -54,9 +54,8 @@ trait CreateOrCheckUserNotifications
         //把微信头像保存到本地
         dispatch(new UploadAvatar($user->id, $user->avatar));
         if($eventkey) {
-            $puser = User::query()->where('id', $eventkey)->first(['id', 'superior']);
-            $user->superior = $puser->id;
-            $user->superior_up = $puser->superior;
+            $puser_id = User::query()->where('id', $eventkey)->value('id');
+            $user->superior = $puser_id;
             $user->extension_at = now()->toDateTimeString();
             $user->extension_type = '推广二维码';
             $user->save();
@@ -67,13 +66,12 @@ trait CreateOrCheckUserNotifications
 
     public function relation( $user, $eventkey )
     {
-        if($user->id !== $eventkey && $user->extension_id == 0 && $user->type == 0) {
-            $pinfo = User::find($eventkey);
+        if($user->id !== $eventkey && $user->superior == 0 && $user->type == 0) {
+            $puser_id = User::query()->where('id', $eventkey)->value('id');
             //当用户本来没有推广用户和经销商的时候
             $user->subscribe = 1;
             $user->subscribe_at = now()->toDateTimeString();
-            $user->superior = $pinfo->id;
-            $user->superior_up = $pinfo->superior;
+            $user->superior = $puser_id;
             $user->extension_at = now()->toDateTimeString();
             $user->extension_type = '推广二维码';
             $user->save();

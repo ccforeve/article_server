@@ -41,12 +41,12 @@ class ProfitsController extends Controller
      * @param ProfitService $service
      * @return mixed
      */
-    public function dealer( ProfitService $service )
-    {
-        $user = $this->user();
-
-        return $service->dealer($user->id);
-    }
+//    public function dealer( ProfitService $service )
+//    {
+//        $user = $this->user();
+//
+//        return $service->dealer($user->id);
+//    }
 
     /**
      * 提现记录

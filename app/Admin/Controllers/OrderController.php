@@ -83,7 +83,8 @@ class OrderController extends Controller
         $grid = new Grid(new Order);
         $grid->model()->latest('id');
 
-        $grid->id('Id');
+        $grid->id('order_Id');
+        $grid->user()->id('用户id');
         $grid->user()->nickname('用户');
         $grid->order_id('订单号');
         $grid->price('价格');
@@ -91,10 +92,8 @@ class OrderController extends Controller
         $grid->state('状态')->editable('select', [0 => '未支付', 1 => '已支付', 2 => '支付失败']);
         $grid->pay_type('支付类型')->editable('select', [1 => '微信', 2 => '支付宝']);
         $grid->pay_at('支付时间');
-        $grid->s_user()->nickname('推荐用户');
+        $grid->superiorUser()->nickname('推荐用户');
         $grid->superior_rate('一级佣金(元)');
-        $grid->sup_user()->nickname('推荐用户上级');
-        $grid->superior_up_rate('二级佣金(元)');
         $grid->created_at('下单时间');
 
         $grid->disableCreateButton();
@@ -146,10 +145,8 @@ class OrderController extends Controller
             return $value == 1 ? '微信' : '支付宝';
         });
         $show->pay_at('支付时间');
-        $show->s_user()->nickname('推荐用户');
+        $show->superiorUser()->nickname('推荐用户');
         $show->superior_rate('一级佣金')->badge();
-        $show->sup_user()->nickname('推荐用户的上级');
-        $show->superior_up_rate('二级佣金')->badge();
         $show->refund_state('退款状态')->as(function ($value) {
             return $value ? '已退款' : '未退款';
         });

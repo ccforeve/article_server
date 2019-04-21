@@ -41,12 +41,7 @@ class PayController extends Controller
 
         if($user->superior) {
             $order['superior'] = $user->superior;
-            $order['superior_rate'] = floor($user->superiorUser->integral_scale * $payment->price);
-        }
-
-        if($user->superior_up && optional($user->superiorUpUser)->type == 2) {
-            $order[ 'superior_up' ] = $user->superior_up;
-            $order[ 'superior_up_scale' ] = floor($user->superiorUpUser->integral_scale_second * $payment->price);
+            $order['superior_rate'] = floor(($user->superiorUser->integral_scale / 100) * $payment->price);
         }
 
         $add_order = Order::create($order);
