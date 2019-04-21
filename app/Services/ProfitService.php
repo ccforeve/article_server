@@ -16,10 +16,9 @@ use Carbon\Carbon;
 
 class ProfitService
 {
-    public function index( $user_id, $user_type )
+    public function index( $user_id )
     {
         $superior_orders = Order::query()->pay()->where('superior', $user_id)->get();
-        $superior_up_orders = Order::query()->pay()->where('superior_up', $user_id)->get();
 
         $today_profit = 0;  //今日收益
         $total_profit = 0;  //累计收益
@@ -30,14 +29,7 @@ class ProfitService
             }
             $total_profit += $order->superior_rate;
         }
-        if($user_type === 1) {
-            foreach ($superior_up_orders as $order) {
-                if($this->isToday($order->pay_at)) {
-                    $today_profit += $order->superior_up_rate;
-                }
-                $total_profit += $order->superior_up_rate;
-            }
-        }
+
         //已提现金额
         $used_profit = Cash::query()->where(['user_id' => $user_id])->sum('price');
         //可提现金额

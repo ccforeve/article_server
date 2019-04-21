@@ -21,7 +21,7 @@ class ProfitsController extends Controller
     {
         $user = $this->user();
 
-        return $service->index($user->id, $user->type);
+        return $service->index($user->id);
     }
 
     /**
