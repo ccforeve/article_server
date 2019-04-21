@@ -42,7 +42,7 @@ class MessagesController extends Controller
     public function story( Request $request, MessageService $service )
     {
         $user = $this->user();
-        $add = $service->story($user->id, $request);
+        $add = $service->story($user, $request);
 
         return $this->response->array([
             'code' => 0,
