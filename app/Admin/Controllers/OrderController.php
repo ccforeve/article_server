@@ -2,14 +2,20 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Extensions\Refund;
 use App\Models\Order;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Models\Website;
+use Carbon\Carbon;
+use EasyWeChat\Payment\Application;
 use Encore\Admin\Controllers\HasResourceActions;
-use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Pay;
 
 class OrderController extends Controller
 {
@@ -45,35 +51,6 @@ class OrderController extends Controller
     }
 
     /**
-     * Edit interface.
-     *
-     * @param mixed $id
-     * @param Content $content
-     * @return Content
-     */
-    public function edit($id, Content $content)
-    {
-        return $content
-            ->header('Edit')
-            ->description('description')
-            ->body($this->form()->edit($id));
-    }
-
-    /**
-     * Create interface.
-     *
-     * @param Content $content
-     * @return Content
-     */
-    public function create(Content $content)
-    {
-        return $content
-            ->header('Create')
-            ->description('description')
-            ->body($this->form());
-    }
-
-    /**
      * Make a grid builder.
      *
      * @return Grid
@@ -89,11 +66,14 @@ class OrderController extends Controller
         $grid->order_id('订单号');
         $grid->price('价格');
         $grid->month('会员月数');
-        $grid->state('状态')->editable('select', [0 => '未支付', 1 => '已支付', 2 => '支付失败']);
+        $grid->state('状态')->using([0 => '未支付', 1 => '已支付', 2 => '支付失败']);
         $grid->pay_type('支付类型')->editable('select', [1 => '微信', 2 => '支付宝']);
         $grid->pay_at('支付时间');
         $grid->superiorUser()->nickname('推荐用户');
-        $grid->superior_rate('一级佣金(元)');
+        $grid->superior_rate('佣金(元)');
+        $grid->refund_state('退款状态')->display(function ($value) {
+            return $value ? '已退款' : '未退款';
+        });
         $grid->created_at('下单时间');
 
         $grid->disableCreateButton();
@@ -103,6 +83,9 @@ class OrderController extends Controller
         $grid->actions(function ($actions) {
             $actions->disableDelete();
             $actions->disableEdit();
+            if($actions->row->state && !$actions->row->refund_state) {
+                $actions->append(new Refund($actions->row));
+            }
         });
 
         $grid->filter(function ($filter) {
@@ -157,30 +140,81 @@ class OrderController extends Controller
     }
 
     /**
-     * Make a form builder.
-     *
-     * @return Form
+     * 退款
+     * @param Application $app
+     * @param Request $request
+     * @param Order $order
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
      */
-    protected function form()
+    public function refund( Application $app, Request $request, Order $order )
     {
-        $form = new Form(new Order);
+        if ($order->pay_type == 1) {
+            return $this->wechatRefund($request, $app, $order);
+        }
+        return $this->aliRefund($request, $order);
+    }
 
-        $form->switch('public_id', 'Public id');
-        $form->number('user_id', 'User id');
-        $form->text('order_id', 'Order id');
-        $form->decimal('price', 'Price');
-        $form->text('title', 'Title');
-        $form->switch('month', 'Month');
-        $form->switch('state', 'State');
-        $form->switch('pay_type', 'Pay type');
-        $form->datetime('pay_at', 'Pay at')->default(date('Y-m-d H:i:s'));
-        $form->number('superior', 'Superior');
-        $form->switch('superior_rate', 'Superior rate');
-        $form->number('superior_up', 'Superior up');
-        $form->switch('superior_up_rate', 'Superior up rate');
-        $form->switch('refund_state', 'Refund state');
-        $form->datetime('refund_at', 'Refund at')->default(date('Y-m-d H:i:s'));
+    /**
+     * 微信退款
+     * @param $request
+     * @param $app
+     * @param $order
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function wechatRefund( $request, $app, $order )
+    {
+        $orderNo = $order->order_id;
+        $refundNo = date('Ymd') . substr(implode(NULL, array_map('ord', str_split(substr(uniqid(), 7, 13), 1))), 0, 8);
+        $orderPrice = $order->price * 100;
+        $refundPrice = $request->refund_fee * 100;
+        $ret = $app->refund->byOutTradeNumber($orderNo, $refundNo, $orderPrice, $refundPrice);
+        if($ret['result_code'] == 'SUCCESS' && $ret['return_code'] == 'SUCCESS') {
+            return $this->refundOperation($request, $order);
+        } else {
+            return response()->json(['code' => $ret['err_code'], 'message' => $ret['err_code_des']]);
+        }
+    }
 
-        return $form;
+    /**
+     * 支付宝退款
+     * @param $request
+     * @param $order
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function aliRefund( $request, $order )
+    {
+        $data = [
+            'out_trade_no' => $order->order_id,
+            'refund_amount' => $request->refund_fee
+        ];
+
+        $ret = Pay::alipay()->refund($data);
+        if($ret['code'] == 10000 && $ret['msg'] == 'Success' && $ret['fund_change'] === 'Y') {
+            return $this->refundOperation($request, $order);
+        }
+
+        info('支付宝退款失败：', [$ret]);
+        return response()->json(['code' => 417, 'message' => '退款出错']);
+    }
+
+    /**
+     * 退款操作
+     * @param $request
+     * @param $order
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function refundOperation( $request, $order )
+    {
+        $order->refund_state = 1;
+        $order->refund_fee = $request->refund_fee;
+        $order->refund_remark = $request->refund_remark;
+        $order->refund_at = now();
+        $order->save();
+        $user = User::query()->find($order->user_id);
+        $user->member_lock_at = Carbon::parse($user->member_lock_at)->subMonths($order->month);
+        $user->save();
+
+        return response()->json(['code' => Response::HTTP_OK, 'message' => '退款成功']);
     }
 }

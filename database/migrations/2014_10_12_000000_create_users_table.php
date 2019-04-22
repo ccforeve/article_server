@@ -30,11 +30,9 @@ class CreateUsersTable extends Migration
             $table->string('ali_name')->nullable()->comment('支付宝姓名');
             $table->unsignedTinyInteger('type')->default(0)->comment('用户类型（1：经销商）');
             $table->unsignedInteger('superior')->default(0)->comment('推荐上级');
-            $table->unsignedInteger('superior_up')->default(0)->comment('推广人上级id');
             $table->dateTime('extension_at')->nullable()->comment('被推广时间');
             $table->unsignedTinyInteger('extension_type')->default(0)->comment('被推广方式');
             $table->unsignedInteger('integral_scale')->default(0)->comment('第一层佣金比例');
-            $table->unsignedInteger('integral_scale_second')->default(0)->comment('第二层佣金比例');
             $table->dateTime('member_up_at')->nullable()->comment('开通会员时间');
             $table->dateTime('member_lock_at')->nullable()->comment('会员过期时间');
             $table->dateTime('subscribe_at')->nullable()->comment('关注公众号时间');

@@ -26,8 +26,6 @@ class CreateOrdersTable extends Migration
             $table->dateTime('pay_at')->nullable()->comment('支付时间');
             $table->unsignedInteger('superior')->default(0)->comment('推广用户');
             $table->unsignedTinyInteger('superior_rate')->default(0)->comment('推广佣金');
-            $table->unsignedInteger('superior_up')->default(0)->comment('推广用户所属的经销商');
-            $table->unsignedTinyInteger('superior_up_rate')->default(0)->comment('经销商佣金');
             $table->unsignedTinyInteger('refund_state')->default(0)->comment('退款状态（1：已退款，2：退款失败）');
             $table->dateTime('refund_at')->nullable()->comment('退款到账时间');
             $table->timestamps();

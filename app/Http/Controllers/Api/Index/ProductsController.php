@@ -31,12 +31,21 @@ class ProductsController extends Controller
             }
 
             //添加文章
+            $content = "零售：{$product->price}元，会员：{$product->money}元 + {$product->ticket}券";
+            if($product->kind == 1) {
+                if($product->price == $product->money) {
+                    $content = "会员价：{$product->money}元";
+                } else {
+                    $content = "零售：{$product->price}元，会员价：{$product->money}元";
+                }
+            }
             Article::create([
                 'title' => $request->name,
                 'cover' => $request->cover,
                 'category_id' => 1,
                 'brand_id' => 1,
                 'product_id' => $product->id,
+                'desc' => $content,
                 'detail' => $request->content
             ]);
         }

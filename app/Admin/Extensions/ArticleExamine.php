@@ -41,6 +41,7 @@ $('button[name=examine]').click(function() {
               '审核成功'
             )
             $.pjax.reload('#pjax-container');
+            toastr.success(ret.message);
           })
       }
     })

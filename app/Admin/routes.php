@@ -31,6 +31,7 @@ Route::group([
     //美图
     $router->resource('posters', 'PosterController');
 
+    //文章列表
     $router->resource('articles', 'ArticlesController');
 
     //审核好文章
@@ -39,7 +40,12 @@ Route::group([
     $router->resource('extension_article', 'ExtensionArticleController')->only('index', 'show');
 
     //订单
-    $router->resource('order', 'OrderController')->only('index');
+    $router->resource('orders', 'OrderController')->only('index');
+    //退款
+    $router->post('order/{order}/refund', 'OrderController@refund')->name('admin.order_refund');
+
+    //会员价格
+    $router->resource('payments', 'PaymentController');
 
     //投诉
     $router->resource('complaint', 'ComplaintController');
