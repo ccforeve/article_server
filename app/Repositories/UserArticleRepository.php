@@ -24,7 +24,7 @@ class UserArticleRepository
     {
         $user_article = $this->user_article
             ->where($where)
-            ->select('id', 'user_id', 'article_id')
+            ->select('id', 'user_id', 'article_id', 'product_id')
             ->first();
 
         return $user_article;

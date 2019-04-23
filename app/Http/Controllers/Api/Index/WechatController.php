@@ -36,7 +36,7 @@ class WechatController extends Controller
 
     public function url( $value )
     {
-        return "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxfa7b58cf37b2d3bd&redirect_uri={$value}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
+        return "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe910075ca3b12399&redirect_uri={$value}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
     }
 
     /**
@@ -47,7 +47,7 @@ class WechatController extends Controller
     public function uploadImage()
     {
         $material = $this->app->material;
-        $result = $material->uploadImage(public_path('uploads/images/')."1.jpg");
+        $result = $material->uploadImage(public_path('image/')."study_image.jpg");
         return $result;
     }
 
@@ -63,17 +63,17 @@ class WechatController extends Controller
     {
         $app = $this->app;
         $app->server->push(function ($message) {
+            info($message);
             switch ($message['MsgType']) {
                 //收到事件消息
                 case 'event':
-                    return $this->_event($message['FromUserName'],$message['Event'],$message['EventKey']);
+                    return $this->_event($message['FromUserName'], $message['Event'], $message['EventKey']);
                     break;
                 //收到文字消息
                 case 'text':
                     return $this->_text($message['Content']);
                     break;
                 case 'voice':
-                    info('测试', $message);
                     return $this->_voice($message['Recognition']);
                     break;
             }
@@ -91,15 +91,50 @@ class WechatController extends Controller
         $app = $this->app;
         $buttons = [
             [
-                "type" => "view",
-                "name" => "热文分享",
-                "url"  => $this->url('http://btl.yxcxin.com')
+                "name"       => "事业分享",
+                "sub_button" => [
+                    [
+                        "type" => "view",
+                        "name" => "分享事业",
+                        "url"  => $this->url('http://btl.yxcxin.com')
+                    ],
+                    [
+                        "type" => "view",
+                        "name" => "签到打卡",
+                        "url"  => $this->url('http://btl.yxcxin.com/punch')
+                    ]
+                ],
             ],
             [
                 "type" => "view",
-                "name" => "早起打卡",
-                "url"  => $this->url('http://btl.yxcxin.com/punch')
-            ]
+                "name" => "访客记录",
+                "url"  => $this->url('http://btl.yxcxin.com/visitor')
+            ],
+            [
+                "name"       => "服务",
+                "sub_button" => [
+                    [
+                        "type" => "view",
+                        "name" => "个人中心",
+                        "url"  => $this->url('http://btl.yxcxin.com/user')
+                    ],
+                    [
+                        "type" => "click",
+                        "name" => "咨询教程",
+                        "key"  => "study"
+                    ],
+                    [
+                        "type" => "click",
+                        "name" => "客服微信",
+                        "key"  => "server"
+                    ],
+//                    [
+//                        "type" => "view",
+//                        "name" => "操作指南",
+//                        "url"  => $this->url('http://btl.yxcxin.com')
+//                    ]
+                ],
+            ],
         ];
         $app->menu->create($buttons);
     }
@@ -157,7 +192,7 @@ class WechatController extends Controller
                 } else {
                     $user = $this->checkUser($FromUserName);
                 }
-                $context = "{$user->nickname}，你好\n\n恭喜你找到事业分享神奇\n“事业分享”为你准备了大量的行业文章。\n每天都会持续稳定更新。\n让你可以快速成长，获取专业知识。\n是你健康事业一大利器！\n你可以通过“分享事业”点击进入，分享里面的文章。\n分享到朋友圈和好友群之后，如有人点开你分享的文章浏览，我们会第一时间通知您，让你第一时间和客户取得联系。不遗漏每一位潜在客户！！！\n\n点击👇👇👇“分享事业”开启你互联网健康事业的第一步吧！";
+                $context = "{$user->nickname}，你好\n\n恭喜你找到事业分享神器\n“事业分享”为你准备了大量的行业文章。\n每天都会持续稳定更新。\n让你可以快速成长，获取专业知识。\n是你健康事业一大利器！\n你可以通过“分享事业”点击进入，分享里面的文章。\n分享到朋友圈和好友群之后，如有人点开你分享的文章浏览，我们会第一时间通知您，让你第一时间和客户取得联系。不遗漏每一位潜在客户！！！\n\n点击👇👇👇“分享事业”开启你互联网健康事业的第一步吧！";
                 return $context;
                 break;
             //取消关注公众号
@@ -165,7 +200,12 @@ class WechatController extends Controller
                 User::where('openid', $FromUserName)->update(['subscribe' => 0]);
                 break;
             case 'CLICK':
-                return '暂无点击事件';
+                if($eventkey == 'study') {
+                    message($FromUserName, 'image', 'iVNa-Daw9h5An5r9eWd0Lichp133IAvmP24TFejhHyE');
+                } elseif($eventkey == 'server') {
+                    message($FromUserName, 'image', 'iVNa-Daw9h5An5r9eWd0LsJW7PzzIT0LvOp-6pcK9Dk');
+                }
+                return '';
                 break;
         }
     }

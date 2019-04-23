@@ -9,6 +9,7 @@
 namespace App\Services;
 
 
+use App\Models\Article;
 use App\Models\Footprint;
 use App\Models\User;
 use App\Models\UserArticle;
@@ -84,9 +85,11 @@ class UserArticleService
     {
         $user_article = UserArticle::query()->where(['user_id' => $user_id, 'article_id' => $article_id])->first();
         if(!$user_article) {
+            $product_id = Article::query()->where('id', $article_id)->value('product_id');
             $user_article = UserArticle::create([
                 'user_id' => $user_id,
-                'article_id' => $article_id
+                'article_id' => $article_id,
+                'product_id' => $product_id
             ]);
 
             return ['code' => 201, 'message' => '创建文章成功', 'user_article_id' => $user_article->id];

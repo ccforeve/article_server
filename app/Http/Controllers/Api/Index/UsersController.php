@@ -52,13 +52,18 @@ class UsersController extends Controller
      * @return \Dingo\Api\Http\Response
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
      */
-    public function login( Request $request )
+    public function login( Request $request, Application $app )
     {
         $driver = Socialite::driver('weixin');
         $response = $driver->getAccessTokenResponse($request->code);
         $driver->setOpenId($response['openid']);
-        $oauthUser = $driver->userFromToken($response['access_token']);
-        $user_info = collect($oauthUser->user);
+        $user_info = $app->user->get($response['openid']);
+        $subscribe = true;
+        if(!$user_info['subscribe']) {
+            $oauthUser = $driver->userFromToken($response['access_token']);
+            $user_info = collect($oauthUser->user);
+            $subscribe = false;
+        }
         $user = User::query()->where('openid', $user_info['openid'])->first();
         if(!$user) {
             $user = User::create([
@@ -66,10 +71,23 @@ class UsersController extends Controller
                 'nickname'  => $user_info['nickname'],
                 'sex'       => $user_info['sex'],
                 'avatar'    => $user_info['headimgurl'],
+                'subscribe'    => $subscribe ? 1 : 0
             ]);
-            //把微信头像保存到本地
             dispatch(new UploadAvatar($user->id, $user->avatar));
         }
+//        $oauthUser = $driver->userFromToken($response['access_token']);
+//        $user_info = collect($oauthUser->user);
+//        $user = User::query()->where('openid', $user_info['openid'])->first();
+//        if(!$user) {
+//            $user = User::create([
+//                'openid'    => $user_info['openid'],
+//                'nickname'  => $user_info['nickname'],
+//                'sex'       => $user_info['sex'],
+//                'avatar'    => $user_info['headimgurl'],
+//            ]);
+//            //把微信头像保存到本地
+//            dispatch(new UploadAvatar($user->id, $user->avatar));
+//        }
 
         return $this->response->item($user, new UserTransformer())
             ->setMeta([

@@ -34,6 +34,7 @@ $api->version('v1', [
     $api->any('wechat', 'WechatController@index');
     //微信公众号菜单
     $api->get('wechat/create_button', 'WechatController@button');
+    $api->get('wechat/upload_image', 'WechatController@uploadImage');
     //微信jssdk配置
     $api->get('wechat/config', 'UsersController@config');
     //滚动信息
