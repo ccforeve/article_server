@@ -31,9 +31,9 @@ class Refund
         })
         $("form[data-form=refund]").on("submit",function(event){
             event.preventDefault();
-            var refund_fee = $('#refund_fee').val(),
-                order_fee = $('#order_fee').val(),
-                refund_remark = $('#refund_remark').val(),
+            var refund_fee = $(this).find('input[name=refund_fee]').val(),
+                order_fee = $(this).find('input[name=order_fee]').val(),
+                refund_remark = $(this).find('input[name=refund_remark]').val(),
                 url = $(this).attr('action')
             if(refund_fee <= 0 || refund_fee > order_fee) {
                 Swal.fire({

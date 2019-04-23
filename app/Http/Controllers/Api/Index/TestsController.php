@@ -18,6 +18,23 @@ class TestsController extends Controller
 {
     public function test()
     {
+//        $user_articles = UserArticle::with('article')->where('user_id', 20)->get();
+//        foreach ($user_articles as $key => $article) {
+//            $article->read_count = rand(50, 100);
+//            $article->save();
+//            Footprint::query()->where('user_article_id', 16)->delete();
+//            $i = 0;
+//            while($i < rand(50, 100)) {
+//                Footprint::query()->create([
+//                    'user_id' => 20,
+//                    'article_id' => $article->article_id,
+//                    'user_article_id' => $article->id,
+//                    'see_user_id' => rand(1, 100),
+//                    'type' => 1,
+//                ]);
+//                $i++;
+//            }
+//        }
 //        $posters = Poster::all();
 //        foreach ($posters as $poster) {
 //            imgChangeBase64($poster->image_url, "{$poster->id}_{$poster->title}");

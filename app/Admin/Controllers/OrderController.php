@@ -30,7 +30,7 @@ class OrderController extends Controller
     public function index(Content $content)
     {
         return $content
-            ->header('订单列表')
+            ->header('订单管理')
             ->description('列表')
             ->body($this->grid());
     }
@@ -45,7 +45,7 @@ class OrderController extends Controller
     public function show($id, Content $content)
     {
         return $content
-            ->header('订单详情')
+            ->header('订单')
             ->description('详情')
             ->body($this->detail($id));
     }
@@ -63,16 +63,18 @@ class OrderController extends Controller
         $grid->id('order_Id');
         $grid->user()->id('用户id');
         $grid->user()->nickname('用户');
-        $grid->order_id('订单号');
+        $grid->user()->phone('手机');
         $grid->price('价格');
         $grid->month('会员月数');
         $grid->state('状态')->using([0 => '未支付', 1 => '已支付', 2 => '支付失败']);
-        $grid->pay_type('支付类型')->editable('select', [1 => '微信', 2 => '支付宝']);
+        $grid->pay_type('支付类型')->using([1 => '微信', 2 => '支付宝']);
         $grid->pay_at('支付时间');
         $grid->superiorUser()->nickname('推荐用户');
         $grid->superior_rate('佣金(元)');
         $grid->refund_state('退款状态')->display(function ($value) {
-            return $value ? '已退款' : '未退款';
+            if($this->state) {
+                return $value ? '已退款' : '未退款';
+            }
         });
         $grid->created_at('下单时间');
 
@@ -97,6 +99,7 @@ class OrderController extends Controller
                 });
             }, '昵称或手机号或微信');
             $filter->equal('state', '支付状态')->radio([0 => '未支付', 1 => '已支付']);
+            $filter->equal('refund_state', '退款状态')->radio([0 => '未退款', 1 => '已退款']);
         });
 
         $grid->perPages([15, 20]);

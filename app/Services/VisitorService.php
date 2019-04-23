@@ -25,7 +25,7 @@ class VisitorService
         )
             ->has('footprint')
             ->where('user_id', $user_id)
-            ->latest('id')
+            ->latest('updated_at')
             ->paginate(5);
         $user_articles->transform(function ($user_article) {
             $value = collect($user_article->article);
@@ -58,6 +58,7 @@ class VisitorService
         $footprints = Footprint::with('user:id,nickname,avatar', 'seeUser:id,nickname,avatar')
             ->where(['user_article_id' => $user_article->id, 'type' => 1])
             ->select('id', 'user_article_id', 'user_id', 'see_user_id', 'share_id', 'residence_time', 'created_at')
+            ->latest('id')
             ->paginate(5);
         $footprints->transform(function ($footprint) {
             if($footprint->share_id) {
