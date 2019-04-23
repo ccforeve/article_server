@@ -44,7 +44,7 @@ class InvitationPoster implements ShouldQueue
         unlink($file_path);
 
         //推送文本消息
-        message($this->openid, 'text', "分享下图邀请您的朋友同事也来使用事业头条，推荐好友成为正式会员，您将获得丰厚佣金！\n\n赶紧长按保存并分享下方图片吧\n\n↓↓↓↓↓");
+        message($this->openid, 'text', "分享下图邀请您的朋友同事也来使用事业分享，推荐好友成为正式会员，您将获得丰厚佣金！\n\n赶紧长按保存并分享下方图片吧\n\n↓↓↓↓↓");
         //推送推广图片
         message($this->openid, 'image', $ret['media_id']);
     }

@@ -21,8 +21,16 @@ trait SecondRuleNotifications
             if($type == 1) {
                 if ( str_contains($content, $key_word->name) ) {
                     $search_key = str_replace($key_word->name, '', $content);
-                    $products = Product::query()->where('alias_name', 'like', "%$search_key%")->paginate(7);
+                    $products = Product::query()
+                        ->where([['state', '<>', 9], ['is_show_price', '=', 1]])
+//                        ->where('alias_name', 'like', "%$search_key%")
+                        ->where(function ($where) use ($search_key){
+                            $where->where('alias_name', 'like', "%{$search_key}%")->orWhere('desc', 'like', "%{$search_key}%");
+                        })
+                        ->latest('listed_at')
+                        ->paginate(5);
                     if ( $products->total() > 0 ) {
+
                         return $this->sendProductsMessage($products, $search_key);
                     }
                 }

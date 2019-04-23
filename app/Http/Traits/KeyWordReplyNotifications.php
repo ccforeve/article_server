@@ -39,8 +39,8 @@ trait KeyWordReplyNotifications
     public function sendProductsMessage( $products, $content )
     {
         $message = "智能推荐关键词为“{$content}”的产品{$products->total()}种";
-        if($products->total() > 6) {
-            $message .= "，下面仅显示6条检索结果：\n";
+        if($products->total() > 5) {
+            $message .= "，下面仅显示5条检索结果：\n";
         } else {
             $message .= "：\n";
         }

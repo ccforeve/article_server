@@ -44,7 +44,7 @@ class UserArticleService
     {
         $user_article = $this->user_article_repository->articleFromUser(['id' => $id]);
         $user_article->load(
-            'user:id,openid,nickname,avatar,wechat,phone,qrcode,profession,subscribe,receive_message,member_lock_at',
+            'user:id,openid,nickname,avatar,wechat,phone,qrcode,profession,subscribe,message_send,member_lock_at',
             'article:id,product_id,title,cover,detail,desc,created_at',
             'product:id,name,cover,price,money,ticket,kind,listed_at,sale_unit,min_unit,unit,multiple'
         );

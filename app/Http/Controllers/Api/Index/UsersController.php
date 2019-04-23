@@ -39,11 +39,12 @@ class UsersController extends Controller
      */
     public function config( Application $app, Request $request )
     {
-        $config = json_decode($app->jssdk->buildConfig(['chooseWXPay', 'onMenuShareTimeline', 'onMenuShareAppMessage'], urldecode($request->url)), true);
         $user = $this->user();
-        $user = collect($user)->put('is_member', (Carbon::parse($user->member_lock_at)->gt(now()) ? 1 : 0));
-
-        return $this->response->array(['config' => $config, 'user' => $user]);
+        if($user) {
+            $config = json_decode($app->jssdk->buildConfig([ 'chooseWXPay', 'onMenuShareTimeline', 'onMenuShareAppMessage' ], urldecode($request->url)), true);
+            $user = collect($user)->put('is_member', ( Carbon::parse($user->member_lock_at)->gt(now()) ? 1 : 0 ));
+            return $this->response->array([ 'config' => $config, 'user' => $user ]);
+        }
     }
 
     /**

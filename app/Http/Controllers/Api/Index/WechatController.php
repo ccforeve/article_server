@@ -63,11 +63,10 @@ class WechatController extends Controller
     {
         $app = $this->app;
         $app->server->push(function ($message) {
-            info($message);
             switch ($message['MsgType']) {
                 //收到事件消息
                 case 'event':
-                    return $this->_event($message['FromUserName'], $message['Event'], $message['EventKey']);
+                    return $this->_event($message);
                     break;
                 //收到文字消息
                 case 'text':
@@ -120,7 +119,7 @@ class WechatController extends Controller
                     ],
                     [
                         "type" => "click",
-                        "name" => "咨询教程",
+                        "name" => "查询教程",
                         "key"  => "study"
                     ],
                     [
@@ -168,16 +167,16 @@ class WechatController extends Controller
      * @return string
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
      */
-    public function _event($FromUserName, $event, $eventkey)
+    public function _event($message)
     {
+        $FromUserName = $message['FromUserName'];
+        $event = $message['Event'];
+        $eventkey = isset($message['EventKey']) ? $message['EventKey'] : null;
         switch ($event) {
             //已关注公众号的
             case 'SCAN':
                 if(is_numeric($eventkey)){
-                    $user = $this->checkUser($FromUserName, $eventkey);
-                    if($user->id == $eventkey) {
-                        return '扫自己的推广二维码是没用的喔';
-                    }
+                    $this->checkUser($FromUserName, $eventkey);
                 }
                 break;
             //未关注公众号的
@@ -186,9 +185,6 @@ class WechatController extends Controller
                 if (strpos($eventkey, '_') !== false) {
                     $eventkey = str_replace('qrscene_', '', $eventkey);
                     $user = $this->checkUser($FromUserName, $eventkey);
-                    if ($user->id == $eventkey) {
-                        return '扫自己的推广二维码是没用的喔';
-                    }
                 } else {
                     $user = $this->checkUser($FromUserName);
                 }

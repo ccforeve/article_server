@@ -19,6 +19,11 @@ trait CreateOrCheckUserNotifications
         $user = User::where('openid', $FromUserName)->first();
         if($user) {
             if($eventkey) {
+                if($user->id == $eventkey) {
+                    $content = '扫自己的推广二维码是没用的喔';
+                    message($user->openid, 'text', $content);
+                    return false;
+                }
                 $this->relation($user, $eventkey);
             }
             else {
