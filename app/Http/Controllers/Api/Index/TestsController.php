@@ -10,6 +10,7 @@ use App\Models\Footprint;
 use App\Models\Message;
 use App\Models\Order;
 use App\Models\Poster;
+use App\Models\Product;
 use App\Models\Punch;
 use App\Models\User;
 use App\Models\UserArticle;
@@ -19,6 +20,12 @@ class TestsController extends Controller
 {
     public function test()
     {
+        $products = Product::with('article:id,product_id,title')
+            ->where([['state', '<>', 9], ['is_show_price', '=', 1]])
+            ->where(function ($query) {
+                $query->where('alias_name', 'like', "%麦片%")->orWhere('desc', 'like', "%麦片%");
+            })->paginate(10);
+        dd($products->items());
 //        $articles = Article::query()->where('product_id', 0)->get();
 //        foreach ($articles as $key => $article) {
 //            $article->show_at = now()->toDateTimeString();

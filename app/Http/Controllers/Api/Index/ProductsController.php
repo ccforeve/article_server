@@ -20,11 +20,13 @@ class ProductsController extends Controller
     public function searchList( Request $request )
     {
         $search_key = $request->search_key;
-        $products = Product::query()
+        $products = Product::with('article:id,product_id')
             ->where([['state', '<>', 9], ['is_show_price', '=', 1]])
             ->where(function ($query) use ($search_key) {
                 $query->where('alias_name', 'like', "%{$search_key}%")->orWhere('desc', 'like', "%{$search_key}%");
-            })->paginate(10);
+            })
+            ->latest('listed_at')
+            ->paginate(10);
 
         return $products;
     }

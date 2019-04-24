@@ -95,19 +95,19 @@ class WechatController extends Controller
                     [
                         "type" => "view",
                         "name" => "分享事业",
-                        "url"  => $this->url('http://btl.yxcxin.com')
+                        "url"  => 'http://btl.yxcxin.com'
                     ],
                     [
                         "type" => "view",
                         "name" => "签到打卡",
-                        "url"  => $this->url('http://btl.yxcxin.com/punch')
+                        "url"  => 'http://btl.yxcxin.com/punch'
                     ]
                 ],
             ],
             [
                 "type" => "view",
                 "name" => "访客记录",
-                "url"  => $this->url('http://btl.yxcxin.com/visitor')
+                "url"  => 'http://btl.yxcxin.com/visitor'
             ],
             [
                 "name"       => "服务",
@@ -115,7 +115,7 @@ class WechatController extends Controller
                     [
                         "type" => "view",
                         "name" => "个人中心",
-                        "url"  => $this->url('http://btl.yxcxin.com/user')
+                        "url"  => 'http://btl.yxcxin.com/user'
                     ],
                     [
                         "type" => "click",
