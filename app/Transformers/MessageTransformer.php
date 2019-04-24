@@ -16,7 +16,7 @@ class MessageTransformer extends TransformerAbstract
     public function transform( Message $message )
     {
         return [
-            'type' => Message::$type[$message->type],
+            'type' => $message->type,
             'name' => $message->name,
             'age' => $message->age,
             'gender' => Message::$gender[$message->gender],

@@ -111,6 +111,7 @@ class UsersController extends Controller
             $filter->like('nickname', '昵称');
             $filter->equal('phone', '手机号');
             $filter->equal('wechat', '微信号');
+            $filter->equal('subscribe', '关注状态')->radio(['' => '全部', 1 => '关注', 0 => '未关注']);
             $filter->equal('type', '用户类型')->radio(['' => '全部', 0 => '普通用户', 1 => '经销商']);
         });
 

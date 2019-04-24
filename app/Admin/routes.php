@@ -58,4 +58,7 @@ Route::group([
 
     //自定义关键词回复
     $router->resource('key_word_custom', 'KeyWordCustomController');
+
+    //网站报表
+    $router->get('report', 'ReportController@index');
 });

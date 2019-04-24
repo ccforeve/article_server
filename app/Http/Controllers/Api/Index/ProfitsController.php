@@ -9,6 +9,7 @@
 namespace App\Http\Controllers\Api\Index;
 
 use App\Http\Controllers\Api\Controller;
+use App\Http\Requests\CashRequest;
 use App\Models\Cash;
 use App\Services\ProfitService;
 use Illuminate\Http\Request;
@@ -83,26 +84,17 @@ class ProfitsController extends Controller
 
     /**
      * 申请提现
-     * @param Request $request
+     * @param CashRequest $request
      * @param ProfitService $service
      * @return mixed
      */
-    public function withdrawCash( Request $request, ProfitService $service )
+    public function withdrawCash( CashRequest $request, ProfitService $service )
     {
         $user = $this->user();
         $profit = $service->index($user->id);
         if($profit['surplus_profit'] < $request->price) {
             return $this->response->error('提现余额不足', 409);
         }
-//        $order = [
-//            'out_biz_no' => time(),
-//            'payee_type' => 'ALIPAY_LOGONID',
-//            'payee_account' => $user->ali_account,
-//            'amount' => '0.01',
-//        ];
-//
-//        $result = Pay::alipay()->transfer($order);
-//        return $result;
         $data = $request->all();
         $data['user_id'] = $user->id;
         $data['type'] = 2;

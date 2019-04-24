@@ -50,10 +50,10 @@ class MessageService
         return $messages;
     }
 
-    public function story( $user, $request )
+    public function story( $submit_user_id, $request )
     {
         $data = $request->except('cate');
-        $data['submit_user_id'] = $user->id;
+        $data['submit_user_id'] = $submit_user_id;
         switch ($request->cate) {
             case 'normal':
                 $add_message = Message::create($data);
@@ -64,7 +64,8 @@ class MessageService
                 $url = "http://btl.yxcxin.com/message/{$add_message->id}/family";
                 break;
         }
-        if($user->message) {
+        $user = User::query()->where('id', $request->user_id)->first(['openid', 'message_send']);
+        if($user->message_send && now()->lt(Carbon::parse($user->member_lock_at))) {
             $message = [
                 "first" => "您收到了新的咨询",
                 "keyword1" => $request->name,
@@ -74,6 +75,7 @@ class MessageService
             ];
             template_message($user->openid, $message, config('wechat.template.message'), $url);
         }
+        return $add_message;
     }
 
 }

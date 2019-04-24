@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Api\Index;
 
 use App\Http\Controllers\Api\Controller;
+use App\Models\Article;
 use App\Models\Cash;
 use App\Models\Footprint;
 use App\Models\Message;
@@ -18,6 +19,14 @@ class TestsController extends Controller
 {
     public function test()
     {
+//        $articles = Article::query()->whereDate('show_at', '<', now()->toDateString())->get();
+//        dd($articles->toArray());
+        $articles = Article::query()->where('product_id', 0)->get();
+        foreach ($articles as $key => $article) {
+            $article->show_at = now()->toDateTimeString();
+            $article->save();
+        }
+
 //        $user_articles = UserArticle::with('article')->where('user_id', 20)->get();
 //        foreach ($user_articles as $key => $article) {
 //            $article->read_count = rand(50, 100);

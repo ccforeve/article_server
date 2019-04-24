@@ -3,15 +3,11 @@
 namespace App\Admin\Controllers;
 
 use App\Models\Order;
-use App\Models\PhotoType;
 use App\Http\Controllers\Controller;
-use App\Models\Users;
+use App\Models\User;
 use Carbon\Carbon;
 use Encore\Admin\Controllers\HasResourceActions;
-use Encore\Admin\Form;
-use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
-use Encore\Admin\Show;
 
 class ReportController extends Controller
 {
@@ -25,7 +21,7 @@ class ReportController extends Controller
      */
     public function index(Content $content)
     {
-        $users = Users::all();
+        $users = User::all();
         $user['today'] = 0;
         $user['yesterday'] = 0;
         $user['before_yesterday'] = 0;
@@ -36,7 +32,7 @@ class ReportController extends Controller
         $user['all'] = $users->count();
         $user = $this->count($users, $user);
 
-        $perfect_users = Users::query()->where('phone', '<>', '')->get();
+        $perfect_users = User::query()->where('phone', '<>', '')->get();
         $perfect_user['today'] = 0;
         $perfect_user['yesterday'] = 0;
         $perfect_user['before_yesterday'] = 0;
@@ -69,23 +65,14 @@ class ReportController extends Controller
         $open_up_order['all'] = $open_up_orders->count();
         $open_up_order = $this->count($open_up_orders, $open_up_order);
 
-        $user_membership_rate['today'] = $open_up_order['today'] != 0 && $perfect_user['today'] != 0 ? number_format($open_up_order['today'] / $perfect_user['today'], 2) : 0;
-        $user_membership_rate['yesterday'] = $open_up_order['yesterday'] != 0 && $perfect_user['yesterday'] != 0 ? number_format($open_up_order['yesterday'] / $perfect_user['yesterday'], 2) : 0;
-        $user_membership_rate['before_yesterday'] = $open_up_order['before_yesterday'] != 0 && $perfect_user['before_yesterday'] != 0 ? number_format($open_up_order['before_yesterday'] / $perfect_user['before_yesterday'], 2) : 0;
-        $user_membership_rate['this_month'] = $open_up_order['this_month'] != 0 && $perfect_user['this_month'] != 0 ? number_format($open_up_order['this_month'] / $perfect_user['this_month'], 2) : 0;
-        $user_membership_rate['last_month_day'] = $open_up_order['last_month_day'] != 0 && $perfect_user['last_month_day'] != 0 ? number_format($open_up_order['last_month_day'] / $perfect_user['last_month_day'], 2) : 0;
-        $user_membership_rate['last_month'] = $open_up_order['last_month'] != 0 && $perfect_user['last_month'] != 0 ? number_format($open_up_order['last_month'] / $perfect_user['last_month'], 2) : 0;
-        $user_membership_rate['before_last_month'] = $open_up_order['before_last_month'] != 0 && $perfect_user['before_last_month'] != 0 ? number_format($open_up_order['before_last_month'] / $perfect_user['before_last_month'], 2) : 0;
-        $user_membership_rate['all'] = $open_up_order['all'] != 0 && $perfect_user['all'] != 0 ? number_format($open_up_order['all'] / $perfect_user['all'], 2) : 0;
-
-        $membership_rate['today'] = $open_up_order['today'] != 0 && $order['today'] != 0 ? number_format($open_up_order['today'] / $order['today'], 2) : 0;
-        $membership_rate['yesterday'] = $open_up_order['yesterday'] != 0 && $order['yesterday'] != 0 ? number_format($open_up_order['yesterday'] / $order['yesterday'], 2) : 0;
-        $membership_rate['before_yesterday'] = $open_up_order['before_yesterday'] != 0 && $order['before_yesterday'] != 0 ? number_format($open_up_order['before_yesterday'] / $order['before_yesterday'], 2) : 0;
-        $membership_rate['this_month'] = $open_up_order['this_month'] != 0 && $order['this_month'] != 0 ? number_format($open_up_order['this_month'] / $order['this_month'], 2) : 0;
-        $membership_rate['last_month_day'] = $open_up_order['last_month_day'] != 0 && $order['last_month_day'] != 0 ? number_format($open_up_order['last_month_day'] / $order['last_month_day'], 2) : 0;
-        $membership_rate['last_month'] = $open_up_order['last_month'] != 0 && $order['last_month'] != 0 ? number_format($open_up_order['last_month'] / $order['last_month'], 2) : 0;
-        $membership_rate['before_last_month'] = $open_up_order['before_last_month'] != 0 && $order['before_last_month'] != 0 ? number_format($open_up_order['before_last_month'] / $order['before_last_month'], 2) : 0;
-        $membership_rate['all'] = $open_up_order['all'] != 0 && $order['all'] != 0 ? number_format($open_up_order['all'] / $order['all'], 2) : 0;
+        $membership_rate['today'] = $open_up_order['today'] != 0 && $order['today'] != 0 ? number_format($open_up_order['today'] / $order['today'] * 100, 2) : 0;
+        $membership_rate['yesterday'] = $open_up_order['yesterday'] != 0 && $order['yesterday'] != 0 ? number_format($open_up_order['yesterday'] / $order['yesterday'] * 100, 2) : 0;
+        $membership_rate['before_yesterday'] = $open_up_order['before_yesterday'] != 0 && $order['before_yesterday'] != 0 ? number_format($open_up_order['before_yesterday'] / $order['before_yesterday'] * 100, 2) : 0;
+        $membership_rate['this_month'] = $open_up_order['this_month'] != 0 && $order['this_month'] != 0 ? number_format($open_up_order['this_month'] / $order['this_month'] * 100, 2) : 0;
+        $membership_rate['last_month_day'] = $open_up_order['last_month_day'] != 0 && $order['last_month_day'] != 0 ? number_format($open_up_order['last_month_day'] / $order['last_month_day'] * 100, 2) : 0;
+        $membership_rate['last_month'] = $open_up_order['last_month'] != 0 && $order['last_month'] != 0 ? number_format($open_up_order['last_month'] / $order['last_month'] * 100, 2) : 0;
+        $membership_rate['before_last_month'] = $open_up_order['before_last_month'] != 0 && $order['before_last_month'] != 0 ? number_format($open_up_order['before_last_month'] / $order['before_last_month'] * 100, 2) : 0;
+        $membership_rate['all'] = $open_up_order['all'] != 0 && $order['all'] != 0 ? number_format($open_up_order['all'] / $order['all'] * 100, 2) : 0;
 
         $order_money['today'] = 0;
         $order_money['yesterday'] = 0;
@@ -97,10 +84,100 @@ class ReportController extends Controller
         $order_money['all'] = $open_up_orders->sum('price');
         $order_money = $this->count($open_up_orders, $order_money, 1);
 
-        return $content
-            ->header('数据报表')
-            ->description('报表')
-            ->body(view('admin.report_index', compact('user', 'perfect_user', 'order', 'open_up_order', 'user_membership_rate', 'membership_rate', 'order_money')));
+        $content->header('报表');
+        $content->breadcrumb(
+            ['text' => '首页', 'url' => '/admin'],
+            ['text' => '报表', 'url' => '']
+        );
+
+        $contents =  <<<HTML
+        <section class="content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box">
+                        <div class="box-body table-responsive no-padding">
+                          <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                  <th>类型/日期</th><th>今日</th><th>昨日</th><th>前日</th><th>本月</th><th>同比</th><th>上月</th><th>前月</th><th>总计</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                  <th>新增用户</th>
+                                  <th>{$user['today']}</th>
+                                  <th>{$user['yesterday']}</th>
+                                  <th>{$user['before_yesterday']}</th>
+                                  <th>{$user['this_month']}</th>
+                                  <th>{$user['last_month_day']}</th>
+                                  <th>{$user['last_month']}</th>
+                                  <th>{$user['before_last_month']}</th>
+                                  <th>{$user['all']}</th>
+                                </tr>
+                                <tr>
+                                  <th>已完善用户</th>
+                                  <th>{$perfect_user['today']}</th>
+                                  <th>{$perfect_user['yesterday']}</th>
+                                  <th>{$perfect_user['before_yesterday']}</th>
+                                  <th>{$perfect_user['this_month']}</th>
+                                  <th>{$perfect_user['last_month_day']}</th>
+                                  <th>{$perfect_user['last_month']}</th>
+                                  <th>{$perfect_user['before_last_month']}</th>
+                                  <th>{$perfect_user['all']}</th>
+                                </tr>
+                                <tr>
+                                  <th>订单数</th>
+                                  <th>{$order['today']}</th>
+                                  <th>{$order['yesterday']}</th>
+                                  <th>{$order['before_yesterday']}</th>
+                                  <th>{$order['this_month']}</th>
+                                  <th>{$order['last_month_day']}</th>
+                                  <th>{$order['last_month']}</th>
+                                  <th>{$order['before_last_month']}</th>
+                                  <th>{$order['all']}</th>
+                                </tr>
+                                <tr>
+                                  <th>开通数</th>
+                                  <th>{$open_up_order['today']}</th>
+                                  <th>{$open_up_order['yesterday']}</th>
+                                  <th>{$open_up_order['before_yesterday']}</th>
+                                  <th>{$open_up_order['this_month']}</th>
+                                  <th>{$open_up_order['last_month_day']}</th>
+                                  <th>{$open_up_order['last_month']}</th>
+                                  <th>{$open_up_order['before_last_month']}</th>
+                                  <th>{$open_up_order['all']}</th>
+                                </tr>
+                                <tr>
+                                  <th>付费开通率（%）</th>
+                                  <th>{$membership_rate['today']}%</th>
+                                  <th>{$membership_rate['yesterday']}%</th>
+                                  <th>{$membership_rate['before_yesterday']}%</th>
+                                  <th>{$membership_rate['this_month']}%</th>
+                                  <th>{$membership_rate['last_month_day']}%</th>
+                                  <th>{$membership_rate['last_month']}%</th>
+                                  <th>{$membership_rate['before_last_month']}%</th>
+                                  <th>{$membership_rate['all']}%</th>
+                                </tr>
+                                <tr>
+                                  <th>开通金额（元）</th>
+                                  <th>{$order_money['today']}</th>
+                                  <th>{$order_money['yesterday']}</th>
+                                  <th>{$order_money['before_yesterday']}</th>
+                                  <th>{$order_money['this_month']}</th>
+                                  <th>{$order_money['last_month_day']}</th>
+                                  <th>{$order_money['last_month']}</th>
+                                  <th>{$order_money['before_last_month']}</th>
+                                  <th>{$order_money['all']}</th>
+                                </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                  </div>
+              </div>
+          </section>
+HTML;
+        return $content->body($contents);
     }
 
     public function count( $datas, $res, $type = 0 )
@@ -177,50 +254,6 @@ class ReportController extends Controller
         }
 
         return $res;
-    }
-
-    /**
-     * Show interface.
-     *
-     * @param mixed $id
-     * @param Content $content
-     * @return Content
-     */
-    public function show($id, Content $content)
-    {
-        return $content
-            ->header('分类详情')
-            ->description('详情')
-            ->body($this->detail($id));
-    }
-
-    /**
-     * Edit interface.
-     *
-     * @param mixed $id
-     * @param Content $content
-     * @return Content
-     */
-    public function edit($id, Content $content)
-    {
-        return $content
-            ->header('编辑分类')
-            ->description('编辑')
-            ->body($this->form()->edit($id));
-    }
-
-    /**
-     * Create interface.
-     *
-     * @param Content $content
-     * @return Content
-     */
-    public function create(Content $content)
-    {
-        return $content
-            ->header('创建分类')
-            ->description('创建')
-            ->body($this->form());
     }
 
 }

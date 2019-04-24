@@ -33,7 +33,6 @@ trait ThirdRuleNotifications
         //百度分词后查询别名
         $client = new \AipNlp(config('app.baidu_api.app_id'), config('app.baidu_api.app_key'), config('app.baidu_api.app_secret'));
         $baidu_api_result = $client->lexerCustom($content);
-        info('关键词', [$content, $baidu_api_result]);
         $max_key = getMaxString($baidu_api_result['items'])['item'];
         $products = Product::with('article:id,product_id')
             ->where([['state', '<>', 9], ['is_show_price', '=', 1]])

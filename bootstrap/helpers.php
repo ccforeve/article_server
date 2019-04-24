@@ -65,7 +65,7 @@ function message($FromUserName,$type,$context)
  * @param $url 跳转链接
  * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
  */
-function template_message($openid,array $data,$template_id,$url)
+function template_message($openid, array $data, $template_id, $url)
 {
     $app = \EasyWeChat\Factory::officialAccount(config('wechat.official_account.default'));
     //推送模板消息
