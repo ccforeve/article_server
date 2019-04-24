@@ -39,11 +39,11 @@ class Kernel extends ConsoleKernel
 
         $schedule->call(function () {
             $users = User::query()->where('subscribe', 1)->get();
-//            foreach ($users as $key => $user) {
-//                $message = "晚间爆文/玫瑰\n\n🔥“子宫好不好看脸,脸上没这3个症状,那你的子宫很年轻！”\n\n🔥“今天，我开超市了，进来看看吧...”\n\n🔥“从脂肪肝到肝癌，只要4步！”\n\n🔥“为人厚道，终有福报”\n\n点击下方《事业分享》→《分享事业》\n↓↓↓↓↓↓↓↓";
-//                message($user->openid, 'text', $message);
-//            }
-        })->dailyAt('19:00');
+            foreach ($users as $key => $user) {
+                $message = "人生最精彩的不是实现梦想的瞬间，而是坚持梦想的过程，晚安/月亮\n晚间爆文/玫瑰\n\n🔥<a href='http://btl.yxcxin.com/article_detail/2657/public'>“1875，刷牙，洗头，洗脸，洗手，洗澡，洗碗，洗锅，洗菜，洗水果，洗衣服，我的绿叶大超市全包了！”</a>\n\n🔥<a href='http://btl.yxcxin.com/article_detail/2617/public'>“它让你上瘾，危害毁全身！专家发出毒品一般的警告！你还天天吃！”</a>\n\n🔥<a href='http://btl.yxcxin.com/article_detail/2659/public'>“致女人！（句句感人）”</a>\n\n点击下方《事业分享》→《分享事业》\n↓↓↓↓↓↓↓↓";
+                message($user->openid, 'text', $message);
+            }
+        })->dailyAt('19:30');
     }
 
     /**

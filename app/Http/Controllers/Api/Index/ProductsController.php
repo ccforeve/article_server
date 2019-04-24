@@ -17,6 +17,18 @@ use Illuminate\Http\Response;
 
 class ProductsController extends Controller
 {
+    public function searchList( Request $request )
+    {
+        $search_key = $request->search_key;
+        $products = Product::query()
+            ->where([['state', '<>', 9], ['is_show_price', '=', 1]])
+            ->where(function ($query) use ($search_key) {
+                $query->where('alias_name', 'like', "%{$search_key}%")->orWhere('desc', 'like', "%{$search_key}%");
+            })->paginate(10);
+
+        return $products;
+    }
+
     public function store( Request $request, Product $product )
     {
         $has_product = Product::query()->where('online_id', $request->online_id)->first();

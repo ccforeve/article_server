@@ -165,5 +165,6 @@ $api->version('v1', [
             //获取当前用户打卡记录
             $api->get('current_user', 'PunchesController@getCurrentUserPunch');
         });
+        $api->get('products/search', 'ProductsController@searchList');
     });
 });

@@ -73,6 +73,7 @@ class ArticlesController extends Controller
         $grid->category()->title('分类');
         $grid->read_count('阅读数');
         $grid->share_count('分享数');
+        $grid->show_at('显示时间');
         $grid->created_at('创建时间');
         $grid->updated_at('更新时间');
 
@@ -110,6 +111,7 @@ class ArticlesController extends Controller
         $form->switch('cover_state', '是否显示多图封面');
         $form->textarea('desc', '描述');
         $form->UEditor('detail', '文章详情');
+        $form->date('show_at', '显示时间');
 
         $form->saving(function (Form $form) {
             $form->detail = str_replace('crossorigin="anonymous"', '', $form->detail);
