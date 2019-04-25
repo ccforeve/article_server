@@ -68,4 +68,22 @@ class ProductsController extends Controller
             'content' => '添加成功'
         ], Response::HTTP_CREATED);
     }
+
+    /**
+     * 更新预售产品为已发售
+     * @param Request $request
+     * @return mixed
+     */
+    public function updateProducts( Request $request )
+    {
+        $online_ids = explode(',', $request->online_ids);
+        foreach ($online_ids as $id) {
+            Product::query()->where('online_id', $id)->update(['kind' => 0]);
+        }
+
+        return $this->response->array([
+            'code' => 201,
+            'message' => '更新产品类型成功'
+        ]);
+    }
 }

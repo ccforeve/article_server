@@ -47,6 +47,8 @@ $api->version('v1', [
     $api->any('alipay/notify', 'PayController@alipayNotify')->name('api.alipay_notify');
     //添加产品接口
     $api->post('products', 'ProductsController@store');
+    //更新预售产品
+    $api->get('products/update', 'ProductsController@updateProducts');
     //添加产品分类接口
     $api->post('product_categories', 'ProductCategoriesController@store');
     // 需要 token 验证的接口
