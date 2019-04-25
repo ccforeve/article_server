@@ -40,13 +40,17 @@ trait KeyWordReplyNotifications
     {
         $message = "智能推荐关键词为“{$content}”的产品{$products->total()}种";
         if($products->total() > 5) {
-            $message .= ",<a href='http://btl.yxcxin.com/productList?search_key=". $content ."'>点此查看全部检索结果</a>，下面仅显示5条检索结果：\n";
+            $message .= "，<a href='http://btl.yxcxin.com/productList?search_key=". $content ."'>点此查看全部检索结果</a>，下面仅显示5条检索结果：\n";
         } else {
             $message .= "：\n";
         }
         foreach ( $products->items() as $key => $product ) {
+            $tip = "";
+            if($product->kind == 1){
+                $tip = "[复]";
+            }
             $key++;
-            $message .= "{$key}、[{$product->online_id}]<a href='" . $this->url("{$this->domain}/{$product->article->id}/public") . "'>{$product->name}</a>(零售：{$product->price}元，会员：{$product->money}元 + {$product->ticket}券)\n";
+            $message .= "{$key}、[{$product->online_id}]<a href='" . $this->url("{$this->domain}/{$product->article->id}/public") . "'>{$tip}{$product->name}</a>(零售：{$product->price}元，会员：{$product->money}元 + {$product->ticket}券)\n";
         }
 
         return $message;

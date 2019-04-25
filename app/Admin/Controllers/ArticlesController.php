@@ -69,7 +69,10 @@ class ArticlesController extends Controller
         $grid->model()->latest('id');
 
         $grid->id('Id');
-        $grid->title('标题');
+        $grid->title('标题')->limit(50);
+        $grid->url('文章链接')->display(function () {
+            return "http://btl.yxcxin.com/article_detail/{$this->id}/public";
+        });
         $grid->category()->title('分类');
         $grid->read_count('阅读数');
         $grid->share_count('分享数');
@@ -109,9 +112,9 @@ class ArticlesController extends Controller
         $form->number('share_count', '分享数');
         $form->number('like_count', '喜欢数');
         $form->switch('cover_state', '是否显示多图封面');
+        $form->datetime('show_at', '显示时间');
         $form->textarea('desc', '描述');
         $form->UEditor('detail', '文章详情');
-        $form->date('show_at', '显示时间');
 
         $form->saving(function (Form $form) {
             $form->detail = str_replace('crossorigin="anonymous"', '', $form->detail);

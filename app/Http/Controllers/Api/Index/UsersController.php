@@ -133,7 +133,7 @@ class UsersController extends Controller
      * @param Application $app
      * @return mixed
      */
-    public function getWechatQrcode(Application $app)
+    public function getWechatQrcodeAndUserAvatar(Application $app)
     {
         $user = $this->user();
         $result = $app->qrcode->temporary($user->id, 6 * 24 * 3600);
@@ -145,5 +145,18 @@ class UsersController extends Controller
             'qrcode' => $qrcode,
             'avatar' => $avatar
         ]);
+    }
+
+    /**
+     * 获取带用户id的微信二维码
+     * @param Application $app
+     * @return mixed
+     */
+    public function getWechatQrcode( Application $app, $user_id )
+    {
+        $result = $app->qrcode->temporary($user_id, 6 * 24 * 3600);
+        $qrcode_url = $app->qrcode->url($result['ticket']);
+
+        return $this->response()->array(['qrcode' => $qrcode_url]);
     }
 }

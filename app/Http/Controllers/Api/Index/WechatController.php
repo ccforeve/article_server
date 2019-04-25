@@ -118,6 +118,11 @@ class WechatController extends Controller
                         "url"  => 'http://btl.yxcxin.com/user'
                     ],
                     [
+                        "type" => "view",
+                        "name" => "提交文章",
+                        "url"  => 'http://btl.yxcxin.com/article/extension'
+                    ],
+                    [
                         "type" => "click",
                         "name" => "查询教程",
                         "key"  => "study"

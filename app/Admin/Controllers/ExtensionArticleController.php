@@ -10,6 +10,7 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
+use Illuminate\Http\Request;
 
 class ExtensionArticleController extends Controller
 {
@@ -61,6 +62,8 @@ class ExtensionArticleController extends Controller
         $grid->examine('状态')->display(function ($value) {
             return $value ? '已审核' : '未审核';
         });
+        $grid->examine_at('审核时间');
+        $grid->article_id('审核文章id');
         $grid->created_at('创建时间');
         $grid->updated_at('更新时间');
 
@@ -102,9 +105,26 @@ class ExtensionArticleController extends Controller
         return $show;
     }
 
-    public function examine( ExtensionArticle $article )
+    /**
+     * 审核好文章
+     * @param Request $request
+     * @param ExtensionArticle $article
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
+     */
+    public function examine( Request $request, ExtensionArticle $article )
     {
         $article->examine = 1;
+        $article->examine_at = now()->toDateTimeString();
+        $article->article_id = $request->article_id;
         $article->save();
+
+        $url = "http://btl.yxcxin.com/article_detail/{$request->article_id}/public";
+        $message = [
+            "first" => "您好，你提交的好文章已通过审核",
+            "keyword1" => '通过审核',
+            "keyword2" => now()->toDateTimeString(),
+            "remark" => "您可以点详情查看文章"
+        ];
+        template_message($article->user->openid, $message, config('wechat.template.examine'), $url);
     }
 }

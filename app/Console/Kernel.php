@@ -40,7 +40,7 @@ class Kernel extends ConsoleKernel
         $schedule->call(function () {
             $users = User::query()->where('subscribe', 1)->get();
             foreach ($users as $key => $user) {
-                $message = "人生最精彩的不是实现梦想的瞬间，而是坚持梦想的过程，晚安/月亮\n晚间爆文/玫瑰\n\n🔥<a href='http://btl.yxcxin.com/article_detail/2657/public'>“1875，刷牙，洗头，洗脸，洗手，洗澡，洗碗，洗锅，洗菜，洗水果，洗衣服，我的绿叶大超市全包了！”</a>\n\n🔥<a href='http://btl.yxcxin.com/article_detail/2617/public'>“它让你上瘾，危害毁全身！专家发出毒品一般的警告！你还天天吃！”</a>\n\n🔥<a href='http://btl.yxcxin.com/article_detail/2659/public'>“致女人！（句句感人）”</a>\n\n点击下方《事业分享》→《分享事业》\n↓↓↓↓↓↓↓↓";
+                $message = "当你想要放弃的时候，想想当初为什么要开始。晚安/月亮\n晚间爆文/玫瑰\n\n🔥<a href='http://btl.yxcxin.com/article_detail/17/public'>“绿叶搭配表，收藏好了”</a>\n\n🔥<a href='http://btl.yxcxin.com/article_detail/19/public'>““磷虾油”告诉您：血管是如何一天天堵塞的，看完吓一跳！血管“天敌”黑名单你有几个呢？”</a>\n\n🔥<a href='http://btl.yxcxin.com/article_detail/33/public'>“为什么美国癌症死亡率惊人下降，而我们发病率却在稳步上升！其中原因，我们真该学一学”</a>\n\n🔥<a href='http://btl.yxcxin.com/article_detail/52/public'>“家庭和睦，再穷都能发家”</a>\n\n点击下方《事业分享》→《分享事业》\n↓↓↓↓↓↓↓↓";
                 message($user->openid, 'text', $message);
             }
         })->dailyAt('19:30');

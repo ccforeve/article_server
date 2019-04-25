@@ -35,7 +35,7 @@ Route::group([
     $router->resource('articles', 'ArticlesController');
 
     //审核好文章
-    $router->get('extension_article/examine/{article}', 'ExtensionArticleController@examine')->name('extension_article.examine');
+    $router->post('extension_article/examine/{article}', 'ExtensionArticleController@examine')->name('extension_article.examine');
     //好文章
     $router->resource('extension_article', 'ExtensionArticleController')->only('index', 'show');
 

@@ -115,7 +115,8 @@ class UsersController extends Controller
             $filter->equal('type', '用户类型')->radio(['' => '全部', 0 => '普通用户', 1 => '经销商']);
         });
 
-        $grid->perPages([15, 20]);
+        $grid->paginate(10);
+        $grid->perPages([10, 20]);
 
         return $grid;
     }
@@ -137,7 +138,7 @@ class UsersController extends Controller
         $show->avatar('头像')->image(100, 100);
         $show->phone('手机号');
         $show->wechat('微信号');
-        $show->wechat_qrcode('微信二维码')->image(100, 100);
+        $show->qrcode('微信二维码')->image(100, 100);
         $show->employed_area('从业地区');
         $show->profession('职业');
         $show->type('用户类型')->using(['0' => '普通', '1' => '经销商']);
@@ -180,7 +181,7 @@ class UsersController extends Controller
         $form->image('avatar', '头像');
         $form->mobile('phone', '手机号');
         $form->text('wechat', '微信号');
-        $form->image('wechat_qrcode', '微信二维码');
+        $form->image('qrcode', '微信二维码');
         $form->text('employed_area', '从业地区');
         $form->text('profession', '职业');
         $form->radio('type', '用户类型')->options([0 => '普通用户', 1 => '经销商']);

@@ -27,7 +27,7 @@ $api->version('v1', [
     //测试
     $api->get('test', 'TestsController@test');
 
-    $api->get('wechat_public_qrcode', 'UsersController@getWechatQrcode');
+//    $api->get('wechat_public_qrcode', 'UsersController@getWechatQrcode');
     //微信授权登录
     $api->get('user/login', 'UsersController@login');
     //微信开发配置
@@ -58,8 +58,10 @@ $api->version('v1', [
             $api->patch('/', 'UsersController@update');
             //个人中心
             $api->get('center', 'UsersController@center');
-            //获取用户二维码
-            $api->get('wechat_public_qrcode', 'UsersController@getWechatQrcode');
+            //获取用户头像和二维码的base64文件
+            $api->get('wechat_qrcode_and_user_avatar', 'UsersController@getWechatQrcodeAndUserAvatar');
+            //获取带用户id的微信二维码
+            $api->get('wechat_qrcode/{user_id}', 'UsersController@getWechatQrcode');
         });
         //文章分类列表
         $api->get('article_categories', 'ArticleCategoriesController@list');
@@ -84,8 +86,6 @@ $api->version('v1', [
             $api->get('punch', 'PostersController@getPunchPoster');
             //随机获取海报
             $api->get('random/{count}', 'PostersController@random');
-            //当前分类下上一个或下一下海报
-            $api->get('next_or_last', 'PostersController@nextOrLast');
             //发送海报到微信公众号
             $api->post('send_poster_wechat', 'PostersController@sendPoster');
         });
