@@ -48,6 +48,8 @@ trait KeyWordReplyNotifications
             $tip = "";
             if($product->kind == 1){
                 $tip = "[复]";
+            } elseif($product->kind == 3) {
+                $tip = "[预]";
             }
             $key++;
             $message .= "{$key}、[{$product->online_id}]<a href='" . $this->url("{$this->domain}/{$product->article->id}/public") . "'>{$tip}{$product->name}</a>(零售：{$product->price}元，会员：{$product->money}元 + {$product->ticket}券)\n";
