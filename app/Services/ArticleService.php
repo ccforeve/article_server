@@ -34,6 +34,7 @@ class ArticleService
             ->when($search_key, function ($query) use ($search_key) {
                 $query->where('title', 'like', "%$search_key%");
             })
+            ->whereDate('show_at', '<', now()->toDateTimeString())
             ->where('product_id', 0)
             ->select('id', 'category_id', 'title', 'cover', 'covers', 'read_count', 'cover_state', 'created_at')->latest('id')->paginate(6);
         $articles->transform(function ($article) {

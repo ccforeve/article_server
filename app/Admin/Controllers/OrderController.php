@@ -69,6 +69,7 @@ class OrderController extends Controller
         $grid->state('状态')->using([0 => '未支付', 1 => '已支付', 2 => '支付失败']);
         $grid->pay_type('支付类型')->using([1 => '微信', 2 => '支付宝']);
         $grid->pay_at('支付时间');
+        $grid->superiorUser()->id('推荐用户id');
         $grid->superiorUser()->nickname('推荐用户');
         $grid->superior_rate('佣金(元)');
         $grid->refund_state('退款状态')->display(function ($value) {

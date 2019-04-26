@@ -61,4 +61,7 @@ Route::group([
 
     //网站报表
     $router->get('report', 'ReportController@index');
+
+    //定时推送消息
+    $router->resource('schedules', 'SchedulesController');
 });

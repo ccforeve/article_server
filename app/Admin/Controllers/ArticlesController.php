@@ -112,7 +112,7 @@ class ArticlesController extends Controller
         $form->number('share_count', '分享数');
         $form->number('like_count', '喜欢数');
         $form->switch('cover_state', '是否显示多图封面');
-        $form->datetime('show_at', '显示时间');
+        $form->datetime('show_at', '显示时间')->default(now());
         $form->textarea('desc', '描述');
         $form->UEditor('detail', '文章详情');
 

@@ -105,7 +105,7 @@ trait FirstRuleNotifications
         foreach ( $data->items() as $key => $product ) {
             $key++;
             $member_price = number_format($product->price - $product->ticket, 2);
-            $message .= "{$key}、[{$product->id}]<a href='" . $this->url("{$this->domain}/{$product->article->id}/public") . "'>{$product->name}</a>(零售：{$product->price}元，会员：{$member_price}元 + {$product->ticket}卷)\n";
+            $message .= "{$key}、[{$product->online_id}]<a href='" . $this->url("{$this->domain}/{$product->article->id}/public") . "'>{$product->name}</a>(零售：{$product->price}元，会员：{$member_price}元 + {$product->ticket}卷)\n";
         }
         return $message;
     }
