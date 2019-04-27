@@ -10,7 +10,6 @@ namespace App\Admin\Extensions;
 
 
 use App\Models\Order;
-use App\Models\UserCourse;
 use Encore\Admin\Admin;
 use Encore\Admin\Widgets\Form;
 
@@ -73,7 +72,7 @@ SCRIPT;
         $form->text('refund_fee', '退款金额')->default($this->order->price);
         return <<<HTML
 <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary btn-sm refund">
+<button type="button" class="btn btn-danger btn-sm refund">
   退款
 </button>
 

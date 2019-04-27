@@ -17,6 +17,11 @@ class User extends Authenticatable implements JWTSubject
      */
     protected $guarded = ['type', 'integral_scale', 'member_up_at', 'member_lock_at', 'state'];
 
+    public function userArticles()
+    {
+        return $this->hasMany(UserArticle::class);
+    }
+
     public function superiorUser()
     {
         return $this->belongsTo(User::class, 'superior');

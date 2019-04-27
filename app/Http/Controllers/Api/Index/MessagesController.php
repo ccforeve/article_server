@@ -19,24 +19,18 @@ use Illuminate\Http\Request;
 
 class MessagesController extends Controller
 {
-    public function list( Request $request, MessageService $service )
+    public function list( MessageService $service )
     {
         $user = $this->user();
-        $messages = $service->list($user->id, $request->type);
+        $messages = $service->list($user->id);
 
         return $messages;
     }
 
-    public function show( Request $request, $message )
+    public function show( $message )
     {
-        switch ($request->type) {
-            case 'normal':
-                $message = Message::find($message);
-                return $this->response->item($message, new MessageTransformer());
-            case 'family':
-                $message = MessageFamily::find($message);
-                return $this->response->item($message, new MessageFamilyTransformer());
-        }
+        $message = MessageFamily::find($message);
+        return $this->response->item($message, new MessageFamilyTransformer());
     }
 
     public function story( Request $request, MessageService $service )

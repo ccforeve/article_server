@@ -2,7 +2,9 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Extensions\Message;
 use App\Admin\Extensions\Refund;
+use App\Models\Footprint;
 use App\Models\Order;
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -88,6 +90,15 @@ class OrderController extends Controller
             $actions->disableEdit();
             if($actions->row->state && !$actions->row->refund_state) {
                 $actions->append(new Refund($actions->row));
+            }
+            if(!$actions->row->state && !$actions->row->message && count($actions->row->user->userArticles) > 0) {
+                $footprint = Footprint::query()->where('user_id', $actions->row->user_id)->count();
+                if($footprint) {
+                    $actions->append(new Message($actions->row));
+                }
+            }
+            if($actions->row->message) {
+                $actions->append('已推送消息');
             }
         });
 

@@ -20,9 +20,6 @@ class TestsController extends Controller
 {
     public function test()
     {
-        dump(now()->toDateTimeString());
-        $sh = \App\Models\Schedule::query()->where('send_at', now()->toDateTimeString())->first();
-        dd($sh);
 //        $message = "把平凡的事做好，就是不平凡，把简单的事做好，就是不简单。晚安/月亮\n晚间爆文/玫瑰\n\n🔥<a href='http://btl.yxcxin.com/article_detail/2715/public'>“4月如果你的护肤品用完了，5月份诚邀你来试试绿叶的，安全放心用！”</a>\n\n🔥<a href='http://btl.yxcxin.com/article_detail/2716/public'>“洗脸时加点绿叶牙膏，每天1次，7天之后.....”</a>\n\n🔥<a href='http://btl.yxcxin.com/article_detail/2720/public'>“家里这些隐形毒药，会让孩子变呆变傻！危害孩子健康的都是爸妈想不到的细节！”</a>\n\n🔥<a href='http://btl.yxcxin.com/article_detail/2721/public'>“人性最大的恶，是不懂感恩”</a>\n\n点击下方《事业分享》→《分享事业》\n↓↓↓↓↓↓↓↓";
 //        message('oWwjo1VVjsqiLicjmHtOBZR72xgY', 'text', $message);
 //        message('oWwjo1QUYuZiH6eRqvi-DImSs440', 'text', $message);

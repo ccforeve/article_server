@@ -16,36 +16,19 @@ use Carbon\Carbon;
 
 class MessageService
 {
-    public function list( $user_id, $type )
+    public function list( $user_id )
     {
-        switch ($type) {
-            case 'normal':
-                $messages = Message::with('submitUser:id,avatar,nickname,phone')
-                    ->where('user_id', $user_id)
-                    ->latest('id')
-                    ->paginate(5);
-                $messages->transform(function ($message) {
-                    $value = collect($message->submitUser);
-                    $value->put('message_id', $message->id);
-                    $value->put('created_at', $message->created_at->toDateTimeString());
+        $messages = MessageFamily::with('submitUser:id,avatar,nickname,phone')
+            ->where('user_id', $user_id)
+            ->latest('id')
+            ->paginate(5);
+        $messages->transform(function ($message) {
+            $value = collect($message->submitUser);
+            $value->put('message_id', $message->id);
+            $value->put('created_at', $message->created_at->toDateTimeString());
 
-                    return $value;
-                });
-                break;
-            case 'family':
-                $messages = MessageFamily::with('submitUser:id,avatar,nickname,phone')
-                    ->where('user_id', $user_id)
-                    ->latest('id')
-                    ->paginate(5);
-                $messages->transform(function ($message) {
-                    $value = collect($message->submitUser);
-                    $value->put('message_id', $message->id);
-                    $value->put('created_at', $message->created_at->toDateTimeString());
-
-                    return $value;
-                });
-                break;
-        }
+            return $value;
+        });
 
         return $messages;
     }
@@ -54,23 +37,24 @@ class MessageService
     {
         $data = $request->except('cate');
         $data['submit_user_id'] = $submit_user_id;
-        switch ($request->cate) {
-            case 'normal':
-                $add_message = Message::create($data);
-                $url = "http://btl.yxcxin.com/message/{$add_message->id}/normal";
-                break;
-            case 'family':
-                $add_message = MessageFamily::create($data);
-                $url = "http://btl.yxcxin.com/message/{$add_message->id}/family";
-                break;
-        }
-        $user = User::query()->where('id', $request->user_id)->first(['openid', 'message_send']);
+        $add_message = MessageFamily::create($data);
+        $url = "http://btl.yxcxin.com/message/{$add_message->id}";
+        $user = User::query()->where('id', $request->user_id)->first(['openid', 'message_send', 'member_lock_at']);
         if($user->message_send && now()->lt(Carbon::parse($user->member_lock_at))) {
             $message = [
                 "first" => "您收到了新的咨询",
                 "keyword1" => $request->name,
                 "keyword2" => now()->format('Y年m月d日'),
                 "keyword3" => $request->type,
+                "remark" => "请及时处理！"
+            ];
+            template_message($user->openid, $message, config('wechat.template.message'), $url);
+        } elseif ($user->message_send && now()->gt(Carbon::parse($user->member_lock_at))) {
+            $message = [
+                "first" => "您收到了新的咨询",
+                "keyword1" => '***',
+                "keyword2" => now()->format('Y年m月d日'),
+                "keyword3" => '***',
                 "remark" => "请及时处理！"
             ];
             template_message($user->openid, $message, config('wechat.template.message'), $url);

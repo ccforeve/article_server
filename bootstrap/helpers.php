@@ -59,10 +59,10 @@ function message($FromUserName,$type,$context)
 
 /**
  * @title 推送模板消息
- * @param $openid
+ * @param string $openid
  * @param array $data 模板内容（数组）
- * @param $template_id 模板id
- * @param $url 跳转链接
+ * @param string $template_id 模板id
+ * @param string $url 跳转链接
  * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
  */
 function template_message($openid, array $data, $template_id, $url)

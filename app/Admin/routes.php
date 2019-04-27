@@ -64,4 +64,7 @@ Route::group([
 
     //定时推送消息
     $router->resource('schedules', 'SchedulesController');
+
+    //给未支付用户留言
+    $router->post('messages/{user_id}', 'MessagesController@store')->name('admin.order_message');
 });
