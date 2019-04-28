@@ -2,14 +2,17 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Extensions\SendMessage;
 use App\Models\Schedule;
 use App\Http\Controllers\Controller;
 use App\Models\PosterCategory;
+use App\Models\User;
 use Encore\Admin\Controllers\HasResourceActions;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
+use Illuminate\Http\Request;
 
 class SchedulesController extends Controller
 {
@@ -93,6 +96,10 @@ class SchedulesController extends Controller
         $grid->disableExport();
         $grid->disableRowSelector();
 
+        $grid->actions(function ($action) {
+            $action->append(new SendMessage($action->getKey()));
+        });
+
         $grid->perPages([15, 20]);
 
         return $grid;
@@ -130,5 +137,16 @@ class SchedulesController extends Controller
         $form->datetime('send_at', '发送时间');
 
         return $form;
+    }
+
+    /**
+     * 发送消息
+     * @param Request $request
+     * @param Schedule $schedule
+     */
+    public function sendTest( Request $request, Schedule $schedule )
+    {
+        $content = $schedule->content;
+        message($request->openid, 'text', $content);
     }
 }

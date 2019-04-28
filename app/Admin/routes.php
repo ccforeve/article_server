@@ -62,6 +62,8 @@ Route::group([
     //网站报表
     $router->get('report', 'ReportController@index');
 
+    //发送定时消息
+    $router->get('schedule/{schedule}', 'SchedulesController@sendTest')->name('admin.schedule_send');
     //定时推送消息
     $router->resource('schedules', 'SchedulesController');
 

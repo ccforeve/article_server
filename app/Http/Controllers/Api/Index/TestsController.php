@@ -20,7 +20,7 @@ class TestsController extends Controller
 {
     public function test()
     {
-//        $message = "把平凡的事做好，就是不平凡，把简单的事做好，就是不简单。晚安/月亮\n晚间爆文/玫瑰\n\n🔥<a href='http://btl.yxcxin.com/article_detail/2715/public'>“4月如果你的护肤品用完了，5月份诚邀你来试试绿叶的，安全放心用！”</a>\n\n🔥<a href='http://btl.yxcxin.com/article_detail/2716/public'>“洗脸时加点绿叶牙膏，每天1次，7天之后.....”</a>\n\n🔥<a href='http://btl.yxcxin.com/article_detail/2720/public'>“家里这些隐形毒药，会让孩子变呆变傻！危害孩子健康的都是爸妈想不到的细节！”</a>\n\n🔥<a href='http://btl.yxcxin.com/article_detail/2721/public'>“人性最大的恶，是不懂感恩”</a>\n\n点击下方《事业分享》→《分享事业》\n↓↓↓↓↓↓↓↓";
+//        $message = "想把事业做成功，无非两点--产品、客户。能看到这条信息的，我相信大家都有一个好的产品，剩下的就是客户≈人脉。/握手\n\n人脉怎么来？每次看到好的文章分享到朋友圈，都会发现每篇文章底部有别人的小广告，这时我就在想，同样是分享，为什么不帮自己做广告，/傲慢 为自己代言，为自己拓展人脉。\n\n有了这个想法，搭建出这么一款引流神器——【事业分享】/啤酒\n\n①所有分享自带名片，无论你分享还是他分享，都是在为你做广告——微名片；\n②每天更新和你事业产品相关的文章+海报，避免信息爆炸——文章+海报库；\n③通过手机就能查看谁浏览你转发分享的发文章，只要手机在手，随时完成客户沟通——访客记录；\n\n点击下方《事业分享》→《分享事业》\n↓↓↓↓↓↓↓↓";
 //        message('oWwjo1VVjsqiLicjmHtOBZR72xgY', 'text', $message);
 //        message('oWwjo1QUYuZiH6eRqvi-DImSs440', 'text', $message);
 //        $articles = Article::query()->where('product_id', 0)->get();
@@ -50,12 +50,5 @@ class TestsController extends Controller
 //        foreach ($posters as $poster) {
 //            imgChangeBase64($poster->image_url, "{$poster->id}_{$poster->title}");
 //        }
-//        UserArticle::query()->truncate();
-//        User::query()->truncate();
-//        Footprint::query()->truncate();
-//        Punch::query()->truncate();
-//        Order::query()->truncate();
-//        Message::query()->truncate();
-//        Cash::query()->truncate();
     }
 }
