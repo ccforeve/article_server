@@ -33,19 +33,22 @@ trait ThirdRuleNotifications
         //百度分词后查询别名
         $client = new \AipNlp(config('app.baidu_api.app_id'), config('app.baidu_api.app_key'), config('app.baidu_api.app_secret'));
         $baidu_api_result = $client->lexerCustom($content);
-        $max_key = getMaxString($baidu_api_result['items'])['item'];
-        $products = Product::with('article:id,product_id')
-            ->where([['state', '<>', 9], ['is_show_price', '=', 1]])
+        if(isset($baidu_api_result['items'])) {
+            $max_key = getMaxString($baidu_api_result[ 'items' ])[ 'item' ];
+            $products = Product::with('article:id,product_id')
+                ->where([ [ 'state', '<>', 9 ], [ 'is_show_price', '=', 1 ] ])
 //            ->where('alias_name', 'like', "%{$max_key}%")
-            ->where(function ($where) use ($max_key){
-                $where->where('alias_name', 'like', "%{$max_key}%")->orWhere('desc', 'like', "%{$max_key}%");
-            })
-            ->latest('listed_at')
-            ->paginate(5);
-        if ( $products->total() > 0 ) {
-            return $this->sendProductsMessage($products, $max_key);
-        } else {
-            return "未检索到关键词为“{$content}”的产品，可以修改关键词，重新检索！";
+                ->where(function ( $where ) use ( $max_key ) {
+                    $where->where('alias_name', 'like', "%{$max_key}%")->orWhere('desc', 'like', "%{$max_key}%");
+                })
+                ->latest('listed_at')
+                ->paginate(5);
+            if ( $products->total() > 0 ) {
+                return $this->sendProductsMessage($products, $max_key);
+            } else {
+                return "未检索到关键词为“{$content}”的产品，可以修改关键词，重新检索！";
+            }
         }
+        return "未检索到关键词为“{$content}”的产品，可以修改关键词，重新检索！";
     }
 }
