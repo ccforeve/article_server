@@ -175,8 +175,7 @@ class PayController extends Controller
      */
     public function orders()
     {
-        $user = $this->user();
-        $users = User::query()->whereNotIn('id', [$user->id])->inRandomOrder()->take(20)->get(['id', 'nickname']);
+        $users = User::query()->inRandomOrder()->take(20)->get(['id', 'nickname']);
 
         return $users;
     }
