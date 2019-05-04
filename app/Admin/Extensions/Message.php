@@ -67,7 +67,7 @@ SCRIPT;
         $form->attribute('data-form', 'message');
         $form->action(route('admin.order_message', $this->order->user_id));
         $form->disablePjax();
-        $form->select('submit_user_id', '留言人')->options([20 => '李源源（徐启隆）', 38 => '万玉亮（D.m）'])->default(20);
+        $form->select('submit_user_id', '留言人')->options([20 => '李源源（徐启隆）', 38 => '万玉亮（D.m）', 5057 => '李源源（ABC健康成长）', 5074 => "李源源（健康有道（雷淑霞））"])->default(20);
         $form->select('type', '咨询问题')->options(['咨询健康问题' => '咨询健康问题', '了解加盟事业' => '了解加盟事业', '其他' => '其他'])->default('咨询健康问题');
         $form->text('region', '工作地区')->default(array_random(['深圳', '上海', '无锡', '百色']));
         $form->text('name', '姓名');
