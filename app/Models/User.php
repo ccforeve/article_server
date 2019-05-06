@@ -27,6 +27,11 @@ class User extends Authenticatable implements JWTSubject
         return $this->belongsTo(User::class, 'superior');
     }
 
+    public function footprints()
+    {
+        return $this->hasMany(Footprint::class);
+    }
+
     public function getAvatarAttribute( $value )
     {
         if(!str_contains($value, 'http')) {

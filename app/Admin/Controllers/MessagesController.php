@@ -13,11 +13,24 @@ use Illuminate\Http\Request;
 
 class MessagesController extends Controller
 {
-    public function store( Request $request, $user_id )
+    public function orderSendMessage( Request $request, Order $order )
     {
-        Order::query()->where('id', $request->order_id)->update(['message' => 1]);
-        $data = $request->except('order_id');
-        $data['user_id'] = $user_id;
+        $order->update(['message' => 1]);
+        $data = $request->all();
+        $data['user_id'] = $order->user_id;
+        $this->store($data, $order->user_id);
+    }
+
+    public function userSendMessage( Request $request, User $user )
+    {
+        $user->increment('message');
+        $data = $request->all();
+        $data['user_id'] = $user->id;
+        $this->store($data, $user->id);
+    }
+
+    public function store( $data, $user_id )
+    {
         $add_message = MessageFamily::query()->create($data);
         $url = "http://btl.yxcxin.com/message/{$add_message->id}";
         $user = User::query()->where('id', $user_id)->first(['openid', 'message_send']);
@@ -26,7 +39,7 @@ class MessagesController extends Controller
             'user_id' => $user_id,
             'article_id' => $user_article->article_id,
             'user_article_id' => $user_article->id,
-            'see_user_id' => $request->submit_user_id,
+            'see_user_id' => $add_message->submit_user_id,
             'residence_time' => rand(10, 200),
             'type' => 1,
             'from' => 'groupmessage',
@@ -35,9 +48,9 @@ class MessagesController extends Controller
         if($user->message_send) {
             $message = [
                 "first"    => "您收到了新的咨询",
-                "keyword1" => '***',
+                "keyword1" => $add_message->name,
                 "keyword2" => now()->format('Y年m月d日'),
-                "keyword3" => '***',
+                "keyword3" => $add_message->message,
                 "remark"   => "请及时处理！"
             ];
             template_message($user->openid, $message, config('wechat.template.message'), $url);

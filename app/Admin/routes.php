@@ -68,5 +68,7 @@ Route::group([
     $router->resource('schedules', 'SchedulesController');
 
     //给未支付用户留言
-    $router->post('messages/{user_id}', 'MessagesController@store')->name('admin.order_message');
+    $router->post('messages/{order}/order', 'MessagesController@orderSendMessage')->name('admin.order_message');
+    //给用户留言
+    $router->post('messages/{user}/user', 'MessagesController@userSendMessage')->name('admin.user_message');
 });

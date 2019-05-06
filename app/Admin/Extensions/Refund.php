@@ -83,7 +83,6 @@ SCRIPT;
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="myModalLabel">退款（退款人：{$this->order->user->nickname}）</h4>
-        <input id="order_fee" type="hidden" value="{$this->order->price}">
       </div>
       <div class="modal-body">
         {$form->render()}

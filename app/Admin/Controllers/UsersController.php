@@ -2,9 +2,11 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Extensions\Tools\UserMessage;
+use App\Admin\Extensions\UserSendMessage;
+use App\Models\Footprint;
 use App\Models\User;
 use App\Http\Controllers\Controller;
-use Carbon\Carbon;
 use Encore\Admin\Controllers\HasResourceActions;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -81,11 +83,11 @@ class UsersController extends Controller
     protected function grid()
     {
         $grid = new Grid(new User);
-
-        $grid->model()->latest('id');
+        $grid->model()->when(\Request::get('message') == 1, function ($query) {
+            $query->has('footprints');
+        })->latest('id');
 
         $grid->id('Id');
-//        $grid->openid('微信Openid');
         $grid->subscribe('关注')->editable('select', [0 => '未关注', 1 => '关注']);
         $grid->nickname('昵称');
         $grid->sex('性别')->editable('select', [1 => '男', 2 => '女']);
@@ -96,15 +98,23 @@ class UsersController extends Controller
         $grid->state('状态')->switch(['on' => ['value' => 0, 'text' => '正常'], 'off' => ['value' => 1, 'text' => '禁用']]);
         $grid->member_lock_at('到期时间')->editable('date');
         $grid->superiorUser()->nickname('推荐人');
-        $grid->integral_scale('一级佣金比')->editable();
+        $grid->integral_scale('一级佣金比')->editable()->label('default');
         $grid->created_at('注册时间');
+        $grid->message('发送留言次数')->label('danger');
 
         $grid->disableCreateButton();
         $grid->disableExport();
         $grid->disableRowSelector();
 
+        $grid->tools(function ($tools) {
+            $tools->append(new UserMessage());
+        });
+
         $grid->actions(function ($actions) {
             $actions->disableDelete();
+            if(count($actions->row->footprints) > 0) {
+                $actions->append(new UserSendMessage($actions->row));
+            }
         });
 
         $grid->filter(function($filter) {

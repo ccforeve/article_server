@@ -2,7 +2,7 @@
 
 namespace App\Admin\Controllers;
 
-use App\Admin\Extensions\Message;
+use App\Admin\Extensions\OrderSendMessage;
 use App\Admin\Extensions\Refund;
 use App\Models\Footprint;
 use App\Models\Order;
@@ -60,7 +60,7 @@ class OrderController extends Controller
     protected function grid()
     {
         $grid = new Grid(new Order);
-        $grid->model()->latest('id');
+        $grid->model()->latest('id')->groupBy('state', 'user_id');
 
         $grid->id('order_Id');
         $grid->user()->id('用户id');
@@ -80,6 +80,7 @@ class OrderController extends Controller
             }
         });
         $grid->created_at('下单时间');
+        $grid->user()->member_up_at('开通时间');
 
         $grid->disableCreateButton();
         $grid->disableExport();
@@ -94,7 +95,7 @@ class OrderController extends Controller
             if(!$actions->row->state && !$actions->row->message && count($actions->row->user->userArticles) > 0) {
                 $footprint = Footprint::query()->where('user_id', $actions->row->user_id)->count();
                 if($footprint) {
-                    $actions->append(new Message($actions->row));
+                    $actions->append(new OrderSendMessage($actions->row));
                 }
             }
             if($actions->row->message) {
