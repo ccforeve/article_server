@@ -11,6 +11,7 @@
         "dingo/api": "2.0.0-alpha2",
         "encore/laravel-admin": "^1.6",
         "fideloper/proxy": "^4.0",
+        "laravel-admin-ext/cropper": "1.0.2.1",
         "laravel-admin-ext/log-viewer": "^1.0",
         "laravel/framework": "5.7.*",
         "laravel/horizon": "^2.0",
@@ -20,7 +21,8 @@
         "overtrue/laravel-wechat": "~4.0",
         "predis/predis": "~1.0",
         "socialiteproviders/weixin": "^4.0",
-        "tymon/jwt-auth": "1.0.0-rc.3"
+        "tymon/jwt-auth": "1.0.0-rc.3",
+        "yansongda/laravel-pay": "^2.0"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.5",

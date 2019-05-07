@@ -67,6 +67,9 @@ Route::group([
     //定时推送消息
     $router->resource('schedules', 'SchedulesController');
 
+    //微信模板消息
+    $router->resource('wechat_templates', 'WechatTemplateController');
+
     //给未支付用户留言
     $router->post('messages/{order}/order', 'MessagesController@orderSendMessage')->name('admin.order_message');
     //给用户留言

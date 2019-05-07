@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2a32caf77874b306b07d35a032813fbd",
+    "content-hash": "c84c23df4ff62b185b554eb2e014e246",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1067,16 +1067,16 @@
         },
         {
             "name": "encore/laravel-admin",
-            "version": "v1.6.7",
+            "version": "v1.6.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/z-song/laravel-admin.git",
-                "reference": "2c7de6c1d8e3aad3c300a1ba3e8fa0f82403845d"
+                "reference": "a4495a7278f3d5c679edaf92fd17b01a99b35717"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/z-song/laravel-admin/zipball/2c7de6c1d8e3aad3c300a1ba3e8fa0f82403845d",
-                "reference": "2c7de6c1d8e3aad3c300a1ba3e8fa0f82403845d",
+                "url": "https://api.github.com/repos/z-song/laravel-admin/zipball/a4495a7278f3d5c679edaf92fd17b01a99b35717",
+                "reference": "a4495a7278f3d5c679edaf92fd17b01a99b35717",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -1096,7 +1096,7 @@
                 "intervention/image": "~2.3",
                 "laravel/browser-kit-testing": "^2.0",
                 "laravel/laravel": "~5.5",
-                "phpunit/phpunit": "~6.0",
+                "phpunit/phpunit": "~6.0 || ~8.0",
                 "symfony/css-selector": "~3.1"
             },
             "suggest": {
@@ -1140,7 +1140,7 @@
                 "grid",
                 "laravel"
             ],
-            "time": "2018-11-01T02:13:08+00:00"
+            "time": "2019-05-06T10:57:07+00:00"
         },
         {
             "name": "erusev/parsedown",
@@ -1550,6 +1550,125 @@
                 }
             ],
             "time": "2015-04-20T18:58:01+00:00"
+        },
+        {
+            "name": "laravel-admin-ext/cropper",
+            "version": "1.0.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel-admin-extensions/cropper.git",
+                "reference": "eaa614c3fd5621eacba961cf284ff822a620aa65"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel-admin-extensions/cropper/zipball/eaa614c3fd5621eacba961cf284ff822a620aa65",
+                "reference": "eaa614c3fd5621eacba961cf284ff822a620aa65",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "encore/laravel-admin": "~1.6",
+                "php": ">=7.0.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~6.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Encore\\Cropper\\CropperServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Encore\\Cropper\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "EVA09",
+                    "email": "940173803@qq.com"
+                }
+            ],
+            "description": "Integrate Cropper into laravel-admin",
+            "homepage": "https://github.com/laravel-admin-extensions/cropper",
+            "keywords": [
+                "cropper",
+                "extension",
+                "image",
+                "laravel-admin"
+            ],
+            "time": "2019-04-03T04:40:07+00:00"
+        },
+        {
+            "name": "laravel-admin-ext/log-viewer",
+            "version": "v1.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel-admin-extensions/log-viewer.git",
+                "reference": "742a2550746c9346d463249ba16b8fba9ac9cf97"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel-admin-extensions/log-viewer/zipball/742a2550746c9346d463249ba16b8fba9ac9cf97",
+                "reference": "742a2550746c9346d463249ba16b8fba9ac9cf97",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "encore/laravel-admin": "~1.6",
+                "php": ">=7.0.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~6.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Encore\\Admin\\LogViewer\\LogViewerServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Encore\\Admin\\LogViewer\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "z-song",
+                    "email": "zosong@126.com"
+                }
+            ],
+            "description": "Log viewer for laravel",
+            "homepage": "https://github.com/laravel-admin-extensions/log-viewer",
+            "keywords": [
+                "Viewer",
+                "laravel-admin",
+                "log"
+            ],
+            "time": "2018-11-13T17:17:36+00:00"
         },
         {
             "name": "laravel/framework",
@@ -5526,6 +5645,175 @@
                 "validate"
             ],
             "time": "2018-01-29T19:49:41+00:00"
+        },
+        {
+            "name": "yansongda/laravel-pay",
+            "version": "v2.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yansongda/laravel-pay.git",
+                "reference": "7b2574a62a22e5d777df222f0280c8ea158e5f66"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/yansongda/laravel-pay/zipball/7b2574a62a22e5d777df222f0280c8ea158e5f66",
+                "reference": "7b2574a62a22e5d777df222f0280c8ea158e5f66",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "illuminate/support": "^5.1",
+                "yansongda/pay": "^2.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Yansongda\\LaravelPay\\PayServiceProvider"
+                    ],
+                    "aliases": {
+                        "Pay": "Yansongda\\LaravelPay\\Facades\\Pay"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Yansongda\\LaravelPay\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "yansongda",
+                    "email": "me@yansongda.cn"
+                }
+            ],
+            "description": "专注 Alipay 和 WeChat 的 laravel 支付扩展包",
+            "keywords": [
+                "alipay",
+                "laravel",
+                "package",
+                "pay",
+                "wechat"
+            ],
+            "time": "2018-09-03T09:09:08+00:00"
+        },
+        {
+            "name": "yansongda/pay",
+            "version": "v2.7.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yansongda/pay.git",
+                "reference": "65bceb75476d321a6b6f318bae59ac77ea6e8779"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/yansongda/pay/zipball/65bceb75476d321a6b6f318bae59ac77ea6e8779",
+                "reference": "65bceb75476d321a6b6f318bae59ac77ea6e8779",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "ext-openssl": "*",
+                "ext-simplexml": "*",
+                "monolog/monolog": "^1.23",
+                "php": ">=7.0",
+                "symfony/event-dispatcher": "^3.0|^4.0",
+                "symfony/http-foundation": "^3.0|^4.0",
+                "yansongda/supports": "^1.8"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.2",
+                "phpunit/phpunit": "^6.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Yansongda\\Pay\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "yansongda",
+                    "email": "me@yansongda.cn"
+                }
+            ],
+            "description": "专注 Alipay 和 WeChat 的支付扩展包",
+            "keywords": [
+                "alipay",
+                "pay",
+                "wechat"
+            ],
+            "time": "2019-05-06T02:31:48+00:00"
+        },
+        {
+            "name": "yansongda/supports",
+            "version": "v1.8.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yansongda/supports.git",
+                "reference": "27d2692005af9900bc6aa4390bc9bd4a3d6a1fdd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/yansongda/supports/zipball/27d2692005af9900bc6aa4390bc9bd4a3d6a1fdd",
+                "reference": "27d2692005af9900bc6aa4390bc9bd4a3d6a1fdd",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^6.2",
+                "monolog/monolog": "^1.23",
+                "php": ">=5.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Yansongda\\Supports\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "yansongda",
+                    "email": "me@yansongda.cn"
+                }
+            ],
+            "description": "common components",
+            "keywords": [
+                "Guzzle",
+                "array",
+                "collection",
+                "config",
+                "http",
+                "support"
+            ],
+            "time": "2019-05-06T09:29:58+00:00"
         }
     ],
     "packages-dev": [

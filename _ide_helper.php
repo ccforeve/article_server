@@ -3,7 +3,7 @@
 
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.7.13 on 2019-04-09 11:40:44.
+ * Generated for Laravel 5.7.13 on 2019-05-07 14:52:55.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -14197,6 +14197,10 @@ namespace Encore\Admin\Facades {
      * @method static void registerAuthRoutes()
      * @method static void extend($name, $class)
      * @method static void disablePjax()
+     * @method static void booting(\Closure $builder)
+     * @method static void booted(\Closure $builder)
+     * @method static void bootstrap()
+     * @see \Encore\Admin\Admin
      */ 
     class Admin {
         
@@ -14301,6 +14305,29 @@ namespace Encore\Admin\Facades {
         }
         
         /**
+         * 
+         *
+         * @param array $menu
+         * @return array 
+         * @static 
+         */ 
+        public static function menuLinks($menu = array())
+        {
+            return \Encore\Admin\Admin::menuLinks($menu);
+        }
+        
+        /**
+         * Set admin title.
+         *
+         * @return void 
+         * @static 
+         */ 
+        public static function setTitle($title)
+        {
+            \Encore\Admin\Admin::setTitle($title);
+        }
+        
+        /**
          * Get admin title.
          *
          * @return \Config 
@@ -14392,6 +14419,16 @@ namespace Encore\Admin\Facades {
         }
         
         /**
+         * Bootstrap the admin application.
+         *
+         * @static 
+         */ 
+        public static function bootstrap()
+        {
+            return \Encore\Admin\Admin::bootstrap();
+        }
+        
+        /**
          * 
          *
          * @static 
@@ -14405,7 +14442,7 @@ namespace Encore\Admin\Facades {
          * Add css or get all css.
          *
          * @param null $css
-         * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|void 
+         * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View 
          * @static 
          */ 
         public static function css($css = null)
@@ -14417,7 +14454,7 @@ namespace Encore\Admin\Facades {
          * 
          *
          * @param null $css
-         * @return array|void 
+         * @return array|null 
          * @static 
          */ 
         public static function baseCss($css = null)
@@ -14429,7 +14466,7 @@ namespace Encore\Admin\Facades {
          * Add js or get all js.
          *
          * @param null $js
-         * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|void 
+         * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View 
          * @static 
          */ 
         public static function js($js = null)
@@ -14438,10 +14475,22 @@ namespace Encore\Admin\Facades {
         }
         
         /**
+         * Add js or get all js.
+         *
+         * @param null $js
+         * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View 
+         * @static 
+         */ 
+        public static function headerJs($js = null)
+        {
+            return \Encore\Admin\Admin::headerJs($js);
+        }
+        
+        /**
          * 
          *
          * @param null $js
-         * @return array|void 
+         * @return array|null 
          * @static 
          */ 
         public static function baseJs($js = null)
@@ -14453,7 +14502,7 @@ namespace Encore\Admin\Facades {
          * 
          *
          * @param string $script
-         * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|void 
+         * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View 
          * @static 
          */ 
         public static function script($script = '')
@@ -15365,6 +15414,157 @@ namespace Tymon\JWTAuth\Facades {
         public static function setRefreshFlow($refreshFlow = true)
         {
             return \Tymon\JWTAuth\Factory::setRefreshFlow($refreshFlow);
+        }
+         
+    }
+ 
+}
+
+namespace Yansongda\LaravelPay\Facades { 
+
+    /**
+     * 
+     *
+     */ 
+    class Pay {
+        
+        /**
+         * Pay an order.
+         *
+         * @author yansongda <me@yansongda.cn>
+         * @param string $gateway
+         * @param array $params
+         * @throws InvalidGatewayException
+         * @return \Response|\Yansongda\Pay\Gateways\Collection 
+         * @static 
+         */ 
+        public static function pay($gateway, $params = array())
+        {
+            return \Yansongda\Pay\Gateways\Alipay::pay($gateway, $params);
+        }
+        
+        /**
+         * Verify sign.
+         *
+         * @author yansongda <me@yansongda.cn>
+         * @param null|array $data
+         * @param bool $refund
+         * @throws InvalidSignException
+         * @throws InvalidConfigException
+         * @return \Yansongda\Pay\Gateways\Collection 
+         * @static 
+         */ 
+        public static function verify($data = null, $refund = false)
+        {
+            return \Yansongda\Pay\Gateways\Alipay::verify($data, $refund);
+        }
+        
+        /**
+         * Query an order.
+         *
+         * @author yansongda <me@yansongda.cn>
+         * @param string|array $order
+         * @param string $type
+         * @param bool $transfer @deprecated since v2.7.3
+         * @throws GatewayException
+         * @throws InvalidConfigException
+         * @throws InvalidSignException
+         * @return \Yansongda\Pay\Gateways\Collection 
+         * @static 
+         */ 
+        public static function find($order, $type = 'wap', $transfer = false)
+        {
+            return \Yansongda\Pay\Gateways\Alipay::find($order, $type, $transfer);
+        }
+        
+        /**
+         * Refund an order.
+         *
+         * @author yansongda <me@yansongda.cn>
+         * @param array $order
+         * @throws GatewayException
+         * @throws InvalidConfigException
+         * @throws InvalidSignException
+         * @return \Yansongda\Pay\Gateways\Collection 
+         * @static 
+         */ 
+        public static function refund($order)
+        {
+            return \Yansongda\Pay\Gateways\Alipay::refund($order);
+        }
+        
+        /**
+         * Cancel an order.
+         *
+         * @author yansongda <me@yansongda.cn>
+         * @param array $order
+         * @throws GatewayException
+         * @throws InvalidConfigException
+         * @throws InvalidSignException
+         * @return \Yansongda\Pay\Gateways\Collection 
+         * @static 
+         */ 
+        public static function cancel($order)
+        {
+            return \Yansongda\Pay\Gateways\Alipay::cancel($order);
+        }
+        
+        /**
+         * Close an order.
+         *
+         * @param string|array $order
+         * @author yansongda <me@yansongda.cn>
+         * @throws GatewayException
+         * @throws InvalidConfigException
+         * @throws InvalidSignException
+         * @return \Yansongda\Pay\Gateways\Collection 
+         * @static 
+         */ 
+        public static function close($order)
+        {
+            return \Yansongda\Pay\Gateways\Alipay::close($order);
+        }
+        
+        /**
+         * Download bill.
+         *
+         * @author yansongda <me@yansongda.cn>
+         * @param string|array $bill
+         * @throws GatewayException
+         * @throws InvalidConfigException
+         * @throws InvalidSignException
+         * @return string 
+         * @static 
+         */ 
+        public static function download($bill)
+        {
+            return \Yansongda\Pay\Gateways\Alipay::download($bill);
+        }
+        
+        /**
+         * Reply success to alipay.
+         *
+         * @author yansongda <me@yansongda.cn>
+         * @return \Response 
+         * @static 
+         */ 
+        public static function success()
+        {
+            return \Yansongda\Pay\Gateways\Alipay::success();
+        }
+        
+        /**
+         * extend.
+         *
+         * @author yansongda <me@yansongda.cn>
+         * @param string $method
+         * @param callable $function
+         * @return void 
+         * @static 
+         */ 
+        public static function extend($method, $function)
+        {
+            \Yansongda\Pay\Gateways\Alipay::extend($method, $function);
         }
          
     }
@@ -17759,6 +17959,8 @@ namespace  {
     class JWTAuth extends \Tymon\JWTAuth\Facades\JWTAuth {}
 
     class JWTFactory extends \Tymon\JWTAuth\Facades\JWTFactory {}
+
+    class Pay extends \Yansongda\LaravelPay\Facades\Pay {}
  
 }
 
