@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Jobs\TemplateSend;
 use App\Models\Article;
 use App\Models\User;
 use App\Models\WechatTemplate;
@@ -81,7 +82,8 @@ class Kernel extends ConsoleKernel
                             $message[$keyword] = $item['message'];
                         }
                         foreach ($users as $key => $user) {
-                            template_message($user->openid, $message, $template->template_id, $template->url);
+                            dispatch(new TemplateSend($user->openid, $message, $template->template_id, $template->url))->onQueue('article');
+//                            template_message($user->openid, $message, $template->template_id, $template->url);
                         }
                         break;
                 }

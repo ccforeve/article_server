@@ -105,7 +105,7 @@ return [
                 'connection' => 'redis',
                 'queue' => ['default', 'article'],
                 'balance' => 'auto',
-                'processes' => 12,
+                'processes' => 8,
                 'tries' => 3,
             ],
         ],

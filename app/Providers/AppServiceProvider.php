@@ -7,9 +7,11 @@ use App\Models\Poster;
 use App\Observers\ArticleObserver;
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Laravel\Horizon\Horizon;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -29,6 +31,10 @@ class AppServiceProvider extends ServiceProvider
             'category' => 'App\Models\PosterCategory',
             'brand' => 'App\Models\Brand',
         ]);
+
+        Horizon::auth(function () {
+           return Auth::guard('admin')->check();
+        });
 
         Article::observe(ArticleObserver::class);
         Poster::observe(PosterObserver::class);

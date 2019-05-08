@@ -88,7 +88,7 @@ trait FirstRuleNotifications
         } else {
             $product_query->whereBetween('listed_at', $date);
         }
-        $products = $product_query->paginate(6);
+        $products = $product_query->paginate(7);
         if(count($products->items()) < 1) {
             return null;
         }
@@ -104,8 +104,7 @@ trait FirstRuleNotifications
         $message = "发送序号后面【中括号】里的数字，查看产品信息。\n========================\n{$data_string}{$data->total()}种：\n";
         foreach ( $data->items() as $key => $product ) {
             $key++;
-            $member_price = number_format($product->price - $product->ticket, 2);
-            $message .= "{$key}、[{$product->online_id}]<a href='" . $this->url("{$this->domain}/{$product->article->id}/public") . "'>{$product->name}</a>(零售：{$product->price}元，会员：{$member_price}元 + {$product->ticket}卷)\n";
+            $message .= "{$key}、[{$product->online_id}]<a href='" . $this->articleUrl($product->article->id) . "'>{$product->name}</a>(零售：{$product->price}元，会员：{$product->money}元 + {$product->ticket}卷)\n";
         }
         return $message;
     }

@@ -39,6 +39,11 @@ class WechatController extends Controller
         return "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe910075ca3b12399&redirect_uri={$value}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
     }
 
+    public function articleUrl( $id )
+    {
+        return "http://btl.yxcxin.com/article_detail/{$id}/public";
+    }
+
     /**
      * 上传素材
      * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string

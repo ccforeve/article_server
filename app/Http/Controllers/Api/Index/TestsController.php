@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Api\Index;
 
 use App\Http\Controllers\Api\Controller;
+use App\Jobs\TemplateSend;
 use App\Models\Article;
 use App\Models\Cash;
 use App\Models\Footprint;
