@@ -79,7 +79,7 @@ class Kernel extends ConsoleKernel
                                 $item['message'] = now()->toDateString();
                             }
                             $keyword = 'keyword' . ($key + 1);
-                            $message[$keyword] = $item['message'];
+                            $message[$keyword] = [$item['message'], isset($item['color']) ? $item['color'] : ""];
                         }
                         foreach ($users as $key => $user) {
                             dispatch(new TemplateSend($user->openid, $message, $template->template_id, $template->url))->onQueue('article');

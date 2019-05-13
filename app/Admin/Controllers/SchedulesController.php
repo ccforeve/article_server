@@ -182,7 +182,7 @@ class SchedulesController extends Controller
                         $item['message'] = now()->toDateString();
                     }
                     $keyword = 'keyword' . ($key + 1);
-                    $message[$keyword] = $item['message'];
+                    $message[$keyword] = [$item['message'], isset($item['color']) ? $item['color'] : ""];
                 }
                 template_message($request->openid, $message, $template->template_id, $template->url);
                 break;
