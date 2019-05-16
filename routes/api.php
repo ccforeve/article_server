@@ -47,8 +47,12 @@ $api->version('v1', [
     $api->any('alipay/notify', 'PayController@alipayNotify')->name('api.alipay_notify');
     //添加产品接口
     $api->post('products', 'ProductsController@store');
+    //产品列表
+    $api->get('products/{category_id}/category', 'ProductsController@list');
     //更新预售产品
     $api->get('products/update', 'ProductsController@updateProducts');
+    //产品分类列表
+    $api->get('product_categories', 'ProductCategoriesController@list');
     //添加产品分类接口
     $api->post('product_categories', 'ProductCategoriesController@store');
     // 需要 token 验证的接口
@@ -71,6 +75,8 @@ $api->version('v1', [
         $api->get('articles', 'ArticlesController@list');
         //文章详情
         $api->get('articles/{article_id}', 'ArticlesController@show')->where(['article_id' => '[0-9]+']);
+        //更新分享文章数
+        $api->patch('articles/{article_id}', 'ArticlesController@updateShareCount');
         //成为我的文章
         $api->get('articles/become_my', 'UserArticlesController@becomeMyArticle');
         //推荐好文章

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Index;
 
 use App\Http\Controllers\Api\Controller;
 use App\Http\Requests\ExtensionArticleRequest;
+use App\Models\Article;
 use App\Models\ExtensionArticle;
 use App\Services\ArticleService;
 use Illuminate\Http\Request;
@@ -40,6 +41,18 @@ class ArticlesController extends Controller
             'user_article_id' => $user_article->id,
             'product' => $user_article->article->product
         ];
+    }
+
+    /**
+     * 更新文章分享数
+     * @param $article_id
+     * @return \Dingo\Api\Http\Response
+     */
+    public function updateShareCount( $article_id )
+    {
+        Article::query()->where('id', $article_id)->increment('share_count');
+
+        return $this->response->noContent();
     }
 
     /**

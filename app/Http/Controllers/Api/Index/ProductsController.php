@@ -17,6 +17,11 @@ use Illuminate\Http\Response;
 
 class ProductsController extends Controller
 {
+    /**
+     * 产品搜索列表
+     * @param Request $request
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
     public function searchList( Request $request )
     {
         $search_key = $request->search_key;
@@ -31,6 +36,12 @@ class ProductsController extends Controller
         return $products;
     }
 
+    /**
+     * 添加产品
+     * @param Request $request
+     * @param Product $product
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function store( Request $request, Product $product )
     {
         $has_product = Product::query()->where('online_id', $request->online_id)->first();
@@ -85,5 +96,21 @@ class ProductsController extends Controller
             'code' => 201,
             'message' => '更新产品类型成功'
         ]);
+    }
+
+    /**
+     * 分类的产品列表
+     * @param $category_id
+     * @return mixed
+     */
+    public function list( $category_id )
+    {
+        $products = Product::with('article:id,product_id')
+            ->where(['parent_category_id' => $category_id, 'is_show_price' => 1])
+            ->select('id', 'cover', 'name', 'kind', 'state', 'price', 'money', 'ticket')
+            ->latest('listed_at')
+            ->paginate(20);
+
+        return $products;
     }
 }

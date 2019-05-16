@@ -16,6 +16,24 @@ use Illuminate\Http\Response;
 
 class ProductCategoriesController extends Controller
 {
+    public function list(  )
+    {
+        $categories = ProductCategory::query()
+            ->where(['parent_id' => 0, 'level' => 1])
+            ->whereNotIn('id', [228, 231])
+            ->get(['online_id', 'name']);
+
+        return $this->response->array([
+            'data' => $categories
+        ], 200);
+    }
+
+    /**
+     * 添加产品分类
+     * @param Request $request
+     * @param ProductCategory $category
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function store( Request $request, ProductCategory $category )
     {
         $has_category = ProductCategory::query()->where('online_id', $request->online_id)->first();
