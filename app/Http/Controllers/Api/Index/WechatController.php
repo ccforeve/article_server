@@ -100,19 +100,19 @@ class WechatController extends Controller
                     [
                         "type" => "view",
                         "name" => "分享事业",
-                        "url"  => 'http://btl.yxcxin.com'
+                        "url"  => 'https://btl.yxcxin.com'
                     ],
                     [
                         "type" => "view",
                         "name" => "签到打卡",
-                        "url"  => 'http://btl.yxcxin.com/punch'
+                        "url"  => 'https://btl.yxcxin.com/punch'
                     ]
                 ],
             ],
             [
                 "type" => "view",
                 "name" => "访客记录",
-                "url"  => 'http://btl.yxcxin.com/visitor'
+                "url"  => 'https://btl.yxcxin.com/visitor'
             ],
             [
                 "name"       => "服务",
@@ -120,12 +120,12 @@ class WechatController extends Controller
                     [
                         "type" => "view",
                         "name" => "个人中心",
-                        "url"  => 'http://btl.yxcxin.com/user'
+                        "url"  => 'https://btl.yxcxin.com/user'
                     ],
                     [
                         "type" => "view",
                         "name" => "提交文章",
-                        "url"  => 'http://btl.yxcxin.com/article/extension'
+                        "url"  => 'https://btl.yxcxin.com/article/extension'
                     ],
                     [
                         "type" => "click",
@@ -156,6 +156,7 @@ class WechatController extends Controller
      */
     public function _text( $content )
     {
+//        return '系统维护中';
         return $this->searchProduct( $content );
     }
 
@@ -166,6 +167,7 @@ class WechatController extends Controller
      */
     public function _voice( $recognition )
     {
+//        return '系统维护中';
         return $this->searchProduct( $recognition );
     }
 

@@ -57,7 +57,7 @@ class MessagesController extends Controller
                 "remark"   => "请及时处理！"
             ];
             template_message($user->openid, $message, config('wechat.template.message'), $url);
-            dispatch(new DeleteMessage($add_message->id))->delay(now()->addSeconds(30));
+            dispatch(new DeleteMessage($add_message->id))->delay(now()->addDay());
         }
     }
 }
