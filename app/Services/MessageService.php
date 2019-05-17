@@ -38,6 +38,7 @@ class MessageService
     {
         $data = $request->except('cate');
         $data['submit_user_id'] = $submit_user_id;
+        $data['show'] = 1;
         $add_message = MessageFamily::create($data);
         $url = "http://btl.yxcxin.com/message/{$add_message->id}";
         $user = User::query()->where('id', $request->user_id)->first(['openid', 'message_send', 'member_lock_at']);

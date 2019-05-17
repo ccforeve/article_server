@@ -19,6 +19,7 @@ class MessagesController extends Controller
         $order->update(['message' => 1]);
         $data = $request->all();
         $data['user_id'] = $order->user_id;
+        $data['show'] = 1;
         $this->store($data, $order->user_id);
     }
 
@@ -27,6 +28,7 @@ class MessagesController extends Controller
         $user->increment('message');
         $data = $request->all();
         $data['user_id'] = $user->id;
+        $data['show'] = 1;
         $this->store($data, $user->id);
     }
 
