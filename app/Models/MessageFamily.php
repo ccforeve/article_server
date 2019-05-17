@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
 class MessageFamily extends Model
 {
+    use Notifiable;
     const MAN = 1;
     const WOMAN = 2;
 

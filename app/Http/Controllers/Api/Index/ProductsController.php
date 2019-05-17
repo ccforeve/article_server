@@ -12,6 +12,7 @@ namespace App\Http\Controllers\Api\Index;
 use App\Http\Controllers\Api\Controller;
 use App\Models\Article;
 use App\Models\Product;
+use App\Models\ProductCategory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -105,12 +106,16 @@ class ProductsController extends Controller
      */
     public function list( $category_id )
     {
+        $category = ProductCategory::query()->where('online_id', $category_id)->first();
         $products = Product::with('article:id,product_id')
             ->where(['parent_category_id' => $category_id, 'is_show_price' => 1])
             ->select('id', 'cover', 'name', 'kind', 'state', 'price', 'money', 'ticket')
             ->latest('listed_at')
             ->paginate(20);
 
-        return $products;
+        return $this->response->array([
+            'products' => $products,
+            'category' => $category
+        ]);
     }
 }

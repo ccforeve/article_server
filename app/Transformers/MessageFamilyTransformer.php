@@ -21,11 +21,11 @@ class MessageFamilyTransformer extends TransformerAbstract
             'user_id' => $message->user_id,
             'type' => $message->type,
             'name' => $message->name,
-            'age' => $message->age,
             'gender' => MessageFamily::$family_gender[$message->gender],
             'phone' => $message->phone,
             'region' => $message->region,
             'message' => $message->message,
+            'show' => $message->show,
             'created_at' => $message->created_at->toDateTimeString()
         ];
     }

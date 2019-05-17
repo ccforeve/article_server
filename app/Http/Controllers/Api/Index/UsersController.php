@@ -47,6 +47,17 @@ class UsersController extends Controller
         }
     }
 
+    public function testLogin()
+    {
+        $user = User::query()->find(50);
+        return $this->response->item($user, new UserTransformer())
+            ->setMeta([
+                'msg'          => '授权成功',
+                'access_token' => 'Bearer ' . Auth::guard('api')->login($user),
+                'token_type'   => 'Bearer',
+            ])->statusCode(201);
+    }
+
     /**
      * 登录
      * @param Request $request

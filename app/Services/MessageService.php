@@ -9,6 +9,7 @@
 namespace App\Services;
 
 
+use App\Jobs\DeleteMessage;
 use App\Models\Message;
 use App\Models\MessageFamily;
 use App\Models\User;
@@ -59,6 +60,7 @@ class MessageService
             ];
             template_message($user->openid, $message, config('wechat.template.message'), $url);
         }
+        dispatch(new DeleteMessage($add_message->id))->delay(now()->addDay());
         return $add_message;
     }
 

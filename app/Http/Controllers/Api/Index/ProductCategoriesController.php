@@ -18,10 +18,12 @@ class ProductCategoriesController extends Controller
 {
     public function list(  )
     {
-        $categories = ProductCategory::query()
+        $categories = ProductCategory::withCount(['products' => function ($query) {
+            $query->where('is_show_price', 1);
+        }])
             ->where(['parent_id' => 0, 'level' => 1])
             ->whereNotIn('id', [228, 231])
-            ->get(['online_id', 'name']);
+            ->get(['online_id', 'name', 'cover']);
 
         return $this->response->array([
             'data' => $categories

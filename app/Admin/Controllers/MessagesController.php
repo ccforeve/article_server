@@ -4,6 +4,7 @@
 namespace App\Admin\Controllers;
 
 use App\Http\Controllers\Api\Controller;
+use App\Jobs\DeleteMessage;
 use App\Models\Footprint;
 use App\Models\MessageFamily;
 use App\Models\Order;
@@ -54,6 +55,7 @@ class MessagesController extends Controller
                 "remark"   => "请及时处理！"
             ];
             template_message($user->openid, $message, config('wechat.template.message'), $url);
+            dispatch(new DeleteMessage($add_message->id))->delay(now()->addSeconds(30));
         }
     }
 }

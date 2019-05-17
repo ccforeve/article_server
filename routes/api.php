@@ -55,6 +55,10 @@ $api->version('v1', [
     $api->get('product_categories', 'ProductCategoriesController@list');
     //添加产品分类接口
     $api->post('product_categories', 'ProductCategoriesController@store');
+
+    //测试
+    $api->get('test_login', 'UsersController@testLogin');
+
     // 需要 token 验证的接口
     $api->group(['middleware' => 'user.oauth'], function($api) {
         $api->group([ 'prefix' => 'user' ], function ( $api ) {
