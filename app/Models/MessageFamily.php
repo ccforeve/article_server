@@ -3,11 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class MessageFamily extends Model
 {
-    use Notifiable;
+    use SoftDeletes;
+
     const MAN = 1;
     const WOMAN = 2;
 

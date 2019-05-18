@@ -25,6 +25,16 @@ class ArticlesController extends Controller
     }
 
     /**
+     * 单单文章详情
+     * @param $article_id
+     * @return Article
+     */
+    public function detail( $article_id )
+    {
+        return Article::query()->where('id', $article_id)->first(['title']);
+    }
+
+    /**
      * 公共文章详情
      * @param ArticleService $service
      * @param $article_id

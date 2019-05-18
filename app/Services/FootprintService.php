@@ -22,7 +22,7 @@ class FootprintService
 
     public function ReadOrShare( $user_id, $type )
     {
-        $messages = Footprint::with('seeUser:id,nickname,avatar', 'userArticle.article:id,title,cover')
+        $messages = Footprint::with('seeUser:id,nickname,avatar', 'userArticle.article:id,title,cover,product_id')
             ->where(['user_id' => $user_id, 'type' => $type])->latest('id')->groupBy('see_user_id')->paginate(5);
         $messages->transform(function ($message) use ($user_id) {
             $value = collect($message->seeUser);

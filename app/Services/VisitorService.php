@@ -21,7 +21,7 @@ class VisitorService
         $user_articles = UserArticle::with(
             'footprint:id,user_id,see_user_id,user_article_id',
             'footprint.seeUser:id,avatar',
-            'article:id,cover,title'
+            'article:id,cover,title,product_id'
         )
             ->has('footprint')
             ->where('user_id', $user_id)
@@ -30,6 +30,7 @@ class VisitorService
         $user_articles->transform(function ($user_article) {
             $value = collect($user_article->article);
             $value->put('id', $user_article->id);
+            $value->put('product_id', $user_article->article->product_id);
             $value->put('read_count', $user_article->read_count);
             $value->put('created_at', $user_article->created_at->format('Y-m-d'));
             $users = $user_article->footprint->unique('see_user_id');
@@ -54,7 +55,7 @@ class VisitorService
 
     public function userArticleShow( $user_article )
     {
-        $user_article = $user_article->load('article:id,title,cover,read_count,created_at');
+        $user_article = $user_article->load('article:id,title,cover,read_count,product_id,created_at');
         $footprints = Footprint::with('user:id,nickname,avatar', 'seeUser:id,nickname,avatar')
             ->where(['user_article_id' => $user_article->id, 'type' => 1])
             ->select('id', 'user_article_id', 'user_id', 'see_user_id', 'share_id', 'residence_time', 'created_at')
@@ -72,6 +73,7 @@ class VisitorService
 
         return [
             'article' => [
+                'product_id' => $user_article->article->product_id,
                 'title' => $user_article->article->title,
                 'cover' => $user_article->article->cover,
                 'read_count' => $user_article->article->read_count,
@@ -103,7 +105,7 @@ class VisitorService
         $user = User::query()->where('id', $user_id)->first(['nickname', 'avatar', 'phone', 'wechat']);
         $footprints = Footprint::with(
             'userArticle:id,article_id',
-            'userArticle.article:id,title,cover,created_at'
+            'userArticle.article:id,title,cover,product_id,created_at'
         )
             ->select('id', 'user_article_id', 'residence_time', 'created_at')
             ->where(['see_user_id' => $user_id, 'type' => 1])

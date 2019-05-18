@@ -55,7 +55,8 @@ $api->version('v1', [
     $api->get('product_categories', 'ProductCategoriesController@list');
     //添加产品分类接口
     $api->post('product_categories', 'ProductCategoriesController@store');
-
+    //单单文章详情
+    $api->get('articles/{article_id}/detail', 'ArticlesController@detail');
     //测试
     $api->get('test_login', 'UsersController@testLogin');
 
@@ -77,7 +78,7 @@ $api->version('v1', [
         $api->get('article_categories', 'ArticleCategoriesController@list');
         //文章列表
         $api->get('articles', 'ArticlesController@list');
-        //文章详情
+        //公共文章详情
         $api->get('articles/{article_id}', 'ArticlesController@show')->where(['article_id' => '[0-9]+']);
         //更新分享文章数
         $api->patch('articles/{article_id}', 'ArticlesController@updateShareCount');
