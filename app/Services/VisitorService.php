@@ -30,7 +30,6 @@ class VisitorService
         $user_articles->transform(function ($user_article) {
             $value = collect($user_article->article);
             $value->put('id', $user_article->id);
-            $value->put('product_id', $user_article->article->product_id);
             $value->put('read_count', $user_article->read_count);
             $value->put('created_at', $user_article->created_at->format('Y-m-d'));
             $users = $user_article->footprint->unique('see_user_id');
@@ -73,9 +72,9 @@ class VisitorService
 
         return [
             'article' => [
-                'product_id' => $user_article->article->product_id,
                 'title' => $user_article->article->title,
                 'cover' => $user_article->article->cover,
+                'product_id' => $user_article->article->product_id,
                 'read_count' => $user_article->article->read_count,
                 'created_at' => $user_article->article->created_at->diffForhumans(),
             ],
@@ -110,7 +109,8 @@ class VisitorService
             ->select('id', 'user_article_id', 'residence_time', 'created_at')
             ->where(['see_user_id' => $user_id, 'type' => 1])
             ->latest('id')
-            ->paginate(5);
+            ->groupBy('user_article_id')
+            ->paginate(6);
 
         $footprints->transform(function ($footprint) {
             $article = $footprint->userArticle->article;
