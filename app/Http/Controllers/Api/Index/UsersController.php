@@ -59,7 +59,7 @@ class UsersController extends Controller
     }
 
     /**
-     * 登录
+     * 微信公众号登录
      * @param Request $request
      * @return \Dingo\Api\Http\Response
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
@@ -98,6 +98,19 @@ class UsersController extends Controller
                 'access_token' => 'Bearer ' . Auth::guard('api')->login($user),
                 'token_type'   => 'Bearer',
             ])->statusCode(201);
+    }
+
+    /**
+     * 小程序登录
+     * @param \EasyWeChat\MiniProgram\Application $app
+     * @param Request $request
+     * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     */
+    public function miniprogramLogin( \EasyWeChat\MiniProgram\Application $app, Request $request )
+    {
+        $session = $app->auth->session($request->code);
+        return $session;
     }
 
     /**

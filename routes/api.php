@@ -26,10 +26,12 @@ $api->version('v1', [
 
     //测试
     $api->get('test', 'TestsController@test');
-
-//    $api->get('wechat_public_qrcode', 'UsersController@getWechatQrcode');
     //微信授权登录
     $api->get('user/login', 'UsersController@login');
+    //小程序登录
+    $api->get('user/miniprogram_login', 'UsersController@miniprogramLogin');
+    //小程序支付
+    $api->get('miniprogram/pay', 'PayController@miniprogram');
     //微信开发配置
     $api->any('wechat', 'WechatController@index');
     //微信公众号菜单
@@ -57,8 +59,6 @@ $api->version('v1', [
     $api->post('product_categories', 'ProductCategoriesController@store');
     //单单文章详情
     $api->get('articles/{article_id}/detail', 'ArticlesController@detail');
-    //测试
-    $api->get('test_login', 'UsersController@testLogin');
 
     // 需要 token 验证的接口
     $api->group(['middleware' => 'user.oauth'], function($api) {

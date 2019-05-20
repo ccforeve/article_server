@@ -35,6 +35,11 @@ class PaySuccessNotification
         }
         $pay_user->member_up_at = now();
         $pay_user->member_lock_at = $time->addMonth($order->month);
+        //判断是否是获得
+        if(now()->gt(Carbon::parse(config('app.activity.begin_time'))) && now()->lt(Carbon::parse(config('app.activity.end_time')))) {
+            $pay_user->luck_draw = $pay_user->luck_draw + 1;
+            $pay_user->save();
+        }
         $pay_user->save();
     }
 }

@@ -60,7 +60,7 @@ class OrderController extends Controller
     protected function grid()
     {
         $grid = new Grid(new Order);
-        $grid->model()->latest('id')->groupBy('state', 'user_id');
+        $grid->model()->latest('id');
 
         $grid->id('order_Id');
         $grid->user()->id('用户id');
@@ -165,10 +165,10 @@ class OrderController extends Controller
      */
     public function refund( Application $app, Request $request, Order $order )
     {
-        if ($order->pay_type == 1) {
-            return $this->wechatRefund($request, $app, $order);
+        if ($order->pay_type == 2) {
+            return $this->aliRefund($request, $order);
         }
-        return $this->aliRefund($request, $order);
+        return $this->wechatRefund($request, $app, $order);
     }
 
     /**
@@ -180,6 +180,9 @@ class OrderController extends Controller
      */
     public function wechatRefund( $request, $app, $order )
     {
+        if($order->pay_type === 3) {
+            $app->setMerchant(config('wechat.mini_program.default.app_id'));
+        }
         $orderNo = $order->order_id;
         $refundNo = date('Ymd') . substr(implode(NULL, array_map('ord', str_split(substr(uniqid(), 7, 13), 1))), 0, 8);
         $orderPrice = $order->price * 100;

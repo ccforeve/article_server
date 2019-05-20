@@ -23,6 +23,11 @@ return [
         'app_secret' => env('BAIDU_APP_SECRET')
     ],
 
+    'activity' => [
+        'begin_time' => env('BEGIN_TIME'),
+        'end_time' => env('END_TIME')
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Application Name
