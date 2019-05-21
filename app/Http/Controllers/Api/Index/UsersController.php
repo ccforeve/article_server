@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api\Index;
 
 use App\Http\Controllers\Api\Controller;
 use App\Jobs\UploadAvatar;
+use App\Models\Article;
 use App\Models\User;
+use App\Models\UserArticle;
 use App\Services\UserService;
 use App\Transformers\UserTransformer;
 use Auth;
@@ -78,16 +80,20 @@ class UsersController extends Controller
         if ( !$user_info[ 'subscribe' ] ) {
             $oauthUser = $driver->userFromToken($response[ 'access_token' ]);
             $user_info = collect($oauthUser->user);
+            $user_info->put('unionid', '');
             $subscribe = false;
         }
-        $user = User::query()->where('openid', $user_info[ 'openid' ])->first();
+        $user = User::query()->where(function ($query) use ($user_info, $request) {
+            $query->where('openid', $user_info[ 'openid' ]); //->orWhere('unionid', $request->unionid)
+        })->first();
         if ( !$user ) {
             $user = User::create([
                 'openid'    => $user_info[ 'openid' ],
                 'nickname'  => $user_info[ 'nickname' ],
                 'sex'       => $user_info[ 'sex' ],
                 'avatar'    => $user_info[ 'headimgurl' ],
-                'subscribe' => $subscribe ? 1 : 0
+                'subscribe' => $subscribe ? 1 : 0,
+                'unionid'   => $user_info['unionid']
             ]);
             dispatch(new UploadAvatar($user->id, $user->avatar));
         }
@@ -111,6 +117,28 @@ class UsersController extends Controller
     {
         $session = $app->auth->session($request->code);
         return $session;
+    }
+
+    /**
+     * 用户从小程序查看文章
+     * @param Request $request
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model
+     */
+    public function miniprogramReadArticle(Request $request)
+    {
+        $article_id = $request->article_id;
+        $unionid = $request->unionid;
+        $user = User::query()->where('unionid', $unionid)->first(['id']);
+        if (!$user) {
+            $user = User::query()->create([
+                'openid' => $unionid,
+                'unionid' => $unionid
+            ]);
+        }
+        $product_id = Article::query()->where('id', $article_id)->value('product_id');
+        $user_article = UserArticle::query()->firstOrCreate(['article_id' => $article_id, 'user_id' => $user->id, 'product_id' => $product_id]);
+
+        return $user_article;
     }
 
     /**

@@ -27,6 +27,8 @@ trait CreateOrCheckUserNotifications
                 $this->relation($user, $eventkey);
             }
             else {
+                $unionid = $this->app->user->get($FromUserName)['unionid'];
+                $user->unionid = $unionid;
                 $user->subscribe = 1;
                 $user->subscribe_at = Carbon::now()->toDateTimeString();
                 $user->save();
@@ -49,6 +51,7 @@ trait CreateOrCheckUserNotifications
         $user = $this->app->user->get($FromUserName);
         $data = [
             'openid' => $FromUserName,
+            'unionid' => $user[ 'unionid' ],
             'nickname' => $user[ 'nickname' ],
             'avatar' => $user[ 'headimgurl' ],
             'subscribe' => 1,
@@ -74,6 +77,8 @@ trait CreateOrCheckUserNotifications
         if($user->id !== $eventkey && $user->superior == 0 && $user->type == 0) {
             $puser_id = User::query()->where('id', $eventkey)->value('id');
             //当用户本来没有推广用户和经销商的时候
+            $unionid = $this->app->user->get($user->openid)['unionid'];
+            $user->unionid = $unionid;
             $user->subscribe = 1;
             $user->subscribe_at = now()->toDateTimeString();
             $user->superior = $puser_id;
