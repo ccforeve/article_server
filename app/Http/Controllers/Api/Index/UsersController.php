@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Index;
 
 use App\Http\Controllers\Api\Controller;
+use App\Http\Requests\MiniprogramLoginRequest;
 use App\Jobs\UploadAvatar;
 use App\Models\Article;
 use App\Models\User;
@@ -80,12 +81,9 @@ class UsersController extends Controller
         if ( !$user_info[ 'subscribe' ] ) {
             $oauthUser = $driver->userFromToken($response[ 'access_token' ]);
             $user_info = collect($oauthUser->user);
-            $user_info->put('unionid', '');
             $subscribe = false;
         }
-        $user = User::query()->where(function ($query) use ($user_info, $request) {
-            $query->where('openid', $user_info[ 'openid' ]); //->orWhere('unionid', $request->unionid)
-        })->first();
+        $user = User::query()->where('openid', $user_info[ 'openid' ])->first();
         if ( !$user ) {
             $user = User::create([
                 'openid'    => $user_info[ 'openid' ],
@@ -96,6 +94,11 @@ class UsersController extends Controller
                 'unionid'   => $user_info['unionid']
             ]);
             dispatch(new UploadAvatar($user->id, $user->avatar));
+        } else {
+            $user->unionid = $user_info['unionid'];
+            if ($user->isDirty('unionid')) {
+                $user->save();
+            }
         }
 
         return $this->response->item($user, new UserTransformer())
@@ -107,7 +110,7 @@ class UsersController extends Controller
     }
 
     /**
-     * 小程序登录
+     * 小程序登录（已关注公众号的才有unionid）
      * @param \EasyWeChat\MiniProgram\Application $app
      * @param Request $request
      * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
@@ -116,29 +119,44 @@ class UsersController extends Controller
     public function miniprogramLogin( \EasyWeChat\MiniProgram\Application $app, Request $request )
     {
         $session = $app->auth->session($request->code);
-        return $session;
+        if (isset($session['unionid'])) {
+            $user = User::query()->where('unionid', $session['unionid'])->first();
+            if ($user) {
+                return $this->response->array([
+                    'code' =>200,
+                    'user_id' => $user->id,
+                    'message' => '存在该用户'
+                ]);
+            }
+        }
+        return $this->response->array([
+            'code' =>401,
+            'message' => '不存在该用户'
+        ]);
     }
 
     /**
-     * 用户从小程序查看文章
-     * @param Request $request
-     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model
+     * 小程序授权后查找用户
+     * @param \EasyWeChat\MiniProgram\Application $app
+     * @param MiniprogramLoginRequest $request
+     * @return \Dingo\Api\Http\Response|void
+     * @throws \EasyWeChat\Kernel\Exceptions\DecryptException
      */
-    public function miniprogramReadArticle(Request $request)
+    public function miniprogramAuthorizon( \EasyWeChat\MiniProgram\Application $app, MiniprogramLoginRequest $request )
     {
-        $article_id = $request->article_id;
-        $unionid = $request->unionid;
-        $user = User::query()->where('unionid', $unionid)->first(['id']);
+        $user_info = $app->encryptor->decryptData($request->session_key, $request->iv, $request->encryptedData);
+        $user = User::query()->where('openid', $user_info['unionId'])->value('id');
         if (!$user) {
-            $user = User::query()->create([
-                'openid' => $unionid,
-                'unionid' => $unionid
+            return $this->response->array([
+                'code' =>401,
+                'message' => '不存在该用户'
             ]);
         }
-        $product_id = Article::query()->where('id', $article_id)->value('product_id');
-        $user_article = UserArticle::query()->firstOrCreate(['article_id' => $article_id, 'user_id' => $user->id, 'product_id' => $product_id]);
-
-        return $user_article;
+        return $this->response->array([
+            'code' =>200,
+            'user_id' => $user->id,
+            'message' => '存在该用户'
+        ]);
     }
 
     /**

@@ -29,7 +29,9 @@ $api->version('v1', [
     //微信授权登录
     $api->get('user/login', 'UsersController@login');
     //小程序登录
-    $api->get('user/miniprogram_login', 'UsersController@miniprogramLogin');
+    $api->get('miniprogram/user/login', 'UsersController@miniprogramLogin');
+    //小程序创建用户
+    $api->get('miniprogram/user/check_user', 'UsersController@miniprogramAuthorizon');
     //小程序支付
     $api->get('miniprogram/pay', 'PayController@miniprogram');
     //微信开发配置

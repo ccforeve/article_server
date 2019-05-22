@@ -6,6 +6,8 @@ use App\Http\Controllers\Api\Controller;
 use App\Http\Requests\ExtensionArticleRequest;
 use App\Models\Article;
 use App\Models\ExtensionArticle;
+use App\Models\User;
+use App\Models\UserArticle;
 use App\Services\ArticleService;
 use Illuminate\Http\Request;
 
@@ -26,12 +28,27 @@ class ArticlesController extends Controller
 
     /**
      * 单单文章详情
+     * @param Request $request
      * @param $article_id
      * @return Article
      */
-    public function detail( $article_id )
+    public function detail( Request $request, $article_id )
     {
-        return Article::query()->where('id', $article_id)->first(['title']);
+        if (isset($request->user_id) && $request->user_id) {
+            $product_id = Article::query()->where('id', $article_id)->value('product_id');
+            $user_article = UserArticle::with('article:id,title')->firstOrCreate(['article_id' => $article_id, 'user_id' => $request->user_id, 'product_id' => $product_id]);
+            return $this->response->array([
+                'type' => 2,
+                'title' => $user_article->article->title,
+                'user_article_id' => $user_article->id
+            ]);
+        }
+
+        $article = Article::query()->where('id', $article_id)->first(['title']);
+        return $this->response->array([
+            'type' => 1,
+            'title' => $article->title
+        ]);
     }
 
     /**

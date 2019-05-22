@@ -10,5 +10,7 @@ class TestsController extends Controller
 {
     public function test(Application $app)
     {
+//        $user = $app->user->get('oWwjo1VVjsqiLicjmHtOBZR72xgY');
+//        dd($user);
     }
 }
