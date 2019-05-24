@@ -125,12 +125,14 @@ class UsersController extends Controller
                 return $this->response->array([
                     'code' =>200,
                     'user_id' => $user->id,
+                    'openid' => $session['openid'],
                     'message' => '存在该用户'
                 ]);
             }
         }
         return $this->response->array([
             'code' =>401,
+            'openid' => $session['openid'],
             'message' => '不存在该用户'
         ]);
     }
