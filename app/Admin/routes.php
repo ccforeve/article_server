@@ -74,4 +74,10 @@ Route::group([
     $router->post('messages/{order}/order', 'MessagesController@orderSendMessage')->name('admin.order_message');
     //给用户留言
     $router->post('messages/{user}/user', 'MessagesController@userSendMessage')->name('admin.user_message');
+
+    //活动
+    $router->resource('activities', 'ActivitiesController');
+
+    //抽取奖品列表
+    $router->resource('activities_draw', 'ActivityDrawController')->only('index');
 });

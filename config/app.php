@@ -24,8 +24,7 @@ return [
     ],
 
     'activity' => [
-        'begin_time' => env('BEGIN_TIME'),
-        'end_time' => env('END_TIME')
+        'enable' => env('ENABLE')
     ],
 
     /*

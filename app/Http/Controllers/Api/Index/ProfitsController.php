@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\Controller;
 use App\Http\Requests\CashRequest;
 use App\Models\Cash;
 use App\Services\ProfitService;
+use EasyWeChat\Payment\Application;
 use Illuminate\Http\Request;
 use Pay;
 
@@ -97,12 +98,59 @@ class ProfitsController extends Controller
         }
         $data = $request->all();
         $data['user_id'] = $user->id;
-        $data['type'] = 2;
+        $data['type'] = 1;
         Cash::create($data);
 
         return $this->response->array([
             'code' => 201,
             'message' => '申请提现完成'
         ]);
+    }
+
+    public function testWithdrawCash(Application $app, CashRequest $request, ProfitService $service)
+    {
+        $user = $this->user();
+        $profit = $service->index($user->id);
+        if($profit['surplus_profit'] < $request->price) {
+            return $this->response->error('提现余额不足', 409);
+        }
+        $data = $request->all();
+        $data['user_id'] = $user->id;
+        $data['type'] = 1;
+        $cash = Cash::query()->create($data);
+        $billno = date('YmdHis').str_random(12);
+        $redpackData = [
+            'mch_billno'   => $billno,
+            'send_name'    => '事业分享提现',
+            're_openid'    => $user->openid,
+            'total_amount' => $request->price,  //单位为分，不小于100
+            'wishing'      => '祝福语',
+            'act_name'     => '推广佣金活动',
+            'remark'       => "给{$user->openid}提现",
+        ];
+        try {
+            $result = $app->redpack->sendNormal($redpackData);
+            if ( $result[ 'return_code' ] === 'SUCCESS' ) {
+                if ( $result[ 'result_code' ] === 'SUCCESS' && $result[ 'err_code' ] == 'SUCCESS' ) {      //发送红包成功
+                    $cash->mch_billno = $billno;
+                    $cash->state = 1;
+                    $cash->over_at = now()->toDateTimeString();
+                    $cash->save();
+                    return $this->response->array([
+                        'message' => '申请提现完成'
+                    ]);
+                }
+                //发送红包失败
+                $cash->state = 2;
+                $cash->remark = $result[ 'return_msg' ];
+                $cash->save();
+                return $this->response->error($result[ 'return_msg' ], 409);
+            }
+        } catch (\Exception $e) {   //发送红包失败
+            $cash->state = 2;
+            $cash->remark = $e->getMessage();
+            $cash->save();
+            return $this->response->error($result[ 'return_msg' ], 409);
+        }
     }
 }

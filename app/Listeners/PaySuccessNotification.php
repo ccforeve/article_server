@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\PaySuccess;
+use App\Models\Activity;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Queue\InteractsWithQueue;
@@ -36,9 +37,12 @@ class PaySuccessNotification
         $pay_user->member_up_at = now();
         $pay_user->member_lock_at = $time->addMonth($order->month);
         //判断是否是获得
-        if(now()->gt(Carbon::parse(config('app.activity.begin_time'))) && now()->lt(Carbon::parse(config('app.activity.end_time')))) {
-            $pay_user->luck_draw = $pay_user->luck_draw + 1;
-            $pay_user->save();
+        if(config('app.activity.enable')) {
+            $activity = Activity::query()->latest('id')->first();
+            if ( now()->gt(Carbon::parse($activity->begin_at)) && now()->lt(Carbon::parse($activity->end_at)) ) {
+                $pay_user->luck_draw = $pay_user->luck_draw + 1;
+                $pay_user->save();
+            }
         }
         $pay_user->save();
     }

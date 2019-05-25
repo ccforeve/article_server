@@ -88,11 +88,8 @@ class CashesController extends Controller
         $grid->user()->nickname('用户昵称')->limit(10);
         $grid->user()->phone('手机号');
         $grid->user()->wechat('微信号');
-        $grid->user()->ali_account('支付宝账号');
-        $grid->user()->ali_name('支付宝姓名');
-//        $grid->type('提现类型')->display(function ($value) {
-//            return $value == 1 ? '微信' : '支付宝';
-//        });
+//        $grid->user()->ali_account('支付宝账号');
+//        $grid->user()->ali_name('支付宝姓名');
         $grid->price('金额');
         $grid->state('提现状态')->display(function ($value) {
             switch ($value) {
