@@ -2,11 +2,8 @@
 
 namespace App\Admin\Controllers;
 
-use App\Admin\Extensions\CashOperation;
-use App\Models\Activity;
 use App\Models\ActivityDraw;
 use App\Http\Controllers\Controller;
-use App\Models\Website;
 use Encore\Admin\Controllers\HasResourceActions;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
@@ -42,7 +39,7 @@ class ActivityDrawController extends Controller
         $grid->id('Id');
         $grid->activity()->name('所属活动');
         $grid->nickname('页面展示昵称');
-        $grid->user()->phone('手机号');
+        $grid->phone('页面展示手机号');
         $grid->user()->wechat('微信号');
         $grid->type('奖品')->display(function ($type) {
             return ActivityDraw::$type[$type];

@@ -89,29 +89,36 @@ class ProfitsController extends Controller
      * @param ProfitService $service
      * @return mixed
      */
-    public function withdrawCash( CashRequest $request, ProfitService $service )
+//    public function withdrawCash( CashRequest $request, ProfitService $service )
+//    {
+//        $user = $this->user();
+//        $profit = $service->index($user->id);
+//        if($profit['surplus_profit'] < $request->price) {
+//            return $this->response->error('提现余额不足', 409);
+//        }
+//        $data = $request->all();
+//        $data['user_id'] = $user->id;
+//        $data['type'] = 1;
+//        Cash::create($data);
+//
+//        return $this->response->array([
+//            'code' => 201,
+//            'message' => '申请提现完成'
+//        ]);
+//    }
+
+    /**
+     * 提现
+     * @param Application $app
+     * @param CashRequest $request
+     * @param ProfitService $service
+     */
+    public function WithdrawCash(Application $app, CashRequest $request, ProfitService $service)
     {
+        $fee = $request->price;
         $user = $this->user();
         $profit = $service->index($user->id);
-        if($profit['surplus_profit'] < $request->price) {
-            return $this->response->error('提现余额不足', 409);
-        }
-        $data = $request->all();
-        $data['user_id'] = $user->id;
-        $data['type'] = 1;
-        Cash::create($data);
-
-        return $this->response->array([
-            'code' => 201,
-            'message' => '申请提现完成'
-        ]);
-    }
-
-    public function testWithdrawCash(Application $app, CashRequest $request, ProfitService $service)
-    {
-        $user = $this->user();
-        $profit = $service->index($user->id);
-        if($profit['surplus_profit'] < $request->price) {
+        if($profit['surplus_profit'] < $fee) {
             return $this->response->error('提现余额不足', 409);
         }
         $data = $request->all();
@@ -123,8 +130,8 @@ class ProfitsController extends Controller
             'mch_billno'   => $billno,
             'send_name'    => '事业分享提现',
             're_openid'    => $user->openid,
-            'total_amount' => $request->price,  //单位为分，不小于100
-            'wishing'      => '祝福语',
+            'total_amount' => $fee * 100,  //单位为分，不小于100
+            'wishing'      => '努力就有回报',
             'act_name'     => '推广佣金活动',
             'remark'       => "给{$user->openid}提现",
         ];

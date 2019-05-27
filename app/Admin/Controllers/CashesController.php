@@ -103,6 +103,7 @@ class CashesController extends Controller
             return $state;
         });
         $grid->over_at('提现完成时间');
+        $grid->remark('备注');
         $grid->created_at('申请时间');
 
         $grid->disableCreateButton();

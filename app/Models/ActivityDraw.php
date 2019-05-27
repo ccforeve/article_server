@@ -10,6 +10,8 @@ class ActivityDraw extends Model
 {
     protected $table = 'activity_draw';
 
+    protected $guarded = [];
+
     public static $type = [
         1 => "5元",
         2 => "10元",

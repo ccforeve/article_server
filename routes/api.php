@@ -180,6 +180,13 @@ $api->version('v1', [
             //获取当前用户打卡记录
             $api->get('current_user', 'PunchesController@getCurrentUserPunch');
         });
+        // 搜索产品列表
         $api->get('products/search', 'ProductsController@searchList');
+        // 判断是否是活动期间
+        $api->get('activity/judge', 'ActivityController@activity');
+        // 抽中的奖品写入
+        $api->post('activity/draws', 'ActivityDrawController@store');
+        // 抽中奖品列表
+        $api->get('activity/draws', 'ActivityDrawController@list');
     });
 });

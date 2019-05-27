@@ -12,7 +12,7 @@ class CashRequest extends BaseRequest
     public function rules()
     {
         return [
-            "price" => "required|integer|min:1|max:200"
+            "price" => "required|integer|min:100|max:200"
         ];
     }
 

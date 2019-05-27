@@ -36,6 +36,7 @@ class UserTransformer extends TransformerAbstract
             'member_lock_at' => Carbon::parse($user->member_lock_at)->toDateString(),
             'is_member' => (Carbon::parse($user->member_lock_at)->gt(now()) ? 1 : 0) ,
             'integral_scale' => $user->integral_scale,
+            'luck_draw' => $user->luck_draw
         ];
         return $user_data;
     }

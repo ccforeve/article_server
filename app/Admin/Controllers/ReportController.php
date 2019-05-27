@@ -21,16 +21,33 @@ class ReportController extends Controller
      */
     public function index(Content $content)
     {
-        $users = User::all();
-        $user['today'] = 0;
-        $user['yesterday'] = 0;
-        $user['before_yesterday'] = 0;
-        $user['this_month'] = 0;
-        $user['last_month_day'] = 0;
-        $user['last_month'] = 0;
-        $user['before_last_month'] = 0;
-        $user['all'] = $users->count();
-        $user = $this->count($users, $user);
+        //前天凌晨时间
+        $before_yesterday_time = Carbon::yesterday()->subDay();
+        //昨日凌晨时间
+        $yesterday_time = Carbon::yesterday();
+        //今天凌晨时间
+        $today_time = Carbon::today();
+        //明天凌晨时间
+        $tomorrow_time = Carbon::tomorrow();
+        //本月初时间
+        $this_month_time = Carbon::now()->startOfMonth();
+        //下月初时间
+        $end_month_time = Carbon::now()->addMonth(1)->startOfMonth();
+        //上月初时间
+        $last_month_time = Carbon::now()->addMonth(-1)->startOfMonth();
+        //上月今天的时间
+        $last_month_day_time = Carbon::today()->subMonth()->addDay();
+        //前月初时间
+        $before_last_month_time = Carbon::now()->addMonth(-2)->startOfMonth();
+
+        $user['today'] = User::query()->whereBetween('created_at', [$today_time, $tomorrow_time])->count();
+        $user['yesterday'] = User::query()->whereBetween('created_at', [$yesterday_time, $today_time])->count();
+        $user['before_yesterday'] = User::query()->whereBetween('created_at', [$before_yesterday_time, $yesterday_time])->count();
+        $user['this_month'] = User::query()->whereBetween('created_at', [$this_month_time, $end_month_time])->count();
+        $user['last_month_day'] = User::query()->whereBetween('created_at', [$last_month_time, $last_month_day_time])->count();
+        $user['last_month'] = User::query()->whereBetween('created_at', [$last_month_time, $this_month_time])->count();
+        $user['before_last_month'] = User::query()->whereBetween('created_at', [$before_last_month_time, $last_month_time])->count();
+        $user['all'] = User::count();
 
         $perfect_users = User::query()->where('phone', '<>', '')->get();
         $perfect_user['today'] = 0;
