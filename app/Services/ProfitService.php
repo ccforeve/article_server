@@ -9,12 +9,13 @@
 namespace App\Services;
 
 
+use App\Http\Controllers\Api\Controller;
 use App\Models\Cash;
 use App\Models\Order;
 use App\Models\User;
 use Carbon\Carbon;
 
-class ProfitService
+class ProfitService extends Controller
 {
     public function index( $user_id )
     {
@@ -142,5 +143,39 @@ class ProfitService
             ->paginate(10);
 
         return $orders;
+    }
+
+    /**
+     * 活动红包
+     * @param $app
+     * @param $table
+     * @param $redpackData
+     */
+    public function withDrawCash( $app, $table, $redpackData )
+    {
+        try {
+            $result = $app->redpack->sendNormal($redpackData);
+            if ( $result[ 'return_code' ] === 'SUCCESS' ) {
+                if ( $result[ 'result_code' ] === 'SUCCESS' && $result[ 'err_code' ] == 'SUCCESS' ) {      //发送红包成功
+                    $table->mch_billno = $redpackData['mch_billno'];
+                    $table->state = 1;
+                    $table->over_at = now()->toDateTimeString();
+                    $table->save();
+                    return $this->response->array([
+                        'message' => '申请提现完成'
+                    ]);
+                }
+                //发送红包失败
+                $table->state = 2;
+                $table->remark = $result[ 'return_msg' ];
+                $table->save();
+                return $this->response->error($result[ 'return_msg' ], 409);
+            }
+        } catch (\Exception $e) {   //发送红包失败
+            $table->state = 2;
+            $table->remark = $e->getMessage();
+            $table->save();
+            return $this->response->error($e->getMessage(), 409);
+        }
     }
 }

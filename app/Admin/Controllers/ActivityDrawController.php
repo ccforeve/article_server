@@ -5,6 +5,7 @@ namespace App\Admin\Controllers;
 use App\Models\ActivityDraw;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\HasResourceActions;
+use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 
@@ -21,9 +22,53 @@ class ActivityDrawController extends Controller
     public function index(Content $content)
     {
         return $content
-            ->header('活动抽奖')
+            ->header('抽奖')
             ->description('列表')
             ->body($this->grid());
+    }
+
+    /**
+     * Show interface.
+     *
+     * @param mixed $id
+     * @param Content $content
+     * @return Content
+     */
+    public function show($id, Content $content)
+    {
+        return $content
+            ->header('抽奖')
+            ->description('详情')
+            ->body($this->detail($id));
+    }
+
+    /**
+     * Edit interface.
+     *
+     * @param mixed $id
+     * @param Content $content
+     * @return Content
+     */
+    public function edit($id, Content $content)
+    {
+        return $content
+            ->header('抽奖')
+            ->description('修改')
+            ->body($this->form()->edit($id));
+    }
+
+    /**
+     * Create interface.
+     *
+     * @param Content $content
+     * @return Content
+     */
+    public function create(Content $content)
+    {
+        return $content
+            ->header('抽奖')
+            ->description('创建')
+            ->body($this->form());
     }
 
     /**
@@ -38,14 +83,13 @@ class ActivityDrawController extends Controller
 
         $grid->id('Id');
         $grid->activity()->name('所属活动');
-        $grid->nickname('页面展示昵称');
+        $grid->name('页面展示昵称');
         $grid->phone('页面展示手机号');
         $grid->user()->wechat('微信号');
-        $grid->type('奖品')->display(function ($type) {
-            return ActivityDraw::$type[$type];
+        $grid->prize('奖品')->display(function ($prize) {
+            return ActivityDraw::$type[$prize];
         });
-
-        $grid->disableCreateButton();
+//
         $grid->disableExport();
         $grid->disableRowSelector();
 
@@ -68,7 +112,21 @@ class ActivityDrawController extends Controller
         });
 
         $grid->perPages([15, 20]);
-
         return $grid;
+    }
+
+    /**
+     * Make a form builder.
+     *
+     * @return Form
+     */
+    protected function form()
+    {
+        $form = new Form(new ActivityDraw());
+
+        $form->text('name', '姓名')->rules('required', ['姓名不可为空']);
+
+
+        return $form;
     }
 }

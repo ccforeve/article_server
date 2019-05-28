@@ -51,8 +51,8 @@ class AppServiceProvider extends ServiceProvider
             $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
         }
 
-//        \API::error(function (\Illuminate\Auth\Access\AuthorizationException $exception) {
-//            abort(403, $exception->getMessage());
-//        });
+        \API::error(function (\Illuminate\Auth\Access\AuthorizationException $exception) {
+            abort(403, $exception->getMessage());
+        });
     }
 }

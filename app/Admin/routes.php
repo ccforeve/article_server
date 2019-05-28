@@ -79,5 +79,5 @@ Route::group([
     $router->resource('activities', 'ActivitiesController');
 
     //抽取奖品列表
-    $router->resource('activities_draw', 'ActivityDrawController')->only('index');
+    $router->resource('activities_draw', 'ActivityDrawController');
 });

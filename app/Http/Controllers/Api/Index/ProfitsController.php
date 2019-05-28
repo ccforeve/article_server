@@ -115,6 +115,7 @@ class ProfitsController extends Controller
      */
     public function WithdrawCash(Application $app, CashRequest $request, ProfitService $service)
     {
+        $billno = date('YmdHis').str_random(12);
         $fee = $request->price;
         $user = $this->user();
         $profit = $service->index($user->id);
@@ -124,8 +125,8 @@ class ProfitsController extends Controller
         $data = $request->all();
         $data['user_id'] = $user->id;
         $data['type'] = 1;
+        $data['mch_billno'] = $billno;
         $cash = Cash::query()->create($data);
-        $billno = date('YmdHis').str_random(12);
         $redpackData = [
             'mch_billno'   => $billno,
             'send_name'    => '事业分享提现',
@@ -135,29 +136,7 @@ class ProfitsController extends Controller
             'act_name'     => '推广佣金活动',
             'remark'       => "给{$user->openid}提现",
         ];
-        try {
-            $result = $app->redpack->sendNormal($redpackData);
-            if ( $result[ 'return_code' ] === 'SUCCESS' ) {
-                if ( $result[ 'result_code' ] === 'SUCCESS' && $result[ 'err_code' ] == 'SUCCESS' ) {      //发送红包成功
-                    $cash->mch_billno = $billno;
-                    $cash->state = 1;
-                    $cash->over_at = now()->toDateTimeString();
-                    $cash->save();
-                    return $this->response->array([
-                        'message' => '申请提现完成'
-                    ]);
-                }
-                //发送红包失败
-                $cash->state = 2;
-                $cash->remark = $result[ 'return_msg' ];
-                $cash->save();
-                return $this->response->error($result[ 'return_msg' ], 409);
-            }
-        } catch (\Exception $e) {   //发送红包失败
-            $cash->state = 2;
-            $cash->remark = $e->getMessage();
-            $cash->save();
-            return $this->response->error($result[ 'return_msg' ], 409);
-        }
+
+        return $service->withDrawCash($app, $cash, $redpackData);
     }
 }

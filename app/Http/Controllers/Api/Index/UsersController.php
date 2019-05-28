@@ -133,6 +133,7 @@ class UsersController extends Controller
         return $this->response->array([
             'code' =>401,
             'openid' => $session['openid'],
+            'session_key' => $session['session_key'],
             'message' => '不存在该用户'
         ]);
     }
