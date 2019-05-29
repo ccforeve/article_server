@@ -55,7 +55,7 @@ class ActivityDrawController extends Controller
      */
     public function list()
     {
-        $draws = ActivityDraw::query()->where('activity_id', 1)->latest('id')->take(100)->get();
+        $draws = ActivityDraw::query()->where('activity_id', 1)->latest('id')->take(50)->get();
         $draws->transform(function ($draw) {
             $new = collect($draw);
             $new->put('prize', ActivityDraw::$type[$draw->prize]);

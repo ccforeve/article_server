@@ -106,6 +106,13 @@ class WechatController extends Controller
                         "type" => "view",
                         "name" => "签到打卡",
                         "url"  => 'https://btl.yxcxin.com/punch'
+                    ],
+                    [
+                        "type" => "miniprogram",
+                        "name" => "最新价格表",
+                        "url"  => 'https://btl.yxcxin.com',
+                        "appid" => 'wxfce328ed3c937da6',
+                        "pagepath" => "pages/index"
                     ]
                 ],
             ],
