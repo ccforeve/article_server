@@ -43,10 +43,9 @@ class Kernel extends ConsoleKernel
         $schedule->call(function () {
             $first_time = now()->subSeconds(10)->toDateTimeString();
             $second_time = now()->addSeconds(10)->toDateTimeString();
-
             $sh = \App\Models\Schedule::query()->whereBetween('send_at', [$first_time, $second_time])->first();
             if($sh) {
-                $users = User::query()->where('subscribe', 1)->get();
+                $users = User::query()->where('subscribe', 1)->cursor();
                 switch ($sh->type){
                     case 1:
                         foreach ($users as $key => $user) {
@@ -68,7 +67,7 @@ class Kernel extends ConsoleKernel
                             message($user->openid, 'new_item', $item);
                         }
                         break;
-                    case 3:
+                    case '3':
                         $template = WechatTemplate::query()->find($sh->template_id);
                         $message = [
                             "first" => [$template->first['message'], $template->first['color']],
@@ -88,7 +87,7 @@ class Kernel extends ConsoleKernel
                         break;
                 }
             }
-        })->everyTenMinutes();
+        })->everyMinute();
     }
 
     /**
