@@ -98,8 +98,6 @@ class ActivityDrawController extends Controller
         $grid->disableRowSelector();
 
         $grid->actions(function ($actions) {
-            $actions->disableDelete();
-            $actions->disableEdit();
             $actions->disableView();
         });
 

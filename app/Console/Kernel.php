@@ -45,7 +45,7 @@ class Kernel extends ConsoleKernel
             $second_time = now()->addSeconds(10)->toDateTimeString();
             $sh = \App\Models\Schedule::query()->whereBetween('send_at', [$first_time, $second_time])->first();
             if($sh) {
-                $users = User::query()->where('subscribe', 1)->cursor();
+                $users = User::query()->where('subscribe', 1)->get(['openid']);
                 switch ($sh->type){
                     case 1:
                         foreach ($users as $key => $user) {
@@ -82,7 +82,6 @@ class Kernel extends ConsoleKernel
                         }
                         foreach ($users as $key => $user) {
                             dispatch(new TemplateSend($user->openid, $message, $template->template_id, $template->url))->onQueue('article');
-//                            template_message($user->openid, $message, $template->template_id, $template->url);
                         }
                         break;
                 }

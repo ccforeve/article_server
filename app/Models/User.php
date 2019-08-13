@@ -32,6 +32,11 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Footprint::class);
     }
 
+    public function presale()
+    {
+        return $this->hasOne(Presale::class);
+    }
+
     public function getAvatarAttribute( $value )
     {
         if(!str_contains($value, 'http')) {

@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\Controller;
 use App\Http\Requests\MiniprogramLoginRequest;
 use App\Jobs\UploadAvatar;
 use App\Models\Article;
+use App\Models\Presale;
 use App\Models\User;
 use App\Models\UserArticle;
 use App\Services\UserService;
@@ -13,6 +14,8 @@ use App\Transformers\UserTransformer;
 use Auth;
 use Carbon\Carbon;
 use EasyWeChat\OfficialAccount\Application;
+use Encore\Admin\Admin;
+use Encore\Admin\Auth\Database\Administrator;
 use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -50,17 +53,6 @@ class UsersController extends Controller
         }
     }
 
-    public function testLogin()
-    {
-        $user = User::query()->find(50);
-        return $this->response->item($user, new UserTransformer())
-            ->setMeta([
-                'msg'          => '授权成功',
-                'access_token' => 'Bearer ' . Auth::guard('api')->login($user),
-                'token_type'   => 'Bearer',
-            ])->statusCode(201);
-    }
-
     /**
      * 微信公众号登录
      * @param Request $request
@@ -71,10 +63,6 @@ class UsersController extends Controller
     {
         $driver = Socialite::driver('weixin');
         $response = $driver->getAccessTokenResponse($request->code);
-        if(!isset($response['openid'])) {
-            info('微信登录错误', [$response]);
-            return null;
-        }
         $driver->setOpenId($response[ 'openid' ]);
         $user_info = $app->user->get($response[ 'openid' ]);
         $subscribe = true;
@@ -110,7 +98,7 @@ class UsersController extends Controller
     }
 
     /**
-     * 小程序登录（已关注公众号的才有unionid）
+     * 小程序登录
      * @param \EasyWeChat\MiniProgram\Application $app
      * @param Request $request
      * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
@@ -128,6 +116,16 @@ class UsersController extends Controller
                     'openid' => $session['openid'],
                     'message' => '存在该用户'
                 ]);
+            } else {
+//                $userInfo = $request->userInfo;
+//                $user = User::create([
+//                    'openid'    => $session[ 'unionid' ],
+//                    'nickname'  => $userInfo[ 'nickName' ],
+//                    'sex'       => $userInfo[ 'gender' ],
+//                    'avatar'    => $userInfo[ 'avatarUrl' ],
+//                    'unionid'   => $session[ 'unionid' ]
+//                ]);
+//                dispatch(new UploadAvatar($user->id, $user->avatar));
             }
         }
         return $this->response->array([
@@ -148,6 +146,7 @@ class UsersController extends Controller
     public function miniprogramAuthorizon( \EasyWeChat\MiniProgram\Application $app, MiniprogramLoginRequest $request )
     {
         $user_info = $app->encryptor->decryptData($request->session_key, $request->iv, $request->encryptedData);
+        info($user_info);
         $user = User::query()->where('openid', $user_info['unionId'])->value('id');
         if (!$user) {
             return $this->response->array([
@@ -185,10 +184,20 @@ class UsersController extends Controller
         $user = $this->user();
         $data = $request->all();
         User::query()->where('id', $user->id)->update($data);
+        $admin_id = 0;
+        //分配售前客服
+        if(isset($request->phone) && !Presale::query()->where('user_id', $user->id)->value('id')) {
+            $admin_id = \DB::table('admin_role_users')->where('role_id', 3)->inRandomOrder()->value('user_id');
+            Presale::query()->create([
+                'admin_id' => $admin_id,
+                'user_id' => $user->id
+            ]);
+        }
 
         return $this->response->array([
             'code' => 0,
-            'message' => '修改成功'
+            'message' => '修改成功',
+            'data' => ['admin_id' => $admin_id]
         ]);
     }
 

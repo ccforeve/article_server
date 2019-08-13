@@ -4,6 +4,7 @@ namespace App\Listeners;
 
 use App\Events\PaySuccess;
 use App\Models\Activity;
+use App\Models\Presale;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Queue\InteractsWithQueue;
@@ -45,5 +46,12 @@ class PaySuccessNotification
             }
         }
         $pay_user->save();
+
+        //判断是否是售前开通的
+        $presale = Presale::query()->where('user_id', $order->user_id)->first();
+        if($presale) {
+            $presale->order_id = $order->id;
+            $presale->save();
+        }
     }
 }

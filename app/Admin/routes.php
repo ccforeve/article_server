@@ -80,4 +80,17 @@ Route::group([
 
     //抽取奖品列表
     $router->resource('activities_draw', 'ActivityDrawController');
+
+    //售前总列表
+    $router->get('presale', 'PresalesController@presale');
+    //售前列表
+    $router->get('presale_admin', 'PresalesController@presale_admin');
+    //分配
+    $router->post('presale/distribution', 'PresalesController@distribution');
+    //电联
+    $router->get('presale/{presale}/contact', 'PresalesController@contact')->name('presale.contact');
+    //售前业绩
+    $router->get('presale/export', 'PresalesController@export');
+
+    $router->resource('admin_manage', 'AdminsController')->only('index', 'edit', 'update');
 });

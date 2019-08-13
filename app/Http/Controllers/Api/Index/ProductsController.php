@@ -47,7 +47,23 @@ class ProductsController extends Controller
     {
         $has_product = Product::query()->where('online_id', $request->online_id)->first();
         if($has_product) {
+            info('同步产品', [$has_product->id]);
             $has_product->update($request->all());
+            //修改文章
+            $content = "零售：{$product->price}元，会员：{$product->money}元 + {$product->ticket}券";
+            if($product->kind == 1) {
+                if($product->price == $product->money) {
+                    $content = "会员价：{$product->money}元";
+                } else {
+                    $content = "零售：{$product->price}元，会员价：{$product->money}元";
+                }
+            }
+            Article::query()->where('product_id', $has_product->id)->update([
+                'title' => $request->name,
+                'cover' => $request->cover,
+                'desc' => $content,
+                'detail' => $request->content
+            ]);
         } else {
             $product->fill($request->all());
             $product->save();

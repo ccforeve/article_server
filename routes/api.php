@@ -188,5 +188,11 @@ $api->version('v1', [
         $api->post('activity/draws', 'ActivityDrawController@store');
         // 抽中奖品列表
         $api->get('activity/draws', 'ActivityDrawController@list');
+        // 获取员工二维码
+        $api->get('admin/{admin_id}', 'AdminsController@admin');
+        // 收藏
+        $api->group(['prefix' => 'collector'], function ($api) {
+            $api->get('/', 'CollectorsController@list');
+        });
     });
 });

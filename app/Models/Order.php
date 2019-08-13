@@ -22,4 +22,9 @@ class Order extends Model
     {
         return $this->belongsTo(User::class, 'superior');
     }
+
+    public function presale()
+    {
+        return $this->hasOne(Presale::class);
+    }
 }

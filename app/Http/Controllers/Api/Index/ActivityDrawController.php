@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api\Index;
 
 use App\Http\Controllers\Api\Controller;
+use App\Models\Activity;
 use App\Models\ActivityDraw;
 use App\Services\ProfitService;
+use Carbon\Carbon;
 use EasyWeChat\Payment\Application;
 use Illuminate\Http\Request;
 
@@ -16,36 +18,39 @@ class ActivityDrawController extends Controller
      */
     public function store( Request $request, Application $app, ProfitService $service )
     {
-        $billno = date('YmdHis') . str_random(12);
-        $user = $this->user();
-        $activity = ActivityDraw::query()->create([
-            'user_id' => $user->id,
-            'prize' => $request->prize,
-            'name' => $user->nickname,
-            'phone' => $user->phone,
-            'activity_id' => 1,
-            'mch_billno' => $billno
-        ]);
-        // 次数减一
-        $user->decrement('luck_draw');
-//        return $this->response->error('测试错误时', 409);
-        return $activity;
-        //发送红包
-        $fee = ActivityDraw::$prize[$request->prize];
-        if(is_int($fee) && $fee > 0 && $fee <= 200) {
-            $redpackData = [
-                'mch_billno'   => $billno,
-                'send_name'    => '盛夏会员大抽奖',
-                're_openid'    => $user->openid,
-                'total_amount' => $fee * 100,  //单位为分，不小于100
-                'wishing'      => '恭喜发财',
-                'act_name'     => '盛夏会员大抽奖活动',
-                'remark'       => "给{$user->openid}提现",
-            ];
+        $activity = Activity::query()->latest('id')->first();
+        if (now()->gt(Carbon::parse($activity->begin_at)) && now()->lt(Carbon::parse($activity->end_at))) {
+            $billno = date('YmdHis') . str_random(12);
+            $user = $this->user();
+            $activity = ActivityDraw::query()->create([
+                'user_id' => $user->id,
+                'prize' => $request->prize,
+                'name' => $user->nickname,
+                'phone' => $user->phone,
+                'activity_id' => 1,
+                'mch_billno' => $billno
+            ]);
+            // 次数减一
+            $user->decrement('luck_draw');
+            //发送红包
+            $fee = ActivityDraw::$prize[$request->prize];
+            if(is_int($fee) && $fee > 0 && $fee <= 200) {
+                $redpackData = [
+                    'mch_billno'   => $billno,
+                    'send_name'    => '盛夏会员大抽奖',
+                    're_openid'    => $user->openid,
+                    'total_amount' => $fee * 100,  //单位为分，不小于100
+                    'wishing'      => '恭喜发财',
+                    'act_name'     => '盛夏会员大抽奖活动',
+                    'remark'       => "给{$user->openid}提现",
+                ];
 
-            return $service->withDrawCash($app, $activity, $redpackData);
+                return $service->withDrawCash($app, $activity, $redpackData);
+            } else {
+                return $this->response->error('请求错误', 409);
+            }
         } else {
-            return $this->response->error('请求错误', 409);
+            return $this->response->error('活动尚未开始或已结束', 409);
         }
     }
 

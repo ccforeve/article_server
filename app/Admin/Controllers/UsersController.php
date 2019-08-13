@@ -100,6 +100,7 @@ class UsersController extends Controller
         $grid->superiorUser()->nickname('推荐人');
         $grid->integral_scale('一级佣金比')->editable()->label('default');
         $grid->created_at('注册时间');
+        $grid->luck_draw('抽奖次数')->editable();
         $grid->message('发送留言次数')->label('danger');
 
         $grid->disableCreateButton();
@@ -204,8 +205,7 @@ class UsersController extends Controller
         $form->datetime('subscribe_at', '关注时间');
         $form->datetime('perfect_at', '完善资料时间');
         $form->switch('receive_message', '是否接收公众号消息')->states(['on' => ['value' => 0, 'text' => '接收'], 'off' => ['value' => 1, 'text' => '不接收']]);
-        $form->text('ali_account', '支付宝账号');
-        $form->text('ali_name', '支付宝认证姓名');
+        $form->text('luck_draw', '抽奖次数');
 
         $form->saving(function (Form $form) {
             if($form->type == 1) {

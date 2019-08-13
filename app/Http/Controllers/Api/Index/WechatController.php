@@ -208,7 +208,7 @@ class WechatController extends Controller
                     $user = $this->checkUser($FromUserName);
                 }
                 $nickname = optional($user)->nickname;
-                info('未关注公众号：', [$eventkey, $nickname]);
+//                info('未关注公众号：', [$eventkey, $nickname]);
                 $context = "{$nickname}你好\n\n恭喜你找到事业分享神器\n“事业分享”为你准备了大量的行业文章。\n每天都会持续稳定更新。\n让你可以快速成长，获取专业知识。\n是你健康事业一大利器！\n你可以通过“分享事业”点击进入，分享里面的文章。\n分享到朋友圈和好友群之后，如有人点开你分享的文章浏览，我们会第一时间通知您，让你第一时间和客户取得联系。不遗漏每一位潜在客户！！！\n\n点击👇👇👇“分享事业”开启你互联网健康事业的第一步吧！";
                 return $context;
                 break;
