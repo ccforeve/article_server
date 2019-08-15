@@ -146,7 +146,6 @@ class UsersController extends Controller
     public function miniprogramAuthorizon( \EasyWeChat\MiniProgram\Application $app, MiniprogramLoginRequest $request )
     {
         $user_info = $app->encryptor->decryptData($request->session_key, $request->iv, $request->encryptedData);
-        info($user_info);
         $user = User::query()->where('openid', $user_info['unionId'])->value('id');
         if (!$user) {
             return $this->response->array([

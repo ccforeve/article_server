@@ -53,7 +53,7 @@ class AdminsController extends Controller
     {
         $grid = new Grid(new \Encore\Admin\Auth\Database\Administrator());
 
-        $grid->model()->whereIn('id', [2, 5]);
+        $grid->model()->whereIn('id', [2, 5, 6]);
 
         $grid->id('Id');
         $grid->name('姓名');
