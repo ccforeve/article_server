@@ -114,7 +114,8 @@ class UsersController extends Controller
                     'code' =>200,
                     'user_id' => $user->id,
                     'openid' => $session['openid'],
-                    'message' => '存在该用户'
+                    'access_token' => 'Bearer ' . Auth::guard('api')->login($user),
+                    'expires_in' => 7200
                 ]);
             } else {
 //                $userInfo = $request->userInfo;

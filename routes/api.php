@@ -24,12 +24,10 @@ $api->version('v1', [
         return response()->json(['message' => '接口链接不正确'], 404);
     });
 
-    //测试
-    $api->get('test', 'TestsController@test');
     //微信授权登录
     $api->get('user/login', 'UsersController@login');
     //小程序登录
-    $api->get('miniprogram/user/login', 'UsersController@miniprogramLogin');
+    $api->any('miniprogram/user/login', 'UsersController@miniprogramLogin');
     //小程序创建用户
     $api->get('miniprogram/user/check_user', 'UsersController@miniprogramAuthorizon');
     //小程序支付
@@ -64,6 +62,8 @@ $api->version('v1', [
 
     // 需要 token 验证的接口
     $api->group(['middleware' => 'user.oauth'], function($api) {
+        // 刷新token
+        $api->put('authorizations/refresh_token', 'Authorization@refreshToken');
         $api->group([ 'prefix' => 'user' ], function ( $api ) {
             //获取用户资料
             $api->get('/', 'UsersController@me');

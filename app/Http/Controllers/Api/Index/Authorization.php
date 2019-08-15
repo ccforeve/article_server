@@ -8,19 +8,22 @@
 
 namespace App\Http\Controllers\Api\Index;
 
-
-use Illuminate\Http\Request;
+use Auth;
 
 class Authorization extends BaseController
 {
-    public function check( Request $request )
+    public function refreshToken()
     {
-        if($token = $request->token) {
+        try {
+            $token = Auth::guard('api')->refresh();
+
             return $this->response->array([
                 'code' => 200,
-                'ref_token' => $token
+                'access_token' => 'Bearer ' . $token,
+                'expires_in' => 7200
             ]);
+        } catch (\Exception $e) {
+            abort(401);
         }
-        return $this->response->noContent();
     }
 }
