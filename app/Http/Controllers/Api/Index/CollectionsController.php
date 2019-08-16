@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Api\Index;
 use App\Http\Controllers\Api\Controller;
 use App\Http\Requests\CollectionRequest;
 use App\Models\Collection;
+use Illuminate\Http\Request;
 use App\Services\BaseService;
 
 class CollectionsController extends Controller
@@ -15,10 +16,12 @@ class CollectionsController extends Controller
      * 用户收藏列表
      * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
      */
-    public function list()
+    public function list(Request $request)
     {
         $user_id = $this->user()->id;
-        $collections = Collection::query()->where('user_id', $user_id)->get();
+        $collections = Collection::with('product')
+            ->where(['user_id' => $user_id, 'collector_id' => $request->collector_id])
+            ->get();
 
         return $collections;
     }

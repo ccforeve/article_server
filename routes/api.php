@@ -190,9 +190,13 @@ $api->version('v1', [
         $api->get('activity/draws', 'ActivityDrawController@list');
         // 获取员工二维码
         $api->get('admin/{admin_id}', 'AdminsController@admin');
-        // 收藏
-        $api->group(['prefix' => 'collector'], function ($api) {
+        // 收藏夹
+        $api->group(['prefix' => 'collectors'], function ($api) {
             $api->get('/', 'CollectorsController@list');
+        });
+        // 收藏
+        $api->group(['prefix' => 'collections'], function ($api) {
+            $api->get('/', 'CollectionsController@list');
         });
     });
 });

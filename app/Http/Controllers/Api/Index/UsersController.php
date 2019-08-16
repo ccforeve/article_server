@@ -108,25 +108,19 @@ class UsersController extends Controller
     {
         $session = $app->auth->session($request->code);
         if (isset($session['unionid'])) {
-            $user = User::query()->where('unionid', $session['unionid'])->first();
+            $user = User::query()
+                ->where('unionid', $session['unionid'])
+                ->select('id', 'avatar', 'nickname', 'member_lock_at')
+                ->first();
             if ($user) {
                 return $this->response->array([
                     'code' =>200,
                     'user_id' => $user->id,
+                    'user' => $user,
                     'openid' => $session['openid'],
                     'access_token' => 'Bearer ' . Auth::guard('api')->login($user),
                     'expires_in' => 7200
                 ]);
-            } else {
-//                $userInfo = $request->userInfo;
-//                $user = User::create([
-//                    'openid'    => $session[ 'unionid' ],
-//                    'nickname'  => $userInfo[ 'nickName' ],
-//                    'sex'       => $userInfo[ 'gender' ],
-//                    'avatar'    => $userInfo[ 'avatarUrl' ],
-//                    'unionid'   => $session[ 'unionid' ]
-//                ]);
-//                dispatch(new UploadAvatar($user->id, $user->avatar));
             }
         }
         return $this->response->array([
@@ -153,6 +147,15 @@ class UsersController extends Controller
                 'code' =>401,
                 'message' => '不存在该用户'
             ]);
+        } else {
+//            $user = User::create([
+//                'openid'    => $user_info[ 'unionId' ],
+//                'nickname'  => $user_info[ 'nickName' ],
+//                'sex'       => $user_info[ 'gender' ],
+//                'avatar'    => $user_info[ 'avatarUrl' ],
+//                'unionid'   => $user_info[ 'unionId' ]
+//            ]);
+//            dispatch(new UploadAvatar($user->id, $user->avatar));
         }
         return $this->response->array([
             'code' =>200,
