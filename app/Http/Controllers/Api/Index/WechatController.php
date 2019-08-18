@@ -95,17 +95,12 @@ class WechatController extends Controller
         $app = $this->app;
         $buttons = [
             [
-                "name"       => "事业分享",
+                "name"       => "登录使用",
                 "sub_button" => [
                     [
                         "type" => "view",
-                        "name" => "分享事业",
+                        "name" => "登录使用",
                         "url"  => 'https://btl.yxcxin.com'
-                    ],
-                    [
-                        "type" => "view",
-                        "name" => "签到打卡",
-                        "url"  => 'https://btl.yxcxin.com/punch'
                     ],
                     [
                         "type" => "miniprogram",
@@ -118,41 +113,32 @@ class WechatController extends Controller
             ],
             [
                 "type" => "view",
-                "name" => "访客记录",
-                "url"  => 'https://btl.yxcxin.com/visitor'
+                "name" => "升级会员",
+                "url"  => 'https://btl.yxcxin.com/open_member'
             ],
             [
-                "name"       => "服务",
+                "name"       => "服务中心",
                 "sub_button" => [
+                    [
+                        "type" => "view",
+                        "name" => "访客记录",
+                        "url"  => "https://btl.yxcxin.com/visitor"
+                    ],
                     [
                         "type" => "view",
                         "name" => "个人中心",
                         "url"  => 'https://btl.yxcxin.com/user'
                     ],
                     [
-                        "type" => "view",
-                        "name" => "提交文章",
-                        "url"  => 'https://btl.yxcxin.com/article/extension'
-                    ],
-                    [
-                        "type" => "click",
-                        "name" => "查询教程",
-                        "key"  => "study"
-                    ],
-                    [
                         "type" => "click",
                         "name" => "客服微信",
                         "key"  => "server"
-                    ],
-//                    [
-//                        "type" => "view",
-//                        "name" => "操作指南",
-//                        "url"  => $this->url('http://btl.yxcxin.com')
-//                    ]
+                    ]
                 ],
             ],
         ];
-        $app->menu->create($buttons);
+        $create = $app->menu->create($buttons);
+        dd($create);
     }
 
     /**
