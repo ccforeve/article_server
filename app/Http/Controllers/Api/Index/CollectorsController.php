@@ -63,7 +63,7 @@ class CollectorsController extends Controller
             'user_id' => $user_id,
             'title' => $request->title,
             'desc' => $request->desc,
-            'show_member_price' => $request->show_member_price
+            'show_member_price' => $request->show_member
         ]);
 
         return $this->response->array([
@@ -74,18 +74,19 @@ class CollectorsController extends Controller
 
     /**
      * 修改收藏夹
-     * @param  CollectorRequest  $request
+     * @param CollectorRequest $request
+     * @param Collector $collector
      * @return mixed
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function update(CollectorRequest $request)
+    public function update(CollectorRequest $request, Collector $collector)
     {
-        $user_id = $this->user()->id;
-        Collector::query()->where('user_id', $user_id)
-            ->update([
-                'title' => $request->title,
-                'desc' => $request->desc,
-                'show_member_price' => $request->show_member_price
-            ]);
+        $this->authorize('update', $collector);
+        $collector->update([
+            'title' => $request->title,
+            'desc' => $request->desc,
+            'show_member' => $request->show_member
+        ]);
 
         return $this->response->array([
             'error' => 0,

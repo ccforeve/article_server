@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Collector extends Model
 {
+    protected $guarded = [];
     public function collections()
     {
         return $this->hasMany(Collection::class);

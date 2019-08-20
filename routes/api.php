@@ -193,6 +193,7 @@ $api->version('v1', [
         // 收藏夹
         $api->group(['prefix' => 'collectors'], function ($api) {
             $api->get('/', 'CollectorsController@list');
+            $api->put('{collector}', 'CollectorsController@update');
         });
         // 收藏
         $api->group(['prefix' => 'collections'], function ($api) {

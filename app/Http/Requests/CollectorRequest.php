@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
-class CollectorRequest extends BaseRequest
+use Dingo\Api\Http\FormRequest;
+
+class CollectorRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -12,8 +14,8 @@ class CollectorRequest extends BaseRequest
     public function rules()
     {
         return [
-            'title' => 'required|max:15',
-            'desc' => 'max:500'
+            'title' => 'required|max:32',
+            'desc' => 'max:200'
         ];
     }
 
@@ -21,8 +23,8 @@ class CollectorRequest extends BaseRequest
     {
         return [
             'title.required' => '标题不能为空',
-            'title.max' => '标题最长15字',
-            'desc.max' => '描述最长500字'
+            'title.max' => '标题最长32字',
+            'desc.max' => '描述最长200字'
         ];
     }
 }
