@@ -17,16 +17,18 @@ class CollectorsController extends Controller
      * 收藏夹列表
      * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
      */
-    public function list()
+    public function list(Request $request)
     {
         $user_id = $this->user()->id;
         $collectors = Collector::query()
             ->withCount('collections')
             ->where('user_id', $user_id)
-            ->latest('id')
-            ->paginate();
+            ->latest('updated_at');
+        if ($request->has('list')) {
+            return $collectors->get();
+        }
+        return $collectors->paginate(7);
 
-        return $collectors;
     }
 
     /**
