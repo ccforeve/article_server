@@ -120,11 +120,23 @@ class ProductsController extends Controller
      * @param $category_id
      * @return mixed
      */
-    public function list( $category_id )
+    public function list( Request $request, $category_id )
     {
         $category = ProductCategory::query()->where('online_id', $category_id)->first();
-        $products = Product::with('article:id,product_id')
-            ->where(['parent_category_id' => $category_id, 'is_show_price' => 1])
+        if ($request->has('user_id')) {
+            $user_id = $request->user_id;
+            $products = Product::with(
+                [
+                    'article:id,product_id',
+                    'collection' => function ($query) use ($user_id) {
+                        $query->where('user_id', $user_id)->select('id', 'user_id', 'product_id');
+                    }
+                ]
+            );
+        } else {
+            $products = Product::with('article:id,product_id');
+        }
+        $products = $products->where(['parent_category_id' => $category_id, 'is_show_price' => 1])
             ->select('id', 'cover', 'name', 'kind', 'state', 'price', 'money', 'ticket')
             ->latest('listed_at')
             ->paginate(20);

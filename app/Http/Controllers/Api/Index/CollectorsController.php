@@ -27,7 +27,7 @@ class CollectorsController extends Controller
         if ($request->has('list')) {
             return $collectors->get();
         }
-        return $collectors->paginate(7);
+        return $collectors->paginate(12);
 
     }
 

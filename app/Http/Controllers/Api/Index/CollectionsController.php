@@ -35,7 +35,9 @@ class CollectionsController extends Controller
     {
         $user_id = $this->user()->id;
         if (!$service->checkMember($this->user()->member_lock_at)) {
-            $collector_count = Collection::query()->where('user_id', $user_id)->count();
+            $collector_count = Collection::query()
+                ->where(['user_id' => $user_id, 'collector_id' => $request->collector_id])
+                ->count();
             if ($collector_count >= 3) {
                 return $this->response->error('非会员一个收藏夹最多能收藏5个产品', 403);
             }

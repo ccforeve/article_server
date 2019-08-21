@@ -19,4 +19,9 @@ class Product extends Model
     {
         return $this->hasOne(Article::class);
     }
+
+    public function collection()
+    {
+        return $this->hasOne(Collection::class);
+    }
 }

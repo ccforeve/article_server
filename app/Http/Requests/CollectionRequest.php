@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
-class CollectionRequest extends BaseRequest
+use Dingo\Api\Http\FormRequest;
+
+class CollectionRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
