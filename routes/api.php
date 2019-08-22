@@ -192,12 +192,14 @@ $api->version('v1', [
         $api->get('admin/{admin_id}', 'AdminsController@admin');
         // 收藏夹
         $api->group(['prefix' => 'collectors'], function ($api) {
-            $api->get('/', 'CollectorsController@list');
-            $api->put('{collector}', 'CollectorsController@update');
+            $api->get('/', 'CollectorsController@list');                            // 收藏夹列表
+            $api->put('{collector}', 'CollectorsController@update');                // 修改收藏夹
         });
         // 收藏
         $api->group(['prefix' => 'collections'], function ($api) {
-            $api->get('/', 'CollectionsController@list');
+            $api->get('/', 'CollectionsController@list');                               // 收藏列表
+            $api->delete('{collection}', 'CollectionsController@cancelCollection');     // 取消收藏
+            $api->post('/', 'CollectionsController@collection');                        // 收藏操作
         });
     });
 });

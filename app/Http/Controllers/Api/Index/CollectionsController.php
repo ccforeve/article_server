@@ -42,15 +42,15 @@ class CollectionsController extends Controller
                 return $this->response->error('非会员一个收藏夹最多能收藏5个产品', 403);
             }
         }
-        Collection::query()->create([
+        $collection = Collection::query()->create([
             'user_id' => $user_id,
             'collector_id' => $request->collector_id,
             'product_id' => $request->product_id
         ]);
 
         return $this->response->array([
-            'error' => 0,
-            'message' => '收藏成功'
+            'message' => '收藏成功',
+            'collected_id' => $collection->id
         ]);
     }
 
