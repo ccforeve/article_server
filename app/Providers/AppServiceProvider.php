@@ -4,9 +4,11 @@ namespace App\Providers;
 
 use App\Models\Article;
 use App\Models\Collection;
+use App\Models\Collector;
 use App\Models\Poster;
 use App\Observers\ArticleObserver;
 use App\Observers\CollectionObserver;
+use App\Observers\CollectorObserver;
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
 use Illuminate\Support\Facades\Auth;
@@ -41,6 +43,7 @@ class AppServiceProvider extends ServiceProvider
         Article::observe(ArticleObserver::class);
         Poster::observe(PosterObserver::class);
         Collection::observe(CollectionObserver::class);
+        Collector::observe(CollectorObserver::class);
     }
 
     /**

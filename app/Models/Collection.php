@@ -13,6 +13,8 @@ class Collection extends Model
      */
     protected $touches = ['collector'];
 
+    protected $guarded = [];
+
     public function collector()
     {
         return $this->belongsTo(Collector::class);

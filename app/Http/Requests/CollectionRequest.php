@@ -15,7 +15,7 @@ class CollectionRequest extends FormRequest
     {
         return [
             'product_id' => 'required|exists:products,id',
-            'collector_id' => 'required|exists:collector,id'
+            'collector_id' => 'required|exists:collectors,id'
         ];
     }
 

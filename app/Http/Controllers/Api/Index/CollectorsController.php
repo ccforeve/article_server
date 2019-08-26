@@ -38,10 +38,10 @@ class CollectorsController extends Controller
      */
     public function show(Collector $collector)
     {
-        $collector->with(
-            'collections:id,collector_id,product_id,quantity',
-            'collections.product:id,name,cover,price,money,ticket,min_unit'
-        );
+//        $collector->with(
+//            'collections:id,collector_id,product_id,quantity',
+//            'collections.product:id,name,cover,price,money,ticket,min_unit'
+//        );
 
         return $collector;
     }
@@ -61,16 +61,25 @@ class CollectorsController extends Controller
                 return $this->response->error('非会员最多能创建三个收藏夹', 403);
             }
         }
-        Collector::query()->create([
+        $collector = Collector::query()->create([
             'user_id' => $user_id,
             'title' => $request->title,
             'desc' => $request->desc,
-            'show_member_price' => $request->show_member
+            'show_member' => $request->show_member
+        ]);
+        // 收藏
+        $collection = Collection::query()->create([
+            'user_id' => $user_id,
+            'collector_id' => $collector->id,
+            'product_id' => $request->product_id
         ]);
 
         return $this->response->array([
-            'error' => 0,
-            'message' => '新建收藏夹成功'
+            'message' => '新建收藏夹成功',
+            'data' => [
+                'collector' => $collector,
+                'collection' => $collection
+            ]
         ]);
     }
 
@@ -104,6 +113,7 @@ class CollectorsController extends Controller
      */
     public function destroy(Collector $collector)
     {
+        $this->authorize('delete', $collector);
         $collector->delete();
 
         return $this->response->noContent();
@@ -117,11 +127,10 @@ class CollectorsController extends Controller
     public function copy(Request $request, BaseService $service)
     {
         \Validator::make($request->all(), [
-            'collector_id' => 'exists:collector,id'
+            'collector_id' => 'exists:collectors,id'
         ],[
             'collector_id.exists' => '没有复制的收藏夹'
         ])->validate();
-
         $user_id = $this->user()->id;
         if (!$service->checkMember($this->user()->member_lock_at)) {
             $collector_count = Collector::query()->where('user_id', $user_id)->count();
@@ -135,11 +144,11 @@ class CollectorsController extends Controller
         }
         // 新建复制的收藏夹
         $copy_collector = Collector::query()->where('id', $request->collector_id)->first();
-        Collector::query()->create([
+        $collector = Collector::query()->create([
             'user_id' => $user_id,
             'title' => $copy_collector->title,
             'desc' => $copy_collector->desc,
-            'show_member_price' => $copy_collector->show_member_price
+            'show_member' => $copy_collector->show_member
         ]);
         // 复制收藏夹下的收藏记录
         $collections = Collection::query()->where('collector_id', $request->collector_id)->get();
@@ -147,7 +156,8 @@ class CollectorsController extends Controller
         foreach ($collections as $collection) {
             array_push($collection_data, [
                 'user_id' => $user_id,
-                'collector_id' => $collection->id,
+                'quantity' => $collection->quantity,
+                'collector_id' => $collector->id,
                 'product_id' => $collection->product_id,
                 'created_at' => now()->toDateTimeString(),
                 'updated_at' => now()->toDateTimeString()
@@ -156,7 +166,7 @@ class CollectorsController extends Controller
         \DB::table('collections')->insert($collection_data);
 
         return $this->response->array([
-            'error' => 0,
+            'collector_id' => $collector->id,
             'message' => '复制收藏夹成功'
         ]);
     }

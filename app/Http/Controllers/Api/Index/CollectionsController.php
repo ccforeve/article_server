@@ -19,6 +19,9 @@ class CollectionsController extends Controller
     public function list(Request $request)
     {
         $user_id = $this->user()->id;
+        if ($request->has('user_id')) {
+            $user_id = $request->user_id;
+        }
         $collections = Collection::with('product')
             ->where(['user_id' => $user_id, 'collector_id' => $request->collector_id])
             ->get();
@@ -65,5 +68,23 @@ class CollectionsController extends Controller
         $collection->delete();
 
         return $this->response->noContent();
+    }
+
+    public function updateList(Request $request)
+    {
+        if(!$request->has('list')) {
+            return $this->response->error('提交数据错误', 403);
+        }
+        $user_id = $this->user()->id;
+        foreach ($request->list as $key => $value) {
+            if ($value < 1) {
+                return $this->response->error('提交数量不能为空', 403);
+            }
+            Collection::query()->where(['user_id' => $user_id, 'id' => $key])->update(['quantity' => $value]);
+        }
+
+        return $this->response->array([
+            'message' => '操作成功'
+        ]);
     }
 }

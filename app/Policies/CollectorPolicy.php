@@ -13,4 +13,9 @@ class CollectorPolicy
     {
         return $user->id === $collector->user_id;
     }
+
+    public function delete(User $user, Collector $collector)
+    {
+        return $user->id === $collector->user_id;
+    }
 }
