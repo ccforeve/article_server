@@ -135,15 +135,18 @@ class CollectorsController extends Controller
         if (!$service->checkMember($this->user()->member_lock_at)) {
             $collector_count = Collector::query()->where('user_id', $user_id)->count();
             if ($collector_count >= 3) {
-                return $this->response->error('非会员最多能创建三个收藏夹', 403);
+                return $this->response->error('非会员最多能创建三个收藏夹！', 403);
             }
             $collection_count = Collection::query()->where('collector_id', $request->collector_id)->count();
             if($collection_count > 5) {
-                return $this->response->error('非会员复制的收藏夹中产品不可超过5个', 403);
+                return $this->response->error('非会员复制的收藏夹中产品不可超过5个！', 403);
             }
         }
         // 新建复制的收藏夹
         $copy_collector = Collector::query()->where('id', $request->collector_id)->first();
+        if ($user_id == $copy_collector->user_id) {
+            return $this->response->error('不能复制自己的收藏夹喔~', 403);
+        }
         $collector = Collector::query()->create([
             'user_id' => $user_id,
             'title' => $copy_collector->title,

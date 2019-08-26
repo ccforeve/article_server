@@ -22,7 +22,7 @@ class CollectionsController extends Controller
         if ($request->has('user_id')) {
             $user_id = $request->user_id;
         }
-        $collections = Collection::with('product')
+        $collections = Collection::with('product', 'product.article:id,product_id')
             ->where(['user_id' => $user_id, 'collector_id' => $request->collector_id])
             ->get();
 
