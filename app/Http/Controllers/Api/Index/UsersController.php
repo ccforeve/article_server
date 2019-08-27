@@ -71,7 +71,7 @@ class UsersController extends Controller
             $user_info = collect($oauthUser->user);
             $subscribe = false;
         }
-        $user = User::query()->where('openid', $user_info[ 'openid' ])->first();
+        $user = User::query()->where('openid', $user_info[ 'unionid' ])->first();
         if ( !$user ) {
             $user = User::create([
                 'openid'    => $user_info[ 'openid' ],
@@ -83,8 +83,12 @@ class UsersController extends Controller
             ]);
             dispatch(new UploadAvatar($user->id, $user->avatar));
         } else {
-            $user->unionid = $user_info['unionid'];
-            if ($user->isDirty('unionid')) {
+            $user->openid = $user_info[ 'openid' ];
+            $user->unionid = $user_info[ 'unionid' ];
+            if ($user->isDirty(['unionid'])) {
+                $user->save();
+            }
+            if ($user->isDirty(['openid'])) {
                 $user->save();
             }
         }
@@ -143,25 +147,25 @@ class UsersController extends Controller
         $user_info = $app->encryptor->decryptData($request->session_key, $request->iv, $request->encryptedData);
         $user = User::query()->where('openid', $user_info['unionId'])->value('id');
         if (!$user) {
-            return $this->response->array([
-                'code' =>401,
-                'message' => '不存在该用户'
+            $user = User::create([
+                'openid'    => $user_info[ 'unionId' ],
+                'nickname'  => $user_info[ 'nickName' ],
+                'sex'       => $user_info[ 'gender' ],
+                'avatar'    => $user_info[ 'avatarUrl' ],
+                'unionid'   => $user_info[ 'unionId' ]
             ]);
-        } else {
-//            $user = User::create([
-//                'openid'    => $user_info[ 'unionId' ],
-//                'nickname'  => $user_info[ 'nickName' ],
-//                'sex'       => $user_info[ 'gender' ],
-//                'avatar'    => $user_info[ 'avatarUrl' ],
-//                'unionid'   => $user_info[ 'unionId' ]
-//            ]);
-//            dispatch(new UploadAvatar($user->id, $user->avatar));
+            dispatch(new UploadAvatar($user->id, $user->avatar));
         }
         return $this->response->array([
-            'code' =>200,
-            'user_id' => $user->id,
-            'message' => '存在该用户'
+            'user' => $user,
+            'access_token' => 'Bearer ' . Auth::guard('api')->login($user),
+            'expires_in' => 7200
         ]);
+//        return $this->response->array([
+//            'code' =>200,
+//            'user_id' => $user->id,
+//            'message' => '存在该用户'
+//        ]);
     }
 
     /**
