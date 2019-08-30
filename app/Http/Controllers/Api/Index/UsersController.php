@@ -71,7 +71,7 @@ class UsersController extends Controller
             $user_info = collect($oauthUser->user);
             $subscribe = false;
         }
-        $user = User::query()->where('openid', $user_info[ 'unionid' ])->first();
+        $user = User::query()->where('unionid', $user_info[ 'unionid' ])->first();
         if ( !$user ) {
             $user = User::create([
                 'openid'    => $user_info[ 'openid' ],
@@ -114,7 +114,7 @@ class UsersController extends Controller
         if (isset($session['unionid'])) {
             $user = User::query()
                 ->where('unionid', $session['unionid'])
-                ->select('id', 'avatar', 'nickname', 'member_lock_at')
+                ->select('id', 'avatar', 'nickname', 'phone', 'wechat', 'member_lock_at')
                 ->first();
             if ($user) {
                 return $this->response->array([

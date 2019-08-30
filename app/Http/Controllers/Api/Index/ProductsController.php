@@ -18,6 +18,10 @@ use Illuminate\Http\Response;
 
 class ProductsController extends Controller
 {
+    public function keySearchNameList(Request $request)
+    {
+        return Product::query()->where('name', 'like', "%{$request->key}%")->limit(10)->get()->pluck('name');
+    }
     /**
      * 产品搜索列表
      * @param Request $request

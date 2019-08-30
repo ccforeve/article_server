@@ -69,6 +69,7 @@ $api->version('v1', [
             $api->get('/', 'UsersController@me');
             //编辑用户资料
             $api->patch('/', 'UsersController@update');
+            $api->put('/', 'UsersController@update');
             //个人中心
             $api->get('center', 'UsersController@center');
             //获取用户头像和二维码的base64文件
@@ -182,6 +183,8 @@ $api->version('v1', [
         });
         // 搜索产品列表
         $api->get('products/search', 'ProductsController@searchList');
+        // 搜索产品的名称列表（模糊搜索）
+        $api->get('products/search_name', 'ProductsController@keySearchNameList');
         // 判断是否是活动期间
         $api->get('activity/judge', 'ActivityController@activity');
         // 抽中的奖品写入
