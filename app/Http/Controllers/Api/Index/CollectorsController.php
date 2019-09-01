@@ -47,6 +47,23 @@ class CollectorsController extends Controller
     }
 
     /**
+     * 判断收藏夹
+     * @param BaseService $service
+     * @return \Dingo\Api\Http\Response|void
+     */
+    public function checkStore(BaseService $service)
+    {
+        $user_id = $this->user()->id;
+        if (!$service->checkMember($this->user()->member_lock_at)) {
+            $collector_count = Collector::query()->where('user_id', $user_id)->count();
+            if ($collector_count >= 3) {
+                return $this->response->error('非会员最多能创建三个收藏夹', 403);
+            }
+        }
+        return $this->response->noContent();
+    }
+
+    /**
      * 新建收藏夹
      * @param CollectorRequest $request
      * @param BaseService $service

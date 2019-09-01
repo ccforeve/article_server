@@ -196,7 +196,8 @@ $api->version('v1', [
         // 收藏夹
         $api->group(['prefix' => 'collectors'], function ($api) {
             $api->get('/', 'CollectorsController@list');                            // 收藏夹列表
-            $api->get('{collector}', 'CollectorsController@show');                  // 收藏夹详情
+            $api->get('{collector}', 'CollectorsController@show')->where(['collector' => '[0-9]+']);                  // 收藏夹详情
+            $api->get('check_store', 'CollectorsController@checkStore');            // 添加收藏夹的时候判断
             $api->post('/', 'CollectorsController@store');                          // 收藏夹列表
             $api->put('{collector}', 'CollectorsController@update');                // 修改收藏夹
             $api->delete('{collector}', 'CollectorsController@destroy');            // 删除收藏夹
@@ -207,7 +208,7 @@ $api->version('v1', [
             $api->get('/', 'CollectionsController@list');                               // 收藏列表
             $api->delete('{collection}', 'CollectionsController@cancelCollection');     // 取消收藏
             $api->post('/', 'CollectionsController@collection');                        // 收藏操作
-            $api->put('update_list', 'CollectionsController@updateList');                        // 收藏操作
+            $api->put('update_list', 'CollectionsController@updateList');               // 收藏操作
         });
     });
 });

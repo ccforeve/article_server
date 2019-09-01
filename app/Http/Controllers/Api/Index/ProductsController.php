@@ -20,7 +20,7 @@ class ProductsController extends Controller
 {
     public function keySearchNameList(Request $request)
     {
-        return Product::query()->where('name', 'like', "%{$request->key}%")->limit(10)->get()->pluck('name');
+        return Product::query()->where('name', 'like', "%{$request->key}%")->inRandomOrder()->limit(10)->get()->pluck('name');
     }
     /**
      * 产品搜索列表
@@ -29,12 +29,28 @@ class ProductsController extends Controller
      */
     public function searchList( Request $request )
     {
+        $user_id = $this->user()->id;
         $search_key = $request->search_key;
-        $products = Product::with('article:id,product_id')
+//        if ($user_id == 50) {
+//           return [$request->state, $request->kind];
+//        }
+        $products = Product::with([
+            'article:id,product_id',
+            'collection' => function ($query) use ($user_id) {
+                $query->where('user_id', $user_id)->select('id', 'user_id', 'product_id');
+            }
+        ])
             ->where([['state', '<>', 9], ['is_show_price', '=', 1]])
             ->where(function ($query) use ($search_key) {
                 $query->where('alias_name', 'like', "%{$search_key}%")->orWhere('desc', 'like', "%{$search_key}%");
             })
+            ->when($request->state, function ($query) {
+                return $query->where('state', 0)->where('kind', 0);
+            })
+            ->when($kind = $request->kind, function ($query) use ($kind) {
+                return $query->where('kind', $kind);
+            })
+            ->select('id', 'alias_name', 'desc', 'name', 'price', 'ticket', 'money', 'cover', 'state', 'is_show_price', 'kind')
             ->latest('listed_at')
             ->paginate(10);
 
