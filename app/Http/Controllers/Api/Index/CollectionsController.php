@@ -41,7 +41,7 @@ class CollectionsController extends Controller
             $collector_count = Collection::query()
                 ->where(['user_id' => $user_id, 'collector_id' => $request->collector_id])
                 ->count();
-            if ($collector_count >= 3) {
+            if ($collector_count >= 5) {
                 return $this->response->error('非会员一个收藏夹最多能收藏5个产品', 403);
             }
         }
@@ -59,12 +59,14 @@ class CollectionsController extends Controller
 
     /**
      * 取消收藏
-     * @param  Collection  $collection
+     * @param  $product_id
      * @return \Dingo\Api\Http\Response
      * @throws \Exception
      */
-    public function cancelCollection(Collection $collection)
+    public function cancelCollection($product_id)
     {
+        $user_id = $this->user()->id;
+        $collection = Collection::query()->where(['user_id' => $user_id, 'product_id' => $product_id])->first();
         $collection->delete();
 
         return $this->response->noContent();

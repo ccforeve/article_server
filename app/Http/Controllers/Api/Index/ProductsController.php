@@ -31,9 +31,6 @@ class ProductsController extends Controller
     {
         $user_id = $this->user()->id;
         $search_key = $request->search_key;
-//        if ($user_id == 50) {
-//           return [$request->state, $request->kind];
-//        }
         $products = Product::with([
             'article:id,product_id',
             'collection' => function ($query) use ($user_id) {
