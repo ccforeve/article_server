@@ -67,9 +67,10 @@ class CollectionsController extends Controller
     {
         $user_id = $this->user()->id;
         $collection = Collection::query()->where(['user_id' => $user_id, 'product_id' => $product_id])->first();
+        $collection_id = $collection->id;
         $collection->delete();
 
-        return $this->response->noContent();
+        return $collection_id;
     }
 
     public function updateList(Request $request)
